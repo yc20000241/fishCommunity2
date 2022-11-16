@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.example:pc-common:unknown">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/example/pc-common/unknown/pc-common-unknown.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/example/pc-common/unknown/pc-common-unknown-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/example/pc-common/unknown/pc-common-unknown-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
