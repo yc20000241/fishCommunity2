@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/fishCommunity2.iml" filepath="$PROJECT_DIR$/fishCommunity2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fish-community-service-2.iml" filepath="$PROJECT_DIR$/fish-community-service-2.iml" />
       <module fileurl="file://$PROJECT_DIR$/pc-common/pc-common.iml" filepath="$PROJECT_DIR$/pc-common/pc-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/pc-service/pc-service.iml" filepath="$PROJECT_DIR$/pc-service/pc-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/pc-web/pc-web.iml" filepath="$PROJECT_DIR$/pc-web/pc-web.iml" />
