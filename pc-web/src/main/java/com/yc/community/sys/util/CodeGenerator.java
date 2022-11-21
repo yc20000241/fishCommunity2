@@ -55,7 +55,7 @@ public class CodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:postgresql://43.138.238.84:15432?useSSL=false&useUnicode=true&character_set_server=utf8&serverTimezone=Asia/Shanghai");
+        dsc.setUrl("jdbc:postgresql://43.138.238.84:15432/yc001?useSSL=false&useUnicode=true&character_set_server=utf8&serverTimezone=Asia/Shanghai");
         // dsc.setSchemaName("public");
         dsc.setDriverName("org.postgresql.Driver");
         dsc.setUsername("yc001");

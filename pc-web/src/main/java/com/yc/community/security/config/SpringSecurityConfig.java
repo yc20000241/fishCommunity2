@@ -1,5 +1,7 @@
 package com.yc.community.security.config;
 
+import com.yc.community.security.component.JwtAuthenticationTokenFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     /**
      * 自定义访问控制，默认是所有访问都要经过认证。
@@ -51,7 +56,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .authenticationEntryPoint(restAuthenticationEntryPoint())
                 .and()
                 // 将自定义的JWT过滤器放到过滤链中
-//                .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // 打开Spring Security的跨域
                 .cors()
                 .and()
