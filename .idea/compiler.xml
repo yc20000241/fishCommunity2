@@ -15,7 +15,6 @@
     <bytecodeTargetLevel>
       <module name="fish-community-service-2" target="1.5" />
       <module name="pc-common" target="1.5" />
-      <module name="pc-document" target="1.5" />
       <module name="pc-service" target="1.5" />
       <module name="pc-web" target="1.5" />
     </bytecodeTargetLevel>
