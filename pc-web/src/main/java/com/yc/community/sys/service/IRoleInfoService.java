@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
  * @author yc001
  * @since 2022-11-21
  */
-@Service
 public interface IRoleInfoService extends IService<RoleInfo> {
 
 }

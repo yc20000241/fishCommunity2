@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
  * @author yc001
  * @since 2022-11-21
  */
+@Service
 public class RoleInfoServiceImpl extends ServiceImpl<RoleInfoMapper, RoleInfo> implements IRoleInfoService {
 
 }

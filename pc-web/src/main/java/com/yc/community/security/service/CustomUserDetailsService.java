@@ -3,8 +3,6 @@ package com.yc.community.security.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.entity.UserInfo;
-import com.yc.community.sys.service.IRoleInfoService;
-import com.yc.community.sys.service.IUserInfoService;
 import com.yc.community.sys.service.impl.RoleInfoServiceImpl;
 import com.yc.community.sys.service.impl.UserInfoServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +18,10 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private IUserInfoService userInfoService;
+    private UserInfoServiceImpl userInfoService;
 
     @Autowired
-    private IRoleInfoService roleInfoService;
+    private RoleInfoServiceImpl roleInfoService;
 
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         log.debug("开始登陆验证，用户名为: {}", s);
