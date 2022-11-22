@@ -2,6 +2,7 @@ package com.yc.community.sys.service;
 
 import com.yc.community.sys.entity.RoleUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>

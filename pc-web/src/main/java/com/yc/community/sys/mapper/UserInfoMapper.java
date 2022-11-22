@@ -1,7 +1,8 @@
 package com.yc.community.sys.mapper;
 
-import com.yc.community.sys.entity.User;
+import com.yc.community.sys.entity.UserInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author yc001
  * @since 2022-11-21
  */
-public interface UserMapper extends BaseMapper<User> {
+@Mapper
+public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
 }

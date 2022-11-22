@@ -1,7 +1,8 @@
 package com.yc.community.sys.service;
 
-import com.yc.community.sys.entity.Role;
+import com.yc.community.sys.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author yc001
  * @since 2022-11-21
  */
-public interface IRoleService extends IService<Role> {
+@Service
+public interface IUserInfoService extends IService<UserInfo> {
 
 }

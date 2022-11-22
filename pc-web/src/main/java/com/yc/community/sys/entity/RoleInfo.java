@@ -1,7 +1,6 @@
 package com.yc.community.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -17,31 +16,16 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_user")
-public class User implements Serializable {
+@TableName("sys_role_info")
+public class RoleInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableField("id")
     private String id;
 
-    @TableField("user_name")
-    private String userName;
-
-    @TableField("password")
-    private String password;
-
-    @TableField("nick")
-    private String nick;
-
-    @TableField("email")
-    private String email;
-
-    @TableField("last_login")
-    private Date lastLogin;
-
-    @TableField("created_time")
-    private Date createdTime;
+    @TableField("role_name")
+    private String roleName;
 
     @TableField("active")
     private Integer active;

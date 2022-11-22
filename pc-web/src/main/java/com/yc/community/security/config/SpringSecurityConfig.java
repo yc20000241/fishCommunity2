@@ -1,6 +1,8 @@
 package com.yc.community.security.config;
 
 import com.yc.community.security.component.JwtAuthenticationTokenFilter;
+import com.yc.community.security.component.RestAuthenticationEntryPoint;
+import com.yc.community.security.component.RestfulAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -52,8 +54,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 添加未登录与权限不足异常处理器
                 .exceptionHandling()
-//                .accessDeniedHandler(restfulAccessDeniedHandler())
-//                .authenticationEntryPoint(restAuthenticationEntryPoint())
+                .accessDeniedHandler(restfulAccessDeniedHandler())
+                .authenticationEntryPoint(restAuthenticationEntryPoint())
                 .and()
                 // 将自定义的JWT过滤器放到过滤链中
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
@@ -76,6 +78,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
+    @Bean
+    public RestfulAccessDeniedHandler restfulAccessDeniedHandler() {
+        return new RestfulAccessDeniedHandler();
+    }
+
+    @Bean
+    public RestAuthenticationEntryPoint restAuthenticationEntryPoint() {
+        return new RestAuthenticationEntryPoint();
+    }
 
 
 }
