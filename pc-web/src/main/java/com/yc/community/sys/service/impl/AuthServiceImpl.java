@@ -52,15 +52,17 @@ public class AuthServiceImpl{
     }
 
     public void logout() {
-        stringRedisTemplate.opsForValue().set(AuthProvider.getLoginAccount(), "");
+        redisTemplate.opsForValue().set(AuthProvider.getLoginAccount(), "");
         SecurityContextHolder.clearContext();
     }
 
 
     public void refreshToken(String token) {
         AccessToken accessToken = jwtProvider.refreshToken(token);
-        String userDetail = stringRedisTemplate.opsForValue().get(accessToken.getLoginAccount());
-        stringRedisTemplate.opsForValue().set(accessToken.getLoginAccount(), userDetail);
+        UserDetail userDetail = (UserDetail) redisTemplate.opsForValue().get(accessToken.getLoginAccount());
+        redisTemplate.opsForValue().set(accessToken.getLoginAccount(), userDetail);
+//        String userDetail = stringRedisTemplate.opsForValue().get(accessToken.getLoginAccount());
+//        stringRedisTemplate.opsForValue().set(accessToken.getLoginAccount(), userDetail);
     }
 
 }
