@@ -17,9 +17,10 @@ public class UserDetail implements Serializable, UserDetails {
     private static final long serialVersionUID = 1L;
 
     private UserInfo userInfo;
-    private List<RoleInfo> roleInfoInfoList;
+    private List<RoleInfo> roleInfoList;
     private Collection<? extends GrantedAuthority> grantedAuthorities;
     private List<String> roles;
+
 
     public String getUserId() {
         return this.userInfo.getId();
@@ -30,10 +31,11 @@ public class UserDetail implements Serializable, UserDetails {
         if (grantedAuthorities != null) return this.grantedAuthorities;
         List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
         List<String> authorities = new ArrayList<>();
-        roleInfoInfoList.forEach(roleInfo -> {
-            authorities.add(roleInfo.getId());
-            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + roleInfo.getId()));
-        });
+        if(roleInfoList != null)
+            roleInfoList.forEach(roleInfo -> {
+                authorities.add(roleInfo.getId());
+                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + roleInfo.getId()));
+            });
         this.grantedAuthorities = grantedAuthorities;
         this.roles = authorities;
         return this.grantedAuthorities;

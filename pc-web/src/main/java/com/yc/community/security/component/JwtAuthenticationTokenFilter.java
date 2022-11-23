@@ -10,6 +10,7 @@ import io.netty.handler.codec.json.JsonObjectDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +47,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -58,15 +62,17 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 判断一下内容是否为空
         if (StringUtils.isNotEmpty(authToken) && authToken.startsWith(jwtProperties.getTokenPrefix())) {
             // 去掉token前缀(Bearer )，拿到真实token
-            authToken = authToken.substring(jwtProperties.getTokenPrefix().length());
+            int length = jwtProperties.getTokenPrefix().length();
+            authToken = authToken.substring(length);
 
             // 拿到token里面的登录账号
             String loginAccount = jwtProvider.getSubjectFromToken(authToken);
 
             if (StringUtils.isNotEmpty(loginAccount) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 // 查询用户
-                String account = stringRedisTemplate.opsForValue().get(loginAccount);
-                UserDetail userDetails = JSONObject.parseObject(account, UserDetail.class);
+//                String account = stringRedisTemplate.opsForValue().get(loginAccount);
+                UserDetail userDetails = (UserDetail)redisTemplate.opsForValue().get(loginAccount);
+//                UserDetail userDetails = JSONObject.parseObject(account, UserDetail.class);
 
                 // 拿到用户信息后验证用户信息与token
                 if (userDetails != null && jwtProvider.validateToken(authToken, userDetails)) {

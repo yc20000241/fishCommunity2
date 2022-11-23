@@ -4,7 +4,10 @@ import com.yc.community.sys.entity.RoleInfo;
 import com.yc.community.sys.mapper.RoleInfoMapper;
 import com.yc.community.sys.service.IRoleInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleInfoServiceImpl extends ServiceImpl<RoleInfoMapper, RoleInfo> implements IRoleInfoService {
 
+    @Autowired
+    private RoleInfoMapper roleInfoMapper;
+
+    public List<RoleInfo> listRoleByUserId(String id) {
+        List<RoleInfo> list = roleInfoMapper.listRoleByUserId(id);
+        return list;
+    }
 }

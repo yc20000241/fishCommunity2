@@ -2,6 +2,7 @@ package com.yc.community.security.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yc.community.security.entity.UserDetail;
+import com.yc.community.sys.entity.RoleInfo;
 import com.yc.community.sys.entity.UserInfo;
 import com.yc.community.sys.service.impl.RoleInfoServiceImpl;
 import com.yc.community.sys.service.impl.UserInfoServiceImpl;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Slf4j
@@ -37,8 +40,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         // 构建UserDetail对象
         UserDetail userDetail = new UserDetail();
         userDetail.setUserInfo(userInfo);
-//        List<RoleInfo> roleInfoList = roleService.listRoleByUserId(userInfo.getId());
-//        userDetail.setRoleInfoList(roleInfoList);
+        List<RoleInfo> roleInfoList = roleInfoService.listRoleByUserId(userInfo.getId());
+        userDetail.setRoleInfoList(roleInfoList);
         return userDetail;
     }
 }
