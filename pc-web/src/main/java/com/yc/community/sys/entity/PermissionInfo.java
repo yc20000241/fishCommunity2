@@ -31,8 +31,7 @@ public class PermissionInfo implements Serializable {
     @TableField("name")
     private String name;
 
-    @TableField("parent_id")
-    private String parentId;
-
+    @TableField("active")
+    private String active;
 
 }

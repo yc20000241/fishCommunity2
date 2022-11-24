@@ -32,5 +32,6 @@ public class RoleInfo implements Serializable {
     @TableField("active")
     private Integer active;
 
-
+    @TableField("role_code")
+    private Integer roleCode;
 }

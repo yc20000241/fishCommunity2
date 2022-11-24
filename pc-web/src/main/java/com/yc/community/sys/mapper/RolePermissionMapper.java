@@ -4,6 +4,9 @@ import com.yc.community.sys.entity.RolePermission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
+import pojo.RolePathsVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +19,7 @@ import org.springframework.stereotype.Component;
 @Mapper
 @Component
 public interface RolePermissionMapper extends BaseMapper<RolePermission> {
+
+    List<RolePathsVo> getRolePaths();
 
 }
