@@ -4,7 +4,7 @@ import com.yc.community.sys.entity.RolePermission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
-import pojo.RolePathsVo;
+import com.yc.community.common.pojo.RolePathsVo;
 
 import java.util.List;
 

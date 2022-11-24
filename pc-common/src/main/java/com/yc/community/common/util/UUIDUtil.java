@@ -1,4 +1,4 @@
-package util;
+package com.yc.community.common.util;
 
 import java.util.UUID;
 

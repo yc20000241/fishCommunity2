@@ -1,11 +1,15 @@
 package com.yc.community.security.config;
 
+import com.yc.community.security.component.AccessDecisionProcessor;
 import com.yc.community.security.component.JwtAuthenticationTokenFilter;
 import com.yc.community.security.component.RestAuthenticationEntryPoint;
 import com.yc.community.security.component.RestfulAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +18,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -50,7 +59,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 其他请求都需要认证后才能访问
                 .anyRequest().authenticated()
                 // 使用自定义的 accessDecisionManager
-//                .accessDecisionManager(accessDecisionManager())
+                .accessDecisionManager(accessDecisionManager())
                 .and()
                 // 添加未登录与权限不足异常处理器
                 .exceptionHandling()
@@ -88,5 +97,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return new RestAuthenticationEntryPoint();
     }
 
+    @Bean
+    public AccessDecisionVoter<FilterInvocation> accessDecisionProcessor() {
+        return new AccessDecisionProcessor();
+    }
+
+    @Bean
+    public AccessDecisionManager accessDecisionManager() {
+        // 构造一个新的AccessDecisionManager 放入两个投票器
+        List<AccessDecisionVoter<?>> decisionVoters = Arrays.asList(new WebExpressionVoter(), accessDecisionProcessor());
+        return new UnanimousBased(decisionVoters);
+    }
 
 }

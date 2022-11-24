@@ -1,4 +1,4 @@
-package response;
+package com.yc.community.common.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

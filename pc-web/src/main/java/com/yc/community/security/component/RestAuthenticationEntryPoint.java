@@ -3,7 +3,7 @@ package com.yc.community.security.component;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import response.CommonResponse;
+import com.yc.community.common.response.CommonResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

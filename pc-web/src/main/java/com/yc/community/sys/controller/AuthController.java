@@ -6,7 +6,7 @@ import com.yc.community.sys.util.AccessToken;
 import com.yc.community.sys.util.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import response.CommonResponse;
+import com.yc.community.common.response.CommonResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -49,6 +49,11 @@ public class AuthController {
 
     @GetMapping("/test")
     public CommonResponse test() {
+        return CommonResponse.OKBuilder.msg("登录认证测试").build();
+    }
+
+    @GetMapping("/test1")
+    public CommonResponse test1() {
         return CommonResponse.OKBuilder.msg("登录认证测试").build();
     }
 }

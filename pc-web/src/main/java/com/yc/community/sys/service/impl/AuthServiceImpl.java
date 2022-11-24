@@ -1,7 +1,5 @@
 package com.yc.community.sys.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.util.AccessToken;
 import com.yc.community.sys.util.AuthProvider;
@@ -16,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import response.CommonResponse;
 
 
 @Slf4j
@@ -45,7 +42,8 @@ public class AuthServiceImpl{
         AccessToken accessToken = jwtProvider.createToken((UserDetails) authentication.getPrincipal());
         UserDetail userDetail = (UserDetail) authentication.getPrincipal();
         // 放入缓存
-        redisTemplate.opsForValue().set(userDetail.getUsername(), userDetail);
+        String username = userDetail.getUsername();
+        redisTemplate.opsForValue().set(username, userDetail);
         // json解析不了双重对象
 //        stringRedisTemplate.opsForValue().set(userDetail.getUsername(), JSON.toJSONString(userDetail));
         return accessToken;

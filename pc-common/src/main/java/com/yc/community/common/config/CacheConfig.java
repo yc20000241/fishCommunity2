@@ -1,4 +1,4 @@
-package config;
+package com.yc.community.common.config;
 
 
 import org.springframework.cache.CacheManager;
@@ -11,6 +11,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import javax.annotation.Resource;
@@ -26,21 +27,21 @@ public class CacheConfig extends CachingConfigurerSupport {
      * 自定义生成redis-key ， 类名.方法名
      * @return
      */
-    @Override
-    @Bean
-    public KeyGenerator keyGenerator() {
-        return (o, method, objects) -> {
-
-            StringBuilder sb = new StringBuilder();
+//    @Override
+//    @Bean
+//    public KeyGenerator keyGenerator() {
+//        return (o, method, objects) -> {
+//
+//            StringBuilder sb = new StringBuilder();
 //            sb.append(o.getClass().getName()).append(".");
 //            sb.append(method.getName()).append(".");
-            for (Object obj : objects) {
-                sb.append(obj.toString());
-            }
-            System.out.println(sb);
-            return sb.toString();
-        };
-    }
+//            for (Object obj : objects) {
+//                sb.append(obj.toString());
+//            }
+//            System.out.println(sb);
+//            return sb.toString();
+//        };
+//    }
 
     /**
      * 使用JSON进行序列化
@@ -53,9 +54,9 @@ public class CacheConfig extends CachingConfigurerSupport {
 //JSON格式序列化
         GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
 //key的序列化
-        redisTemplate.setKeySerializer(genericJackson2JsonRedisSerializer);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
 //value的序列化
-        redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
+        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
 //hash结构key的虚拟化
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
 //hash结构value的虚拟化

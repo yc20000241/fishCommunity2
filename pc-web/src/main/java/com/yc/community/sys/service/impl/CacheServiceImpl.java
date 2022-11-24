@@ -1,11 +1,10 @@
-package service;
+package com.yc.community.sys.service.impl;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.yc.community.sys.mapper.RolePermissionMapper;
-import com.yc.community.sys.service.impl.RolePermissionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pojo.RolePathsVo;
+import com.yc.community.common.pojo.RolePathsVo;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class CacheService {
+public class CacheServiceImpl {
 
     @Resource(name = "rolePermissionListCache")
     private Cache<String, List<String>> rolePermissionListCache;

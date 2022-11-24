@@ -1,14 +1,11 @@
-package init;
+package com.yc.community.sys.init;
 
-import com.github.benmanes.caffeine.cache.Cache;
+import com.yc.community.sys.service.impl.CacheServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-import service.CacheService;
 
 
 @Component
@@ -16,7 +13,7 @@ import service.CacheService;
 public class CommonInitRunner implements ApplicationRunner {
 
     @Autowired
-    private CacheService cacheService;
+    private CacheServiceImpl cacheService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {

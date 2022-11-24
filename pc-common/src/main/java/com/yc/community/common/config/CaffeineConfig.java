@@ -1,4 +1,4 @@
-package config;
+package com.yc.community.common.config;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;

@@ -1,4 +1,4 @@
-package pojo;
+package com.yc.community.common.pojo;
 
 import lombok.Data;
 

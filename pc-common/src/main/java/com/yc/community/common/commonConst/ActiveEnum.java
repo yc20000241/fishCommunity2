@@ -1,4 +1,4 @@
-package commonConst;
+package com.yc.community.common.commonConst;
 
 
 import lombok.AllArgsConstructor;
