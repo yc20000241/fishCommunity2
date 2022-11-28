@@ -17,21 +17,21 @@ import java.io.IOException;
  * 当用户尝试访问需要权限才能的REST资源而权限不足的时候，
  * 将调用此方法发送403响应以及错误信息
  *
- * @author 和耳朵
- * @since 2020-06-30
+ * @author yc001
+ * @since 2022-11-24
  */
 public class RestfulAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
-                       AccessDeniedException e) throws IOException, ServletException {
+                       AccessDeniedException e) throws IOException{
 
         response.setHeader("Cache-Control", "no-cache");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        String s = JSONObject.toJSONString(CommonResponse.ERRORBuilder.status(403).build());
+        String s = JSONObject.toJSONString(CommonResponse.ERRORBuilder.status(403).msg("权限不足").build());
         response.getWriter().println(s);
         response.getWriter().flush();
     }

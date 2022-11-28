@@ -17,8 +17,8 @@ import java.io.IOException;
  * 当用户尝试访问需要权限才能的REST资源而不提供Token或者Token错误或者过期时，
  * 将调用此方法发送401响应以及错误信息
  *
- * @author 和耳朵
- * @since 2020-06-30
+ * @author yc001
+ * @since 2022-11-24
  */
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
