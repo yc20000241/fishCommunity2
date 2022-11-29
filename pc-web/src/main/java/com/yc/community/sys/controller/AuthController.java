@@ -1,5 +1,6 @@
 package com.yc.community.sys.controller;
 
+import com.yc.community.sys.request.EmailRequest;
 import com.yc.community.sys.request.LoginInfo;
 import com.yc.community.sys.service.impl.AuthServiceImpl;
 import com.yc.community.sys.util.AccessToken;
@@ -20,7 +21,7 @@ import javax.validation.Valid;
  * @author yc001
  */
 @RestController
-@RequestMapping("/api/sys")
+@RequestMapping("/api/web/sys")
 public class AuthController {
 
     @Autowired
@@ -47,13 +48,9 @@ public class AuthController {
         return CommonResponse.OK;
     }
 
-    @GetMapping("/test")
-    public CommonResponse test() {
-        return CommonResponse.OKBuilder.msg("登录认证测试").build();
-    }
-
-    @GetMapping("/test1")
-    public CommonResponse test1() {
-        return CommonResponse.OKBuilder.msg("登录认证测试").build();
+    @PostMapping("/sendEmail")
+    public CommonResponse sendEmail(@RequestBody EmailRequest emailRequest, HttpServletRequest request) {
+        authService.sendEmail(emailRequest, request);
+        return CommonResponse.OK;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.FilterInvocation;
+import org.springframework.util.AntPathMatcher;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -26,7 +27,9 @@ public class AccessDecisionProcessor implements AccessDecisionVoter<FilterInvoca
 
         // 拿到当前请求uri
         String requestUrl = object.getRequestUrl();
-        if(ConstList.NO_PERMISSION_URL.contains(requestUrl))
+
+        AntPathMatcher antPathMatcher = new AntPathMatcher();
+        if (antPathMatcher.match(ConstList.NO_PERMISSION_LOGIN_MATCH_URL, requestUrl))
             return ACCESS_GRANTED;
         String method = object.getRequest().getMethod();
         log.debug("进入自定义鉴权投票器，URI : {} {}", method, requestUrl);
