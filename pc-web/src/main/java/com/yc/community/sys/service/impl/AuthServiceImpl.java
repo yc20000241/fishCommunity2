@@ -1,6 +1,7 @@
 package com.yc.community.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yc.community.common.commonConst.ActiveEnum;
 import com.yc.community.common.config.PropertiesConfig;
 import com.yc.community.common.exception.BusinessException;
 import com.yc.community.common.exception.BusinessExceptionCode;
@@ -9,6 +10,7 @@ import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.entity.UserInfo;
 import com.yc.community.sys.request.EmailRequest;
+import com.yc.community.sys.request.RegistrateRequest;
 import com.yc.community.sys.util.AccessToken;
 import com.yc.community.sys.util.AuthProvider;
 import com.yc.community.sys.util.JwtProvider;
@@ -28,6 +30,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -137,5 +140,27 @@ public class AuthServiceImpl{
             }else
                 throw new BusinessException(BusinessExceptionCode.EMAIL_VERIFICATION_TOO_MUNCH);
         }
+    }
+
+    public void registration(RegistrateRequest registrateRequest, HttpServletRequest request) {
+        boolean isMatch = Pattern.matches("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$", registrateRequest.getLoginEmail());
+        if(!isMatch)
+            throw new BusinessException(BusinessExceptionCode.EMAIL_FORMAT_ERROR);
+
+        List<UserInfo> list = userInfoService.list(new QueryWrapper<UserInfo>());
+        if(list.size() > 0)
+            throw new BusinessException(BusinessExceptionCode.USER_HAS_REGISTRATED);
+
+        String key = getVerificationExpire(registrateRequest.getLoginEmail(), request);
+        String verification = stringRedisTemplate.opsForValue().get(key);
+        if(!verification.equals(registrateRequest.getEmailVerification()))
+            throw new BusinessException(BusinessExceptionCode.VERIFICATION_ERROR);
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserName(registrateRequest.getLoginEmail());
+        userInfo.setActive(ActiveEnum.ACTIVE.getCode());
+        userInfo.setCreatedTime(new Date());
+        userInfo.setId(UUIDUtil.getUUID());
+        userInfoService.save(userInfo);
     }
 }

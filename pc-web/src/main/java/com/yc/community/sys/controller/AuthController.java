@@ -2,6 +2,7 @@ package com.yc.community.sys.controller;
 
 import com.yc.community.sys.request.EmailRequest;
 import com.yc.community.sys.request.LoginInfo;
+import com.yc.community.sys.request.RegistrateRequest;
 import com.yc.community.sys.service.impl.AuthServiceImpl;
 import com.yc.community.sys.util.AccessToken;
 import com.yc.community.sys.util.JwtProvider;
@@ -51,6 +52,12 @@ public class AuthController {
     @PostMapping("/sendEmail")
     public CommonResponse sendEmail(@RequestBody EmailRequest emailRequest, HttpServletRequest request) {
         authService.sendEmail(emailRequest, request);
+        return CommonResponse.OK;
+    }
+
+    @PostMapping("/registration")
+    public CommonResponse registration(@RequestBody RegistrateRequest registrateRequest, HttpServletRequest request) {
+        authService.registration(registrateRequest, request);
         return CommonResponse.OK;
     }
 }

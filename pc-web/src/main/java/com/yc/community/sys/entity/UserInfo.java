@@ -35,9 +35,6 @@ public class UserInfo implements Serializable {
     @TableField("nick")
     private String nick;
 
-    @TableField("email")
-    private String email;
-
     @TableField("last_login")
     private Date lastLogin;
 

@@ -4,7 +4,9 @@ public enum BusinessExceptionCode {
 
     EMAIL_FORMAT_ERROR("邮箱格式错误", 601),
     EMAIL_VERIFICATION_TOO_MUNCH("验证码发送过于频繁", 602),
-    EMIAL_SYSTEM_ERROR("验证码发送错误，请联系管理员",603)
+    EMIAL_SYSTEM_ERROR("验证码发送错误，请联系管理员",603),
+    USER_HAS_REGISTRATED("用户已注册", 604),
+    VERIFICATION_ERROR("验证码错误", 605)
     ;
 
     private String desc;
