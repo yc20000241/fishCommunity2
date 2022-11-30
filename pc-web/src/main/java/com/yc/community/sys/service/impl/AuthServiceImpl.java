@@ -147,11 +147,11 @@ public class AuthServiceImpl{
         if(!isMatch)
             throw new BusinessException(BusinessExceptionCode.EMAIL_FORMAT_ERROR);
 
-        List<UserInfo> list = userInfoService.list(new QueryWrapper<UserInfo>());
+        List<UserInfo> list = userInfoService.list(new QueryWrapper<UserInfo>().eq("user_name", registrateRequest.getLoginEmail()));
         if(list.size() > 0)
             throw new BusinessException(BusinessExceptionCode.USER_HAS_REGISTRATED);
 
-        String key = getVerificationExpire(registrateRequest.getLoginEmail(), request);
+        String key = getIsVerification(registrateRequest.getLoginEmail(), request);
         String verification = stringRedisTemplate.opsForValue().get(key);
         if(!verification.equals(registrateRequest.getEmailVerification()))
             throw new BusinessException(BusinessExceptionCode.VERIFICATION_ERROR);
@@ -162,5 +162,18 @@ public class AuthServiceImpl{
         userInfo.setCreatedTime(new Date());
         userInfo.setId(UUIDUtil.getUUID());
         userInfoService.save(userInfo);
+    }
+
+    private String getIsVerification(String email, HttpServletRequest request) {
+        Long expire1 = stringRedisTemplate.opsForValue().getOperations().getExpire(email + "_email");
+        if(expire1 > 0)
+            return email + "_email";
+
+        String ipAddr = IpAddrUtil.getIpAddr(request);
+        Long expire2 = stringRedisTemplate.opsForValue().getOperations().getExpire(ipAddr + "_email");
+        if(expire2 > 0)
+            return ipAddr + "_email";
+
+        throw new BusinessException(BusinessExceptionCode.VERIFICATION_NOT_EXISTS);
     }
 }
