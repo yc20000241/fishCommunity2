@@ -55,7 +55,7 @@ public class AuthController {
         return CommonResponse.OK;
     }
 
-    @PostMapping("/registration")
+    @RequestMapping("/registration")
     public CommonResponse registration(@RequestBody RegistrateRequest registrateRequest, HttpServletRequest request) {
         authService.registration(registrateRequest, request);
         return CommonResponse.OK;

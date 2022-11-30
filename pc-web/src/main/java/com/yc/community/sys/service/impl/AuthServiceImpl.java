@@ -29,9 +29,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -49,8 +51,8 @@ public class AuthServiceImpl{
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
-    private JavaMailSenderImpl mailSender;
+    @Resource(name = "CustomMailSender")
+    private JavaMailSenderImpl javaMailSender;
 
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
@@ -111,7 +113,7 @@ public class AuthServiceImpl{
         simpleMailMessage.setFrom(propertiesConfig.getMailSendFrom());
 
         try {
-            mailSender.send(simpleMailMessage);
+            javaMailSender.send(simpleMailMessage);
             stringRedisTemplate.opsForValue().set(key, emailVerification, 60 * 5, TimeUnit.SECONDS);
         }catch (Exception e){
             e.printStackTrace();
