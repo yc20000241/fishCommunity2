@@ -2,12 +2,14 @@ package com.yc.community.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yc.community.common.commonConst.ActiveEnum;
+import com.yc.community.common.commonConst.RoleEnum;
 import com.yc.community.common.config.PropertiesConfig;
 import com.yc.community.common.exception.BusinessException;
 import com.yc.community.common.exception.BusinessExceptionCode;
 import com.yc.community.common.util.IpAddrUtil;
 import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.security.entity.UserDetail;
+import com.yc.community.sys.entity.RoleUser;
 import com.yc.community.sys.entity.UserInfo;
 import com.yc.community.sys.request.EmailRequest;
 import com.yc.community.sys.request.RegistrateRequest;
@@ -27,7 +29,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -62,6 +66,12 @@ public class AuthServiceImpl{
 
     @Autowired
     private PropertiesConfig propertiesConfig;
+
+    @Autowired
+    private RoleUserServiceImpl roleUserService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public AccessToken login(String loginAccount, String password) {
         // 1 创建UsernamePasswordAuthenticationToken
@@ -144,6 +154,7 @@ public class AuthServiceImpl{
         }
     }
 
+    @Transactional
     public void registration(RegistrateRequest registrateRequest, HttpServletRequest request) {
         boolean isMatch = Pattern.matches("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$", registrateRequest.getLoginEmail());
         if(!isMatch)
@@ -162,8 +173,15 @@ public class AuthServiceImpl{
         userInfo.setUserName(registrateRequest.getLoginEmail());
         userInfo.setActive(ActiveEnum.ACTIVE.getCode());
         userInfo.setCreatedTime(new Date());
-        userInfo.setId(UUIDUtil.getUUID());
+        userInfo.setPassword(passwordEncoder.encode("123456"));
+        String uuid = UUIDUtil.getUUID();
+        userInfo.setId(uuid);
         userInfoService.save(userInfo);
+
+        RoleUser roleUser = new RoleUser();
+        roleUser.setRoleId(RoleEnum.USER.getCode());
+        roleUser.setUserId(uuid);
+        roleUserService.save(roleUser);
     }
 
     private String getIsVerification(String email, HttpServletRequest request) {
