@@ -34,13 +34,13 @@ public class AuthController {
     @PostMapping("/login")
     public CommonResponse login(@Valid @RequestBody LoginInfo loginInfo) {
         AccessToken accessToken = authService.login(loginInfo.getLoginAccount(), loginInfo.getPassword());
-        return CommonResponse.OKBuilder.data(accessToken).build();
+        return CommonResponse.OKBuilder.data(accessToken).msg("登录成功").build();
     }
 
     @PostMapping("/logout")
     public CommonResponse logout() {
         authService.logout();
-        return CommonResponse.OK;
+        return CommonResponse.OKBuilder.msg("已退出登录").build();
     }
 
     @PostMapping("/refresh")
@@ -52,12 +52,12 @@ public class AuthController {
     @RequestMapping("/sendEmail")
     public CommonResponse sendEmail(@RequestBody EmailRequest emailRequest, HttpServletRequest request) {
         authService.sendEmail(emailRequest, request);
-        return CommonResponse.OK;
+        return CommonResponse.OKBuilder.msg("邮件发送成功").build();
     }
 
     @PostMapping("/registration")
     public CommonResponse registration(@RequestBody RegistrateRequest registrateRequest, HttpServletRequest request) {
         authService.registration(registrateRequest, request);
-        return CommonResponse.OK;
+        return CommonResponse.OKBuilder.msg("注册成功").status(200).build();
     }
 }
