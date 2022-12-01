@@ -49,13 +49,13 @@ public class AuthController {
         return CommonResponse.OK;
     }
 
-    @PostMapping("/sendEmail")
+    @RequestMapping("/sendEmail")
     public CommonResponse sendEmail(@RequestBody EmailRequest emailRequest, HttpServletRequest request) {
         authService.sendEmail(emailRequest, request);
         return CommonResponse.OK;
     }
 
-    @RequestMapping("/registration")
+    @PostMapping("/registration")
     public CommonResponse registration(@RequestBody RegistrateRequest registrateRequest, HttpServletRequest request) {
         authService.registration(registrateRequest, request);
         return CommonResponse.OK;
