@@ -33,6 +33,10 @@ public class HomeServiceImpl {
         UserInfo userInfo = userDetailAcessUserInfo.getUserInfo(request);
         String key = userInfo.getId()+"_"+ DateUtil.getCurYearAndMonth();
         int currentDay = DateUtil.getCurrentDay();
+        Boolean bit = redisTemplate.opsForValue().getBit(key, currentDay);
+        if(bit == true)
+            throw new BusinessException(BusinessExceptionCode.TODAY_HAS_SIGNED);
+
         Boolean aBoolean = redisTemplate.opsForValue().setBit(key, currentDay, true);
         if(!aBoolean)
             throw new BusinessException(BusinessExceptionCode.SIGN_FAIL);
