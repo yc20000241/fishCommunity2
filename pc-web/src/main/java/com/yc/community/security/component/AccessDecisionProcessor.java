@@ -29,8 +29,11 @@ public class AccessDecisionProcessor implements AccessDecisionVoter<FilterInvoca
         String requestUrl = object.getRequestUrl();
 
         AntPathMatcher antPathMatcher = new AntPathMatcher();
-        if (antPathMatcher.match(ConstList.NO_PERMISSION_LOGIN_MATCH_URL, requestUrl))
-            return ACCESS_GRANTED;
+        for (String url : ConstList.NO_PERMISSION_LOGIN_MATCH_URL) {
+            if (antPathMatcher.match(url, requestUrl))
+                return ACCESS_GRANTED;
+        }
+
         String method = object.getRequest().getMethod();
         log.debug("进入自定义鉴权投票器，URI : {} {}", method, requestUrl);
 

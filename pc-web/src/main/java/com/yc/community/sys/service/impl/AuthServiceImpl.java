@@ -85,7 +85,7 @@ public class AuthServiceImpl{
         UserDetail userDetail = (UserDetail) authentication.getPrincipal();
         // 放入缓存
         String username = userDetail.getUsername();
-        redisTemplate.opsForValue().set(username, userDetail);
+        redisTemplate.opsForValue().set(username, userDetail, 3600 * 24 * 7, TimeUnit.SECONDS);
         // json解析不了双重对象
 //        stringRedisTemplate.opsForValue().set(userDetail.getUsername(), JSON.toJSONString(userDetail));
         return accessToken;

@@ -7,7 +7,8 @@ public enum BusinessExceptionCode {
     EMIAL_SYSTEM_ERROR("验证码发送错误，请联系管理员",603),
     USER_HAS_REGISTRATED("用户已注册", 604),
     VERIFICATION_ERROR("验证码错误", 605),
-    VERIFICATION_NOT_EXISTS("验证码不存在",606)
+    VERIFICATION_NOT_EXISTS("验证码不存在",606),
+    SIGN_FAIL("签到失败", 607)
     ;
 
     private String desc;
