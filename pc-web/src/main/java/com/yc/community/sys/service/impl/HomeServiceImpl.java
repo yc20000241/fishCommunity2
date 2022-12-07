@@ -37,9 +37,7 @@ public class HomeServiceImpl {
         if(bit == true)
             throw new BusinessException(BusinessExceptionCode.TODAY_HAS_SIGNED);
 
-        Boolean aBoolean = redisTemplate.opsForValue().setBit(key, currentDay, true);
-        if(!aBoolean)
-            throw new BusinessException(BusinessExceptionCode.SIGN_FAIL);
+        redisTemplate.opsForValue().setBit(key, currentDay, true);
     }
 
     public List<Integer> curMonthSignList(HttpServletRequest request) throws ParseException {

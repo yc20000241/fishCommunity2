@@ -25,12 +25,9 @@
     </content>
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-redis:2.3.0.RELEASE" level="project" />
     <orderEntry type="module" module-name="pc-common" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.3.12.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.3.0.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.3.0.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.3.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.3.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.2.3" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.2.3" level="project" />
@@ -80,5 +77,18 @@
     <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.3.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.15.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.10.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.baomidou:mybatis-plus-boot-starter:3.4.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.baomidou:mybatis-plus:3.4.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.baomidou:mybatis-plus-extension:3.4.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.baomidou:mybatis-plus-core:3.4.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.baomidou:mybatis-plus-annotation:3.4.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.jsqlparser:jsqlparser:3.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.mybatis:mybatis:3.5.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.mybatis:mybatis-spring:2.0.5" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.3.0.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.3.0.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.boot:spring-boot-starter-jdbc:2.3.0.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.zaxxer:HikariCP:3.4.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-jdbc:5.2.6.RELEASE" level="project" />
   </component>
 </module>

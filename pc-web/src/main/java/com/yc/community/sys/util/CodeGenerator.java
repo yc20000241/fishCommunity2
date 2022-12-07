@@ -76,8 +76,6 @@ public class CodeGenerator {
             }
         };
 
-        // 如果模板引擎是 freemarker
-       // String templatePath = "/templates/mapper.xml.ftl";
         // 如果模板引擎是 velocity
          String templatePath = "/templates/mapper.xml.vm";
 
@@ -92,33 +90,11 @@ public class CodeGenerator {
                         + "/" + tableInfo.getEntityName() + "Mapper" +".xml";
             }
         });
-        /*
-        cfg.setFileCreate(new IFileCreate() {
-            @Override
-            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
-                // 判断自定义文件夹是否需要创建
-                checkDir("调用默认方法创建的目录，自定义目录用");
-                if (fileType == FileType.MAPPER) {
-                    // 已经生成 mapper 文件判断存在，不想重新生成返回 false
-                    return !new File(filePath).exists();
-                }
-                // 允许生成模板文件
-                return true;
-            }
-        });
-        */
         cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
 
         // 配置模板
         TemplateConfig templateConfig = new TemplateConfig();
-
-        // 配置自定义输出模板
-        //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
-        // templateConfig.setEntity("templates/entity2.java");
-        // templateConfig.setService();
-        // templateConfig.setController();
-
         templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
 
@@ -126,19 +102,10 @@ public class CodeGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-       // strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         strategy.setEntityTableFieldAnnotationEnable(true);
-        //strategy.setTablePrefix("t_");
-        // 公共父类
-       // strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
-        // 写于父类中的公共字段
-       // strategy.setSuperEntityColumns("id");
-
-        //String tableName="T_FISHERMAN_INFO,T_BRIDGE_INFO,T_FISHING_EVENT_INFO,T_FISHING_VILLAGE_INFO,T_HANDPIECEH_INFO,T_MARKET_INFO,T_PATROL_BOAT_INFO,T_POLICE_LAW_INFO,T_SHIP_INFO,T_UNMANNED_AERIAL_VEHICLE_INFO,T_WATERS_INFO,T_WHARF_INFO";
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
-        //strategy.setInclude(tableName);
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");
         mpg.setStrategy(strategy);
