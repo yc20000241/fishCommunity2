@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-12-07
  */
 @RestController
-@RequestMapping("/articles/fish-articles")
+@RequestMapping("/api/service/articles/fishArticles")
 public class FishArticlesController {
 
 }

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
 
 /**
  * <p>
@@ -17,7 +17,6 @@ import lombok.EqualsAndHashCode;
  * @since 2022-12-07
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @TableName("fish_articles")
 public class FishArticles implements Serializable {
 

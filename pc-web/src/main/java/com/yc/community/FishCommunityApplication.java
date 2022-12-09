@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(exclude = {ErrorMvcAutoConfiguration.class})
 @ComponentScan(basePackages = "com.yc.community.*")
-@MapperScan(value = "com.yc.community.sys.mapper")
+@MapperScan(value = {"com.yc.community.sys.mapper","com.yc.community.service.modules.articles.mapper"})
 public class FishCommunityApplication {
     public static void main(String[] args) {
         SpringApplication.run(FishCommunityApplication.class, args);
