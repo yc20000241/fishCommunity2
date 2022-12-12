@@ -45,9 +45,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private JwtProperties jwtProperties;
 
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
-
-    @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
     @Override

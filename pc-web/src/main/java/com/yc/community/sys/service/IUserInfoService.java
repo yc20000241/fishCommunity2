@@ -4,6 +4,8 @@ import com.yc.community.sys.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * <p>
  *  服务类
@@ -13,5 +15,7 @@ import org.springframework.stereotype.Service;
  * @since 2022-11-21
  */
 public interface IUserInfoService extends IService<UserInfo> {
+
+    UserInfo getUserInfo(HttpServletRequest request);
 
 }

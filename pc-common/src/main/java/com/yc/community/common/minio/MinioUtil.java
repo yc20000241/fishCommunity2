@@ -1,5 +1,8 @@
 package com.yc.community.common.minio;
 
+import com.yc.community.common.exception.BusinessException;
+import com.yc.community.common.exception.BusinessExceptionCode;
+import com.yc.community.common.util.UUIDUtil;
 import io.minio.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,6 +62,7 @@ public class MinioUtil {
         List<String> names = new ArrayList<>(multipartFile.length);
         for (MultipartFile file : multipartFile) {
             String fileName = file.getOriginalFilename();
+            System.out.println(file.getContentType());
             String[] split = fileName.split("\\.");
             if (split.length > 1) {
                 fileName = split[0] + "_" + System.currentTimeMillis() + "." + split[1];
@@ -140,5 +141,23 @@ public class MinioUtil {
             }
         }
         return responseEntity;
+    }
+
+    public String stringUpload(String str, String bucketName){
+        String fileName = "";
+        try{
+            InputStream in = new ByteArrayInputStream(str.getBytes());
+            fileName = UUIDUtil.getUUID() + ".txt";
+            minioClient.putObject(PutObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(fileName)
+                            .stream(in, in.available(), -1)
+                            .contentType("text/plain")
+                            .build()
+            );
+        }catch (Exception e){
+            throw new BusinessException(BusinessExceptionCode.ARTICLE_UPLOAD_FILE);
+        }
+        return fileName;
     }
 }

@@ -8,8 +8,8 @@ public enum BusinessExceptionCode {
     USER_HAS_REGISTRATED("用户已注册", 604),
     VERIFICATION_ERROR("验证码错误", 605),
     VERIFICATION_NOT_EXISTS("验证码不存在",606),
-    SIGN_FAIL("签到失败", 607),
-    TODAY_HAS_SIGNED("今日已签到", 608)
+    TODAY_HAS_SIGNED("今日已签到", 607),
+    ARTICLE_UPLOAD_FILE("文件上传失败",608)
     ;
 
     private String desc;
