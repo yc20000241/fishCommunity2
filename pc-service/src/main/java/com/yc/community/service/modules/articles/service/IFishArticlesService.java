@@ -2,6 +2,7 @@ package com.yc.community.service.modules.articles.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yc.community.service.modules.articles.entity.FishArticles;
+import com.yc.community.service.modules.articles.request.PublishArticleRequest;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.yc.community.service.modules.articles.entity.FishArticles;
  */
 public interface IFishArticlesService extends IService<FishArticles> {
 
+    void publish(PublishArticleRequest publishArticleRequest);
 }

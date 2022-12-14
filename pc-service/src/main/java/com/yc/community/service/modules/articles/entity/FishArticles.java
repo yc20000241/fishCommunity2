@@ -5,6 +5,7 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 
@@ -32,12 +33,14 @@ public class FishArticles implements Serializable {
     private String createdId;
 
     @TableField("created_time")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
     @TableField("created_name")
     private String createdName;
 
     @TableField("updated_time")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedTime;
 
     @TableField("file_path")
@@ -52,5 +55,9 @@ public class FishArticles implements Serializable {
     @TableField("picture_path")
     private String picturePath;
 
+    @TableField("publish_status")
+    private Integer publishStatus;
 
+    @TableField("status")
+    private Integer status;
 }

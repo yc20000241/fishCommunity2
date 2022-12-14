@@ -56,11 +56,11 @@ public class MinioUtil {
      * @return: java.lang.String
      *
      */
-    public List<String> upload(MultipartFile[] multipartFile, String bucketName) {
+    public List<String> upload(MultipartFile file, String bucketName) {
         existBucket(bucketName);
 
-        List<String> names = new ArrayList<>(multipartFile.length);
-        for (MultipartFile file : multipartFile) {
+        List<String> names = new ArrayList<>();
+//        for (MultipartFile file : multipartFile) {
             String fileName = file.getOriginalFilename();
             System.out.println(file.getContentType());
             String[] split = fileName.split("\\.");
@@ -91,7 +91,7 @@ public class MinioUtil {
                 }
             }
             names.add(fileName);
-        }
+//        }
         return names;
     }
 
@@ -144,6 +144,8 @@ public class MinioUtil {
     }
 
     public String stringUpload(String str, String bucketName){
+        existBucket(bucketName);
+
         String fileName = "";
         try{
             InputStream in = new ByteArrayInputStream(str.getBytes());
@@ -156,6 +158,7 @@ public class MinioUtil {
                             .build()
             );
         }catch (Exception e){
+            System.out.println(e);
             throw new BusinessException(BusinessExceptionCode.ARTICLE_UPLOAD_FILE);
         }
         return fileName;

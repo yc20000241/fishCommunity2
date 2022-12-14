@@ -174,6 +174,7 @@ public class AuthServiceImpl{
         userInfo.setActive(ActiveEnum.ACTIVE.getCode());
         userInfo.setCreatedTime(new Date());
         userInfo.setPassword(passwordEncoder.encode("123456"));
+        userInfo.setNick("未命名");
         String uuid = UUIDUtil.getUUID();
         userInfo.setId(uuid);
         userInfoService.save(userInfo);
