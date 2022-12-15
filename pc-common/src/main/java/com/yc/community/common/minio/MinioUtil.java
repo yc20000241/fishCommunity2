@@ -52,8 +52,7 @@ public class MinioUtil {
     /**
      * description: 上传文件
      *
-     * @param multipartFile
-     * @return: java.lang.String
+     *
      *
      */
     public List<String> upload(MultipartFile file, String bucketName) {
@@ -90,7 +89,7 @@ public class MinioUtil {
                     }
                 }
             }
-            names.add(fileName);
+            names.add("/" + bucketName + "/" + fileName);
 //        }
         return names;
     }

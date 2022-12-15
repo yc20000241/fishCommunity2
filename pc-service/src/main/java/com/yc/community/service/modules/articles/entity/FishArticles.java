@@ -60,4 +60,7 @@ public class FishArticles implements Serializable {
 
     @TableField("status")
     private Integer status;
+
+    @TableField("describe")
+    private String describe;
 }

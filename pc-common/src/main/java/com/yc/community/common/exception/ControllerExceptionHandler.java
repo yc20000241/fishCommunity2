@@ -5,6 +5,9 @@ import com.yc.community.common.response.CommonResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,6 +47,19 @@ public class ControllerExceptionHandler {
         commonResp.setMsg(e.getCode().getDesc());
         commonResp.setStatus(e.getCode().getStatuCode());
         return commonResp;
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public CommonResponse customExceptionHandler(MethodArgumentNotValidException validException){
+        //所需信息在 BindingResult 中，根据自己需求返回
+        BindingResult result = validException.getBindingResult();
+        String defaultMessage = null;
+        for (FieldError fieldError : result.getFieldErrors()) {
+            defaultMessage = fieldError.getDefaultMessage();
+        }
+
+        return new CommonResponse().OKBuilder.msg(defaultMessage).build();
     }
 
     /**

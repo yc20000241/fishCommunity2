@@ -26,7 +26,7 @@ public class AccessDecisionProcessor implements AccessDecisionVoter<FilterInvoca
         assert object != null;
 
         // 拿到当前请求uri
-        String requestUrl = object.getRequestUrl();
+        String requestUrl = object.getRequestUrl().split("\\?")[0];
 
         AntPathMatcher antPathMatcher = new AntPathMatcher();
         for (String url : ConstList.NO_PERMISSION_LOGIN_MATCH_URL) {
