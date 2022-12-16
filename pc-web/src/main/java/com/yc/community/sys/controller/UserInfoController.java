@@ -31,7 +31,7 @@ public class UserInfoController {
     @Autowired
     private IUserInfoService userInfoService;
 
-    @GetMapping("/getUserInfo")
+    @GetMapping("/getInitUserInfo")
     public CommonResponse getUserInfo(HttpServletRequest request){
         UserInfo userInfo = userInfoService.getUserInfo(request);
         return CommonResponse.OKBuilder.data(userInfo).build();

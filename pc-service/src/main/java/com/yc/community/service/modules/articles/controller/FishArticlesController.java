@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yc.community.common.response.CommonResponse;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
+import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -42,5 +43,13 @@ public class FishArticlesController {
         IPage<FishArticles> list = fishArticlesService.search(keyWord, userId, kind, pageNo);
         return CommonResponse.OKBuilder.data(list).build();
     }
+
+    @GetMapping("/getTodayTop10")
+    public CommonResponse getTodayTop10(){
+        List<TodayTop10Reponse> list = fishArticlesService.getTodayTop10();
+        return CommonResponse.OKBuilder.data(list).build();
+    }
+
+
 }
 

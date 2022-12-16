@@ -34,6 +34,9 @@ public class AccessDecisionProcessor implements AccessDecisionVoter<FilterInvoca
                 return ACCESS_GRANTED;
         }
 
+        if(ConstList.PUBLIC_PERMISSION_URL.contains(requestUrl))
+            return ACCESS_GRANTED;
+
         String method = object.getRequest().getMethod();
         log.debug("进入自定义鉴权投票器，URI : {} {}", method, requestUrl);
 

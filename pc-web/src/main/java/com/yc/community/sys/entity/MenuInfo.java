@@ -1,6 +1,5 @@
 package com.yc.community.sys.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
@@ -13,27 +12,23 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author yc001
- * @since 2022-11-23
+ * @since 2022-12-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_permission_info")
-public class PermissionInfo implements Serializable {
+@TableName("sys_menu_info")
+public class MenuInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId("id")
+    @TableField("id")
     private String id;
-
-    @TableField("path")
-    private String path;
 
     @TableField("name")
     private String name;
 
-    @TableField("active")
-    private String active;
+    @TableField("path")
+    private String path;
 
-    @TableField("if_public")
-    private Integer ifPublic;
+
 }

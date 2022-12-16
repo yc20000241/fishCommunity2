@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
+import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 
 import java.util.List;
 
@@ -20,4 +21,7 @@ public interface IFishArticlesService extends IService<FishArticles> {
     void publish(PublishArticleRequest publishArticleRequest);
 
     IPage<FishArticles> search(String keyWord, String userId, Integer kind, Integer pageNo);
+
+    List<TodayTop10Reponse> getTodayTop10();
+
 }

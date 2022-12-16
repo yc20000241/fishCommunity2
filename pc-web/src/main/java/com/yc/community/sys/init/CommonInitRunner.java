@@ -21,6 +21,5 @@ public class CommonInitRunner implements ApplicationRunner {
         cacheService.initRolePermissionList();
         log.info("加载数据加载完成....");
         log.info("加载参数到缓存");
-
     }
 }

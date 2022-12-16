@@ -1,8 +1,10 @@
 package com.yc.community.sys.service.impl;
 
+import com.yc.community.common.util.CopyUtil;
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.entity.UserInfo;
 import com.yc.community.sys.mapper.UserInfoMapper;
+import com.yc.community.sys.response.InitUserInfoResponse;
 import com.yc.community.sys.service.IUserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yc.community.sys.util.JwtProperties;
@@ -12,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
@@ -41,6 +44,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         String loginAccount = jwtProvider.getSubjectFromToken(authToken);
         UserDetail userDetails = (UserDetail)redisTemplate.opsForValue().get(loginAccount);
         UserInfo userInfo = userDetails.getUserInfo();
+
+        List<String> roles = userDetails.getRoles();
+        for (String role : roles) {
+
+        }
+
+        InitUserInfoResponse copy = CopyUtil.copy(userInfo, InitUserInfoResponse.class);
+
+
         return userInfo;
     }
 }

@@ -42,7 +42,7 @@ public class BeanConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
-        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.POSTGRE_SQL));
         return mybatisPlusInterceptor;
     }
 }

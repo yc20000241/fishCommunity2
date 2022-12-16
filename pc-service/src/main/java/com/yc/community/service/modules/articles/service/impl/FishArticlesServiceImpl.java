@@ -9,15 +9,18 @@ import com.yc.community.common.commonConst.ActiveEnum;
 import com.yc.community.common.commonConst.ArticlePublishEnum;
 import com.yc.community.common.commonConst.ConstList;
 import com.yc.community.common.minio.MinioUtil;
+import com.yc.community.common.util.DateUtil;
 import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.mapper.FishArticlesMapper;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
+import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -77,5 +80,18 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         IPage<FishArticles> page1 = page(pageNotst, fishArticlesQueryWrapper);
 
         return page1;
+    }
+
+    @Override
+    public List<TodayTop10Reponse> getTodayTop10() {
+        List<FishArticles> list = list(new QueryWrapper<FishArticles>().ge("created_time", DateUtil.getDayBegin()).orderByAsc("like_count").last("limit 10"));
+        List<TodayTop10Reponse> resultList = new ArrayList<>();
+
+        list.forEach(x -> {
+            TodayTop10Reponse todayTop10Reponse = new TodayTop10Reponse(x.getId(),x.getTitle());
+            resultList.add(todayTop10Reponse);
+        });
+
+        return resultList;
     }
 }
