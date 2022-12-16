@@ -41,6 +41,7 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -73,6 +74,7 @@ public class AuthServiceImpl{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
     public AccessToken login(String loginAccount, String password) {
         // 1 创建UsernamePasswordAuthenticationToken
         UsernamePasswordAuthenticationToken usernameAuthentication = new UsernamePasswordAuthenticationToken(loginAccount, password);
@@ -83,6 +85,10 @@ public class AuthServiceImpl{
         // 4 生成自定义token
         AccessToken accessToken = jwtProvider.createToken((UserDetails) authentication.getPrincipal());
         UserDetail userDetail = (UserDetail) authentication.getPrincipal();
+        //放入角色信息
+        List<RoleUser> user_id = roleUserService.list(new QueryWrapper<RoleUser>().eq("user_id", userDetail.getUserInfo().getId()));
+        List<String> roleIds = user_id.stream().map(RoleUser::getRoleId).collect(Collectors.toList());
+        userDetail.setRoles(roleIds);
         // 放入缓存
         String username = userDetail.getUsername();
         redisTemplate.opsForValue().set(username, userDetail, 3600 * 24 * 7, TimeUnit.SECONDS);

@@ -50,6 +50,17 @@ public class FishArticlesController {
         return CommonResponse.OKBuilder.data(list).build();
     }
 
+    @GetMapping("/searchApplyArticle")
+    public CommonResponse searchApplyArticle(@RequestParam("applyStatus") Integer applyStatus,
+                                       @RequestParam("keyWord") String keyWord){
+        List<FishArticles> list = fishArticlesService.searchApplyArticle(applyStatus, keyWord);
+        return CommonResponse.OKBuilder.data(list).build();
+    }
 
+    @PostMapping("/applyArticleById")
+    public CommonResponse applyArticleById(@RequestParam("id") String id){
+        fishArticlesService.applyArticleById(id);
+        return CommonResponse.OKBuilder.msg("审批成功").build();
+    }
 }
 

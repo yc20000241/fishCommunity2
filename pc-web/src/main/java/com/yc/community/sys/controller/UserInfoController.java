@@ -4,6 +4,7 @@ package com.yc.community.sys.controller;
 import com.yc.community.common.response.CommonResponse;
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.entity.UserInfo;
+import com.yc.community.sys.response.InitUserInfoResponse;
 import com.yc.community.sys.service.IUserInfoService;
 import com.yc.community.sys.util.JwtProperties;
 import com.yc.community.sys.util.JwtProvider;
@@ -33,7 +34,7 @@ public class UserInfoController {
 
     @GetMapping("/getInitUserInfo")
     public CommonResponse getUserInfo(HttpServletRequest request){
-        UserInfo userInfo = userInfoService.getUserInfo(request);
+        InitUserInfoResponse userInfo = userInfoService.getUserInfo(request);
         return CommonResponse.OKBuilder.data(userInfo).build();
     }
 }

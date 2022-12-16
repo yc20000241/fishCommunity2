@@ -1,6 +1,5 @@
 package com.yc.community.service.modules.articles.service.impl;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -63,7 +62,8 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     @Override
     public IPage<FishArticles> search(String keyWord, String userId, Integer kind, Integer pageNo) {
         QueryWrapper<FishArticles> fishArticlesQueryWrapper = new QueryWrapper<>();
-        fishArticlesQueryWrapper.eq("created_id", userId);
+        fishArticlesQueryWrapper.eq("created_id", userId)
+                .eq("publish_status", ActiveEnum.ACTIVE.getCode());
         if(!StringUtils.isEmpty(keyWord))
             fishArticlesQueryWrapper.like("title", keyWord);
 
@@ -93,5 +93,24 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         });
 
         return resultList;
+    }
+
+    @Override
+    public List<FishArticles> searchApplyArticle(Integer applyStatus, String keyWord) {
+        QueryWrapper<FishArticles> fishArticlesQueryWrapper = new QueryWrapper<>();
+        fishArticlesQueryWrapper.eq("publish_status", applyStatus);
+        if(!StringUtils.isEmpty(keyWord))
+            fishArticlesQueryWrapper.like("title", keyWord);
+
+        fishArticlesQueryWrapper.orderByDesc("created_time");
+        List<FishArticles> list = list(fishArticlesQueryWrapper);
+        return list;
+    }
+
+    @Override
+    public void applyArticleById(String id) {
+        FishArticles byId = getById(id);
+        byId.setPublishStatus(ActiveEnum.ACTIVE.getCode());
+        updateById(byId);
     }
 }

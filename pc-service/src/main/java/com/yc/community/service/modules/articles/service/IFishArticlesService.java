@@ -24,4 +24,7 @@ public interface IFishArticlesService extends IService<FishArticles> {
 
     List<TodayTop10Reponse> getTodayTop10();
 
+    List<FishArticles> searchApplyArticle(Integer applyStatus, String keyWord);
+
+    void applyArticleById(String id);
 }

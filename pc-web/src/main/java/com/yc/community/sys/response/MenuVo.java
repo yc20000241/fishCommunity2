@@ -8,4 +8,6 @@ public class MenuVo {
     private String name;
 
     private String path;
+
+    private Integer order;
 }

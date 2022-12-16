@@ -3,8 +3,10 @@ package com.yc.community.sys.service.impl;
 import com.yc.community.common.util.CopyUtil;
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.entity.UserInfo;
+import com.yc.community.sys.mapper.RoleMenuMapper;
 import com.yc.community.sys.mapper.UserInfoMapper;
 import com.yc.community.sys.response.InitUserInfoResponse;
+import com.yc.community.sys.response.MenuVo;
 import com.yc.community.sys.service.IUserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yc.community.sys.util.JwtProperties;
@@ -36,8 +38,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
+
     @Override
-    public UserInfo getUserInfo(HttpServletRequest request) {
+    public InitUserInfoResponse getUserInfo(HttpServletRequest request) {
         String authToken = jwtProvider.getToken(request);
         int length = jwtProperties.getTokenPrefix().length();
         authToken = authToken.substring(length);
@@ -46,13 +51,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfo userInfo = userDetails.getUserInfo();
 
         List<String> roles = userDetails.getRoles();
-        for (String role : roles) {
-
-        }
+        List<MenuVo> list = roleMenuMapper.getRolesMenuList(roles);
 
         InitUserInfoResponse copy = CopyUtil.copy(userInfo, InitUserInfoResponse.class);
+        copy.setMenuVoList(list);
 
-
-        return userInfo;
+        return copy;
     }
 }

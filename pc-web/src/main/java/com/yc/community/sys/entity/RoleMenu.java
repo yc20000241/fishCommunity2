@@ -1,5 +1,6 @@
 package com.yc.community.sys.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
@@ -21,7 +22,7 @@ public class RoleMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("id")
+    @TableId("id")
     private String id;
 
     @TableField("role_id")

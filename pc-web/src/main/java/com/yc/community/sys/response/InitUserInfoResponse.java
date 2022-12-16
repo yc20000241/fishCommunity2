@@ -1,7 +1,10 @@
 package com.yc.community.sys.response;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class InitUserInfoResponse {
 
     private String id;
