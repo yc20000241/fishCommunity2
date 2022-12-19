@@ -37,7 +37,7 @@ public class FishArticlesController {
 
     @GetMapping("/search")
     public CommonResponse search(@RequestParam(value = "keyWord", required = false) String keyWord,
-                                 @RequestParam("userId") String userId,
+                                 @RequestParam(value = "userId", required = false) String userId,
                                  @RequestParam(value = "kind", defaultValue = "1") Integer kind,
                                  @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo){
         IPage<FishArticles> list = fishArticlesService.search(keyWord, userId, kind, pageNo);
@@ -62,5 +62,13 @@ public class FishArticlesController {
         fishArticlesService.applyArticleById(id);
         return CommonResponse.OKBuilder.msg("审批成功").build();
     }
+
+    @GetMapping("/getById")
+    public CommonResponse getById(@RequestParam("id") String id){
+        FishArticles byId = fishArticlesService.getById(id);
+        return CommonResponse.OKBuilder.data(byId).build();
+    }
+
+
 }
 

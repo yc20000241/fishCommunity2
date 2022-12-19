@@ -31,5 +31,9 @@ public class MenuInfo implements Serializable {
     @TableField("path")
     private String path;
 
+    @TableField("order")
+    private Integer order;
 
+    @TableField("icon")
+    private String icon;
 }

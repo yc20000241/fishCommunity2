@@ -36,5 +36,9 @@ public class MinioController {
         return CommonResponse.OKBuilder.data(download).build();
     }
 
-
+    @GetMapping("/stringDownload")
+    public CommonResponse stringDownload(@RequestParam String fileName, @RequestParam(name = "bucketName") String bucketName) {
+        String s = minioUtil.stringDownload(fileName, bucketName);
+        return CommonResponse.OKBuilder.data(s).build();
+    }
 }

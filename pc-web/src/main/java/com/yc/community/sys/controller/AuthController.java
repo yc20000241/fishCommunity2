@@ -58,6 +58,6 @@ public class AuthController {
     @PostMapping("/registration")
     public CommonResponse registration(@RequestBody RegistrateRequest registrateRequest, HttpServletRequest request) {
         authService.registration(registrateRequest, request);
-        return CommonResponse.OKBuilder.msg("注册成功，初始密码为123456").status(200).build();
+        return CommonResponse.OKBuilder.msg("注册成功").status(200).build();
     }
 }

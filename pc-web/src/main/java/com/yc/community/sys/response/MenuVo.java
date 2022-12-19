@@ -10,4 +10,6 @@ public class MenuVo {
     private String path;
 
     private Integer order;
+
+    private String icon;
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.yc.community.sys.mapper.RoleMenuMapper">
 
     <select id="getRolesMenuList" resultType="com.yc.community.sys.response.MenuVo">
-        select name, path, sys_menu_info.order as order from sys_menu_info where id in (
+        select name, path, sys_menu_info.order as order, icon from sys_menu_info where id in (
             select distinct menu_id from sys_role_menu
             where role_id in
             <foreach item="role" index="index" collection="roles" open="(" separator="," close=")">

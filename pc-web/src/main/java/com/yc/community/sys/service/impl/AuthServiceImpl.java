@@ -179,7 +179,7 @@ public class AuthServiceImpl{
         userInfo.setUserName(registrateRequest.getLoginEmail());
         userInfo.setActive(ActiveEnum.ACTIVE.getCode());
         userInfo.setCreatedTime(new Date());
-        userInfo.setPassword(passwordEncoder.encode("123456"));
+        userInfo.setPassword(passwordEncoder.encode(registrateRequest.getPassword()));
         userInfo.setNick("未命名");
         String uuid = UUIDUtil.getUUID();
         userInfo.setId(uuid);

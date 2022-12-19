@@ -162,4 +162,25 @@ public class MinioUtil {
         }
         return fileName;
     }
+
+    public String stringDownload(String fileName, String bucketName) {
+        InputStream in = null;
+        String result = null;
+        try {
+            in = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(fileName).build());
+            result = IOUtils.toString(in);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
 }

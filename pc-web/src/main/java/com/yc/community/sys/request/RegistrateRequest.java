@@ -12,4 +12,7 @@ public class RegistrateRequest {
 
     @NotBlank(message = "验证码不可为空")
     private String emailVerification;
+
+    @NotBlank(message = "密码不可为空")
+    private String password;
 }

@@ -47,14 +47,15 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         fishArticles.setPicturePath(publishArticleRequest.getFilePath());
         fishArticles.setStatus(ActiveEnum.ACTIVE.getCode());
         fishArticles.setPublishStatus(ArticlePublishEnum.ARTICLE_PUBLISH.getCode());
+        fishArticles.setTitle(publishArticleRequest.getTitle());
 
         String fileName = minioUtil.stringUpload(publishArticleRequest.getContent(), ConstList.ARTICLE_BUCKET);
         fishArticles.setFilePath(fileName);
 
-        if(publishArticleRequest.getContent().length() < 100)
-            fishArticles.setDescribe(publishArticleRequest.getContent());
-        else
-            fishArticles.setDescribe(publishArticleRequest.getContent().substring(0,100));
+        String content = publishArticleRequest.getContent().substring(0,200);
+        content = content.replaceAll("</?[^>]+>", "");
+        content = content.replaceAll("<a>\\s*|\t|\r|\n</a>", "");
+        fishArticles.setDescribe(content);
 
         save(fishArticles);
     }
@@ -62,10 +63,11 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     @Override
     public IPage<FishArticles> search(String keyWord, String userId, Integer kind, Integer pageNo) {
         QueryWrapper<FishArticles> fishArticlesQueryWrapper = new QueryWrapper<>();
-        fishArticlesQueryWrapper.eq("created_id", userId)
-                .eq("publish_status", ActiveEnum.ACTIVE.getCode());
+        fishArticlesQueryWrapper.eq("publish_status", ActiveEnum.ACTIVE.getCode());
         if(!StringUtils.isEmpty(keyWord))
             fishArticlesQueryWrapper.like("title", keyWord);
+        if(!StringUtils.isEmpty(userId))
+            fishArticlesQueryWrapper.eq("created_id", userId);
 
         if(kind == 1)
             fishArticlesQueryWrapper.orderByDesc("created_time");
@@ -84,7 +86,12 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
     @Override
     public List<TodayTop10Reponse> getTodayTop10() {
-        List<FishArticles> list = list(new QueryWrapper<FishArticles>().ge("created_time", DateUtil.getDayBegin()).orderByAsc("like_count").last("limit 10"));
+        QueryWrapper<FishArticles> last = new QueryWrapper<FishArticles>();
+        last.ge("created_time", DateUtil.getDayBegin())
+                .eq("publish_status", ActiveEnum.ACTIVE.getCode())
+                .orderByAsc("like_count")
+                .last("limit 10");
+        List<FishArticles> list = list(last);
         List<TodayTop10Reponse> resultList = new ArrayList<>();
 
         list.forEach(x -> {
