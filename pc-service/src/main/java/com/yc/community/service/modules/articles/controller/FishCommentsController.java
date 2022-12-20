@@ -1,9 +1,15 @@
 package com.yc.community.service.modules.articles.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.yc.community.common.response.CommonResponse;
+import com.yc.community.service.modules.articles.entity.FishComments;
+import com.yc.community.service.modules.articles.request.PublishArticleRequest;
+import com.yc.community.service.modules.articles.service.IFishCommentsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * <p>
@@ -14,8 +20,22 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-12-19
  */
 @RestController
-@RequestMapping("/articles/fish-comments")
+@RequestMapping("/api/service/articles/fishComments")
 public class FishCommentsController {
 
+    @Autowired
+    private IFishCommentsService fishCommentsService;
+
+    @PostMapping("/commitComment")
+    public CommonResponse commitComment( @RequestBody FishComments fishComments){
+        fishCommentsService.commitComment(fishComments);
+        return CommonResponse.OKBuilder.msg("评论成功").build();
+    }
+
+    @GetMapping("/getCommentList")
+    public CommonResponse getCommentList( @RequestParam("articleId") String articleId){
+        List<FishComments> list = fishCommentsService.getCommentList(articleId);
+        return CommonResponse.OKBuilder.data(list).build();
+    }
 }
 

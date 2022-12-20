@@ -13,5 +13,7 @@ public class InitUserInfoResponse {
 
     private String nick;
 
+    private String picturePath;
+
     private List<MenuVo> menuVoList;
 }

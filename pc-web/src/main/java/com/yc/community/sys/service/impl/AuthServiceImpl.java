@@ -181,6 +181,7 @@ public class AuthServiceImpl{
         userInfo.setCreatedTime(new Date());
         userInfo.setPassword(passwordEncoder.encode(registrateRequest.getPassword()));
         userInfo.setNick("未命名");
+        userInfo.setPicturePath("/article-image/default-avatar.b7d77977.png");
         String uuid = UUIDUtil.getUUID();
         userInfo.setId(uuid);
         userInfoService.save(userInfo);

@@ -9,7 +9,8 @@ public enum BusinessExceptionCode {
     VERIFICATION_ERROR("验证码错误", 605),
     VERIFICATION_NOT_EXISTS("验证码不存在",606),
     TODAY_HAS_SIGNED("今日已签到", 607),
-    ARTICLE_UPLOAD_FILE("文件上传失败",608)
+    ARTICLE_UPLOAD_FILE("文件上传失败",608),
+    ARTICLE_NOT_APPLIED("文章未审批",609)
     ;
 
     private String desc;

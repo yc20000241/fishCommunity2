@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -41,8 +43,21 @@ public class FishComments implements Serializable {
     @TableField("article_comment")
     private String articleComment;
 
-    @TableField("createt_time")
-    private Date createtTime;
+    @TableField("created_time")
+    private Date createdTime;
 
+    @TableField("from_user_name")
+    private String fromUserName;
 
+    @TableField("to_user_name")
+    private String toUserName;
+
+    @TableField("from_user_picture_path")
+    private String fromUserPicturePath;
+
+    @TableField("like_count")
+    private Integer likeCount;
+
+    @TableField(exist = false)
+    private List<FishComments> childrenList;
 }

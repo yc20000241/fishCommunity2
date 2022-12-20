@@ -44,5 +44,6 @@ public class UserInfo implements Serializable {
     @TableField("active")
     private Integer active;
 
-
+    @TableField("picture_path")
+    private String picturePath;
 }
