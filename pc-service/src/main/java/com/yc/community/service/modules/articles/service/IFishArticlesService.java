@@ -27,4 +27,6 @@ public interface IFishArticlesService extends IService<FishArticles> {
     List<FishArticles> searchApplyArticle(Integer applyStatus, String keyWord);
 
     void applyArticleById(String id);
+
+    FishArticles getArticleInfoById(String id);
 }

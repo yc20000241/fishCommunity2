@@ -65,7 +65,7 @@ public class FishArticlesController {
 
     @GetMapping("/getById")
     public CommonResponse getById(@RequestParam("id") String id){
-        FishArticles byId = fishArticlesService.getById(id);
+        FishArticles byId = fishArticlesService.getArticleInfoById(id);
         return CommonResponse.OKBuilder.data(byId).build();
     }
 

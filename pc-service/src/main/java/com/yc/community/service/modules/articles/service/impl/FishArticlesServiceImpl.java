@@ -16,6 +16,7 @@ import com.yc.community.service.modules.articles.request.PublishArticleRequest;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -118,6 +119,20 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     public void applyArticleById(String id) {
         FishArticles byId = getById(id);
         byId.setPublishStatus(ActiveEnum.ACTIVE.getCode());
+        updateById(byId);
+    }
+
+    @Override
+    public FishArticles getArticleInfoById(String id) {
+        FishArticles byId = getById(id);
+        lookThroughArticle(id);
+        return byId;
+    }
+
+    @Async
+    public void lookThroughArticle(String articleId){
+        FishArticles byId = getById(articleId);
+        byId.setLookCount(byId.getLookCount()+1);
         updateById(byId);
     }
 }
