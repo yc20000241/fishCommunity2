@@ -1,4 +1,4 @@
-package com.yc.community.service.dataHandled;
+package com.yc.community.service.dataHandled.kafka;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

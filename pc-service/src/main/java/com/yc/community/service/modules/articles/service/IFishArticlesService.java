@@ -3,6 +3,7 @@ package com.yc.community.service.modules.articles.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yc.community.service.modules.articles.entity.FishArticles;
+import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 
@@ -26,7 +27,7 @@ public interface IFishArticlesService extends IService<FishArticles> {
 
     List<FishArticles> searchApplyArticle(Integer applyStatus, String keyWord);
 
-    void applyArticleById(String id);
+    void applyArticleById(ApplyArticleRequest applyArticleRequest);
 
     FishArticles getArticleInfoById(String id);
 }

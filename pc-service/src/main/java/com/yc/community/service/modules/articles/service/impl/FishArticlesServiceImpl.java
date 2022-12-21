@@ -12,6 +12,7 @@ import com.yc.community.common.util.DateUtil;
 import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.mapper.FishArticlesMapper;
+import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
@@ -116,9 +117,9 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     }
 
     @Override
-    public void applyArticleById(String id) {
-        FishArticles byId = getById(id);
-        byId.setPublishStatus(ActiveEnum.ACTIVE.getCode());
+    public void applyArticleById(ApplyArticleRequest applyArticleRequest) {
+        FishArticles byId = getById(applyArticleRequest.getId());
+        byId.setPublishStatus(applyArticleRequest.getPublishState());
         updateById(byId);
     }
 

@@ -4,6 +4,7 @@ package com.yc.community.service.modules.articles.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yc.community.common.response.CommonResponse;
 import com.yc.community.service.modules.articles.entity.FishArticles;
+import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
@@ -58,8 +59,8 @@ public class FishArticlesController {
     }
 
     @PostMapping("/applyArticleById")
-    public CommonResponse applyArticleById(@RequestParam("id") String id){
-        fishArticlesService.applyArticleById(id);
+    public CommonResponse applyArticleById(ApplyArticleRequest applyArticleRequest){
+        fishArticlesService.applyArticleById(applyArticleRequest);
         return CommonResponse.OKBuilder.msg("审批成功").build();
     }
 
