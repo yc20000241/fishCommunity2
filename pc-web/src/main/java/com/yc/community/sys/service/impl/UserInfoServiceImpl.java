@@ -5,6 +5,7 @@ import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.entity.UserInfo;
 import com.yc.community.sys.mapper.RoleMenuMapper;
 import com.yc.community.sys.mapper.UserInfoMapper;
+import com.yc.community.sys.response.AuthorUserInfoResponse;
 import com.yc.community.sys.response.InitUserInfoResponse;
 import com.yc.community.sys.response.MenuVo;
 import com.yc.community.sys.service.IUserInfoService;
@@ -42,7 +43,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private RoleMenuMapper roleMenuMapper;
 
     @Override
-    public InitUserInfoResponse getUserInfo(HttpServletRequest request) {
+    public InitUserInfoResponse getInitUserInfo(HttpServletRequest request) {
         String authToken = jwtProvider.getToken(request);
         int length = jwtProperties.getTokenPrefix().length();
         authToken = authToken.substring(length);
@@ -56,6 +57,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         InitUserInfoResponse copy = CopyUtil.copy(userInfo, InitUserInfoResponse.class);
         copy.setMenuVoList(list);
 
+        return copy;
+    }
+
+    @Override
+    public AuthorUserInfoResponse getUserInfoById(String id) {
+        UserInfo byId = getById(id);
+        AuthorUserInfoResponse copy = CopyUtil.copy(byId, AuthorUserInfoResponse.class);
         return copy;
     }
 }

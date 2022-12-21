@@ -4,6 +4,7 @@ package com.yc.community.sys.controller;
 import com.yc.community.common.response.CommonResponse;
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.entity.UserInfo;
+import com.yc.community.sys.response.AuthorUserInfoResponse;
 import com.yc.community.sys.response.InitUserInfoResponse;
 import com.yc.community.sys.service.IUserInfoService;
 import com.yc.community.sys.util.JwtProperties;
@@ -13,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,8 +35,14 @@ public class UserInfoController {
     private IUserInfoService userInfoService;
 
     @GetMapping("/getInitUserInfo")
-    public CommonResponse getUserInfo(HttpServletRequest request){
-        InitUserInfoResponse userInfo = userInfoService.getUserInfo(request);
+    public CommonResponse getInitUserInfo(HttpServletRequest request){
+        InitUserInfoResponse userInfo = userInfoService.getInitUserInfo(request);
+        return CommonResponse.OKBuilder.data(userInfo).build();
+    }
+
+    @GetMapping("/getUserInfoById")
+    public CommonResponse getUserInfoById(@RequestParam("id") String id){
+        AuthorUserInfoResponse userInfo = userInfoService.getUserInfoById(id);
         return CommonResponse.OKBuilder.data(userInfo).build();
     }
 }

@@ -2,6 +2,7 @@ package com.yc.community.sys.service;
 
 import com.yc.community.sys.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yc.community.sys.response.AuthorUserInfoResponse;
 import com.yc.community.sys.response.InitUserInfoResponse;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface IUserInfoService extends IService<UserInfo> {
 
-    InitUserInfoResponse getUserInfo(HttpServletRequest request);
+    InitUserInfoResponse getInitUserInfo(HttpServletRequest request);
 
+    AuthorUserInfoResponse getUserInfoById(String id);
 }
