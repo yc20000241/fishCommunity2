@@ -7,10 +7,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yc.community.common.commonConst.ActiveEnum;
 import com.yc.community.common.commonConst.ArticlePublishEnum;
 import com.yc.community.common.commonConst.ConstList;
+import com.yc.community.common.commonConst.MessageCategoryEnum;
 import com.yc.community.common.minio.MinioUtil;
 import com.yc.community.common.util.DateUtil;
 import com.yc.community.common.util.UUIDUtil;
+import com.yc.community.service.dataHandled.initMessage.MessageAdapter;
 import com.yc.community.service.modules.articles.entity.FishArticles;
+import com.yc.community.service.modules.articles.entity.FishMessage;
 import com.yc.community.service.modules.articles.mapper.FishArticlesMapper;
 import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
@@ -23,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,6 +42,9 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
     @Autowired
     private MinioUtil minioUtil;
+
+    @Autowired
+    private MessageAdapter messageAdapter;
 
     @Override
     public void publish(PublishArticleRequest publishArticleRequest) {
@@ -121,6 +128,11 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         FishArticles byId = getById(applyArticleRequest.getId());
         byId.setPublishStatus(applyArticleRequest.getPublishState());
         updateById(byId);
+
+        HashMap<String, Object> stringObjectHashMap = new HashMap<>();
+        stringObjectHashMap.put("articleObj", byId);
+        stringObjectHashMap.put("publishContent",applyArticleRequest.getPublishContent());
+        messageAdapter.adapter(MessageCategoryEnum.ARTICLE_APPLY.getCategory(), stringObjectHashMap);
     }
 
     @Override

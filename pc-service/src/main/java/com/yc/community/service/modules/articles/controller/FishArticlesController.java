@@ -59,7 +59,7 @@ public class FishArticlesController {
     }
 
     @PostMapping("/applyArticleById")
-    public CommonResponse applyArticleById(ApplyArticleRequest applyArticleRequest){
+    public CommonResponse applyArticleById(@RequestBody ApplyArticleRequest applyArticleRequest){
         fishArticlesService.applyArticleById(applyArticleRequest);
         return CommonResponse.OKBuilder.msg("审批成功").build();
     }
