@@ -19,9 +19,9 @@ public class KafkaProducer
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void send(String message){
+    public void commonSend(String topic, String message){
         ListenableFuture<SendResult<String, String>> info = kafkaTemplate.send("message", message);
-        log.info("=======发送消息："+message+"========");
+        log.info("=======发送"+ topic +"消息："+message+"========");
         info.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
             @Override
             public void onFailure(Throwable ex) {

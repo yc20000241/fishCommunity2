@@ -6,7 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum MessageCategoryEnum {
-    ARTICLE_APPLY(1,"审批消息");
+    ARTICLE_APPLY(1,"审批消息"),
+    ARTICLE_OR_COMMENT_LIKE(2, "文章或评论点赞");
 
     private Integer category;
 

@@ -23,6 +23,7 @@ public class MessageAdapter {
     public void init(){
         iMessageAdaptees = new ArrayList<IMessageAdaptee>();
         iMessageAdaptees.add(new ArticleApplyAdaptee());
+        iMessageAdaptees.add(new ArticleOrCommentLikeAdaptee());
     }
 
     @Async
@@ -34,6 +35,6 @@ public class MessageAdapter {
                 break;
             }
 
-        kafkaProducer.send(JSONObject.toJSONString(fishMessage));
+        kafkaProducer.commonSend("message", JSONObject.toJSONString(fishMessage));
     }
 }

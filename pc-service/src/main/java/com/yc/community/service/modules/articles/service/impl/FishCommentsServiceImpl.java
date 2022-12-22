@@ -1,11 +1,14 @@
 package com.yc.community.service.modules.articles.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yc.community.common.commonConst.MessageCategoryEnum;
 import com.yc.community.common.exception.BusinessException;
 import com.yc.community.common.exception.BusinessExceptionCode;
 import com.yc.community.common.util.UUIDUtil;
+import com.yc.community.service.dataHandled.initMessage.MessageAdapter;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishComments;
 import com.yc.community.service.modules.articles.mapper.FishCommentsMapper;
@@ -32,6 +35,9 @@ public class FishCommentsServiceImpl extends ServiceImpl<FishCommentsMapper, Fis
     @Autowired
     private FishArticlesServiceImpl fishArticlesService;
 
+    @Autowired
+    private MessageAdapter messageAdapter;
+
     @Override
     public void commitComment(FishComments fishComments) {
         FishArticles byId = fishArticlesService.getById(fishComments.getArticleId());
@@ -42,6 +48,8 @@ public class FishCommentsServiceImpl extends ServiceImpl<FishCommentsMapper, Fis
         fishComments.setCreatedTime(new Date());
         fishComments.setLikeCount(0);
         save(fishComments);
+
+        messageAdapter.adapter(MessageCategoryEnum.ARTICLE_OR_COMMENT_LIKE.getCategory(), fishComments);
     }
 
     @Override

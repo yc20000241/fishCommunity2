@@ -1,5 +1,6 @@
 package com.yc.community.service.modules.articles.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,10 +13,12 @@ import com.yc.community.common.minio.MinioUtil;
 import com.yc.community.common.util.DateUtil;
 import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.service.dataHandled.initMessage.MessageAdapter;
+import com.yc.community.service.dataHandled.kafka.KafkaProducer;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishMessage;
 import com.yc.community.service.modules.articles.mapper.FishArticlesMapper;
 import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
+import com.yc.community.service.modules.articles.request.ArticleLikeRequest;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
@@ -45,6 +48,9 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
     @Autowired
     private MessageAdapter messageAdapter;
+
+    @Autowired
+    private KafkaProducer kafkaProducer;
 
     @Override
     public void publish(PublishArticleRequest publishArticleRequest) {
@@ -138,14 +144,13 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     @Override
     public FishArticles getArticleInfoById(String id) {
         FishArticles byId = getById(id);
-        lookThroughArticle(id);
+        kafkaProducer.commonSend("articleLook",JSON.toJSONString(byId));
         return byId;
     }
 
-    @Async
-    public void lookThroughArticle(String articleId){
-        FishArticles byId = getById(articleId);
-        byId.setLookCount(byId.getLookCount()+1);
-        updateById(byId);
+    @Override
+    public void articleLike(ArticleLikeRequest articleLikeRequest) {
+        kafkaProducer.commonSend("articleLike", JSON.toJSONString(articleLikeRequest));
     }
+
 }
