@@ -14,6 +14,7 @@ import com.yc.community.service.modules.articles.request.CommentLikeRequest;
 import com.yc.community.service.modules.articles.service.IFishUserCommentLikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,10 +37,15 @@ public class FishUserCommentLikeServiceImpl extends ServiceImpl<FishUserCommentL
     private MessageAdapter messageAdapter;
 
     @Override
+    @Transactional
     public void likeComment(CommentLikeRequest commentLikeRequest) {
         List<FishUserCommentLike> list = list(new QueryWrapper<FishUserCommentLike>().eq("user_id", commentLikeRequest.getUserId()).eq("comment_id", commentLikeRequest.getCommentId()));
         if (list.size() > 0)
             throw new BusinessException(BusinessExceptionCode.COMMENT_HAS_LIKEN);
+
+        FishComments byId1 = fishCommentsService.getById(commentLikeRequest.getCommentId());
+        byId1.setLikeCount(byId1.getLikeCount() + 1);
+        fishCommentsService.updateById(byId1);
 
         FishUserCommentLike fishUserCommentLike = new FishUserCommentLike();
         fishUserCommentLike.setCommentId(commentLikeRequest.getCommentId());

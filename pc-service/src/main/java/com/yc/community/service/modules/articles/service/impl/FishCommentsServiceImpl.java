@@ -48,6 +48,8 @@ public class FishCommentsServiceImpl extends ServiceImpl<FishCommentsMapper, Fis
         fishComments.setCreatedTime(new Date());
         fishComments.setLikeCount(0);
         save(fishComments);
+
+        messageAdapter.adapter(MessageCategoryEnum.PUBLISH_COMMENT.getCategory(), fishComments);
     }
 
     @Override
