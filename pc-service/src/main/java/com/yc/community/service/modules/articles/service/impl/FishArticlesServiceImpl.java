@@ -9,6 +9,8 @@ import com.yc.community.common.commonConst.ActiveEnum;
 import com.yc.community.common.commonConst.ArticlePublishEnum;
 import com.yc.community.common.commonConst.ConstList;
 import com.yc.community.common.commonConst.MessageCategoryEnum;
+import com.yc.community.common.exception.BusinessException;
+import com.yc.community.common.exception.BusinessExceptionCode;
 import com.yc.community.common.minio.MinioUtil;
 import com.yc.community.common.util.DateUtil;
 import com.yc.community.common.util.UUIDUtil;
@@ -16,6 +18,7 @@ import com.yc.community.service.dataHandled.initMessage.MessageAdapter;
 import com.yc.community.service.dataHandled.kafka.KafkaProducer;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishMessage;
+import com.yc.community.service.modules.articles.entity.FishUserArticleLike;
 import com.yc.community.service.modules.articles.mapper.FishArticlesMapper;
 import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.ArticleLikeRequest;
@@ -25,12 +28,10 @@ import com.yc.community.service.modules.articles.service.IFishArticlesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -51,6 +52,9 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
     @Autowired
     private KafkaProducer kafkaProducer;
+
+    @Autowired
+    private FishUserArticleLikeServiceImpl fishUserArticleLikeService;
 
     @Override
     public void publish(PublishArticleRequest publishArticleRequest) {
@@ -149,10 +153,21 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     }
 
     @Override
+    @Transactional
     public void articleLike(ArticleLikeRequest articleLikeRequest) {
+        List<FishUserArticleLike> list = fishUserArticleLikeService.list(new QueryWrapper<FishUserArticleLike>().eq("user_id", articleLikeRequest.getUserId()).eq("article_id", articleLikeRequest.getArticleId()));
+        if(list.size() > 0)
+            throw new BusinessException(BusinessExceptionCode.ARTICLE_HAS_LIKED);
+
         FishArticles byId = getById(articleLikeRequest.getArticleId());
         byId.setLikeCount(byId.getLikeCount()+1);
         updateById(byId);
+
+        FishUserArticleLike fishUserArticleLike = new FishUserArticleLike();
+        fishUserArticleLike.setId(UUIDUtil.getUUID());
+        fishUserArticleLike.setArticleId(articleLikeRequest.getArticleId());
+        fishUserArticleLike.setUserId(articleLikeRequest.getUserId());
+        fishUserArticleLikeService.save(fishUserArticleLike);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("article", byId);

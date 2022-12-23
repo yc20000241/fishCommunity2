@@ -1,9 +1,15 @@
 package com.yc.community.service.modules.articles.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.yc.community.common.response.CommonResponse;
+import com.yc.community.service.modules.articles.entity.FishComments;
+import com.yc.community.service.modules.articles.entity.FishUserCommentLike;
+import com.yc.community.service.modules.articles.request.CommentLikeRequest;
+import com.yc.community.service.modules.articles.service.IFishUserCommentLikeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * <p>
@@ -14,8 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-12-23
  */
 @RestController
-@RequestMapping("/article/fish-user-comment-like")
+@RequestMapping("/api/service/articles/fishUserCommentLike")
 public class FishUserCommentLikeController {
+
+    @Autowired
+    private IFishUserCommentLikeService fishUserCommentLikeService;
+
+    @PostMapping("/likeComment")
+    public CommonResponse likeComment(@RequestBody CommentLikeRequest commentLikeRequest){
+        fishUserCommentLikeService.likeComment(commentLikeRequest);
+        return CommonResponse.OKBuilder.msg("点赞成功").build();
+    }
 
 }
 

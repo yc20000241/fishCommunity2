@@ -2,6 +2,7 @@ package com.yc.community.service.modules.articles.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yc.community.service.modules.articles.entity.FishUserCommentLike;
+import com.yc.community.service.modules.articles.request.CommentLikeRequest;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.yc.community.service.modules.articles.entity.FishUserCommentLike;
  */
 public interface IFishUserCommentLikeService extends IService<FishUserCommentLike> {
 
+    void likeComment(CommentLikeRequest commentLikeRequest);
 }

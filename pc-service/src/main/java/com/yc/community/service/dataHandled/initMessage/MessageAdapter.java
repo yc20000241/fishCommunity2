@@ -24,6 +24,7 @@ public class MessageAdapter {
         iMessageAdaptees = new ArrayList<IMessageAdaptee>();
         iMessageAdaptees.add(new ArticleApplyAdaptee());
         iMessageAdaptees.add(new ArticleLikeAdaptee());
+        iMessageAdaptees.add(new CommentLikeAdaptee());
     }
 
     @Async

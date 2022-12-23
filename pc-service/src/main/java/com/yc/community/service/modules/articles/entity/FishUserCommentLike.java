@@ -31,5 +31,4 @@ public class FishUserCommentLike implements Serializable {
     @TableField("comment_id")
     private String commentId;
 
-
 }
