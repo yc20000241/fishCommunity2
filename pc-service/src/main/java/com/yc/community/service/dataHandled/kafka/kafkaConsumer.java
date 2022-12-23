@@ -30,8 +30,6 @@ public class kafkaConsumer {
     @Autowired
     private WebSocketServer webSocketServer;
 
-    @Autowired
-    private MessageAdapter messageAdapter;
 
     @KafkaListener(topics = "message")
     public void messageListener(ConsumerRecord<String, String> record) {
@@ -51,22 +49,4 @@ public class kafkaConsumer {
         log.info("消费者进行消费："+ value);
     }
 
-    @KafkaListener(topics = "articleLike")
-    public void articleLikeListener(ConsumerRecord<String, String> record) {
-        String value = record.value();
-        ArticleLikeRequest articleLikeRequest = JSON.parseObject(value, ArticleLikeRequest.class);
-
-        FishArticles byId = fishArticlesService.getById(articleLikeRequest.getArticleId());
-        byId.setLikeCount(byId.getLikeCount()+1);
-        fishArticlesService.updateById(byId);
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("article", byId);
-        map.put("userId", articleLikeRequest.getUserId());
-        map.put("userName", articleLikeRequest.getUserName());
-
-        messageAdapter.adapter(MessageCategoryEnum.ARTICLE_OR_COMMENT_LIKE.getCategory(), map);
-
-        log.info("消费者进行消费："+ value);
-    }
 }

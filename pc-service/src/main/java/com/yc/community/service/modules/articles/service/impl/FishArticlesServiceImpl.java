@@ -150,7 +150,16 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
     @Override
     public void articleLike(ArticleLikeRequest articleLikeRequest) {
-        kafkaProducer.commonSend("articleLike", JSON.toJSONString(articleLikeRequest));
+        FishArticles byId = getById(articleLikeRequest.getArticleId());
+        byId.setLikeCount(byId.getLikeCount()+1);
+        updateById(byId);
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("article", byId);
+        map.put("userId", articleLikeRequest.getUserId());
+        map.put("userName", articleLikeRequest.getUserName());
+
+        messageAdapter.adapter(MessageCategoryEnum.ARTICLE_LIKE.getCategory(), map);
     }
 
 }

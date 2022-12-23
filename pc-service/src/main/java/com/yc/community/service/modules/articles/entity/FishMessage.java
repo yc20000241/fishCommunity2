@@ -49,4 +49,7 @@ public class FishMessage implements Serializable {
 
     @TableField("category_content")
     private String categoryContent;
+
+    @TableField("url")
+    private String url;
 }

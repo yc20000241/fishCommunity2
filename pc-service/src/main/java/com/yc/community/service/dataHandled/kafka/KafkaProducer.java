@@ -20,7 +20,7 @@ public class KafkaProducer
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public void commonSend(String topic, String message){
-        ListenableFuture<SendResult<String, String>> info = kafkaTemplate.send("message", message);
+        ListenableFuture<SendResult<String, String>> info = kafkaTemplate.send(topic, message);
         log.info("=======发送"+ topic +"消息："+message+"========");
         info.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
             @Override

@@ -63,7 +63,4 @@ public class FishArticles implements Serializable {
 
     @TableField("describe")
     private String describe;
-
-    @TableField("url")
-    private String url;
 }
