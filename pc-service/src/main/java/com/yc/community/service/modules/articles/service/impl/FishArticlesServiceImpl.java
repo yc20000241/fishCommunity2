@@ -71,15 +71,10 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         fishArticles.setStatus(ActiveEnum.ACTIVE.getCode());
         fishArticles.setPublishStatus(ArticlePublishEnum.ARTICLE_PUBLISH.getCode());
         fishArticles.setTitle(publishArticleRequest.getTitle());
+        fishArticles.setDescribe(publishArticleRequest.getDescribe());
 
         String fileName = minioUtil.stringUpload(publishArticleRequest.getContent(), ConstList.ARTICLE_BUCKET);
         fishArticles.setFilePath(fileName);
-
-        String content = publishArticleRequest.getContent().substring(0,200);
-        content = content.replaceAll("</?[^>]+>", "");
-        content = content.replaceAll("<a>\\s*|\t|\r|\n</a>", "");
-        fishArticles.setDescribe(content);
-
         save(fishArticles);
     }
 

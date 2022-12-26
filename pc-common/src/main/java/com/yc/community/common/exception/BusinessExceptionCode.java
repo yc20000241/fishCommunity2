@@ -12,7 +12,8 @@ public enum BusinessExceptionCode {
     ARTICLE_UPLOAD_FILE("文件上传失败",608),
     ARTICLE_NOT_APPLIED("文章未审批",609),
     ARTICLE_HAS_LIKED("此篇文章已点赞", 610),
-    COMMENT_HAS_LIKEN("此评论已点赞", 611)
+    COMMENT_HAS_LIKEN("此评论已点赞", 611),
+    EDIT_PASSWORD_NEED_OLD_AND_NEW("修改密码，需要新密码和旧密码", 612)
     ;
 
     private String desc;

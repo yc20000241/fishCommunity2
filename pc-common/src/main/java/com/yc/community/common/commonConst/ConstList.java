@@ -13,10 +13,11 @@ public class ConstList {
 
     public static String ARTICLE_BUCKET = "articles";
 
+    public static String PICTURE_BUCKET = "article-image";
+
     public static List<String> PUBLIC_PERMISSION_URL;
 
     static {
-        NO_PERMISSION_LOGIN_MATCH_URL = Arrays.asList("/api/web/sys/**", "/api/web/home/**",
-                "/api/common/minio/**","/websocket/**");
+        NO_PERMISSION_LOGIN_MATCH_URL = Arrays.asList("/api/web/sys/**", "/api/web/home/**", "/websocket/**");
     }
 }

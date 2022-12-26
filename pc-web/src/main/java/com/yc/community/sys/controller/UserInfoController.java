@@ -2,15 +2,13 @@ package com.yc.community.sys.controller;
 
 
 import com.yc.community.common.response.CommonResponse;
+import com.yc.community.service.modules.articles.entity.UserInfo;
+import com.yc.community.sys.request.EditUserInfoRequest;
 import com.yc.community.sys.response.AuthorUserInfoResponse;
 import com.yc.community.sys.response.InitUserInfoResponse;
 import com.yc.community.sys.service.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,6 +37,18 @@ public class UserInfoController {
     public CommonResponse getUserInfoById(@RequestParam("id") String id){
         AuthorUserInfoResponse userInfo = userInfoService.getUserInfoById(id);
         return CommonResponse.OKBuilder.data(userInfo).build();
+    }
+
+    @PostMapping("/editUserInfoById")
+    public CommonResponse editUserInfoById(EditUserInfoRequest editUserInfoRequest){
+        userInfoService.editUserInfoById(editUserInfoRequest);
+        return CommonResponse.OKBuilder.msg("资料更新成功").build();
+    }
+
+    @GetMapping("/getById")
+    public CommonResponse getById(@RequestParam("id") String id){
+        UserInfo byId = userInfoService.getById(id);
+        return CommonResponse.OKBuilder.data(byId).build();
     }
 }
 

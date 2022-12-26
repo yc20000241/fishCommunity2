@@ -15,5 +15,7 @@ public class InitUserInfoResponse {
 
     private String picturePath;
 
+    private String sign;
+
     private List<MenuVo> menuVoList;
 }

@@ -21,4 +21,6 @@ public class PublishArticleRequest {
 
     @NotBlank(message = "用户名不可为空")
     private String userName;
+
+    private String describe;
 }
