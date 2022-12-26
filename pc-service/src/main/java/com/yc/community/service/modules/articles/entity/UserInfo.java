@@ -1,4 +1,4 @@
-package com.yc.community.sys.entity;
+package com.yc.community.service.modules.articles.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;

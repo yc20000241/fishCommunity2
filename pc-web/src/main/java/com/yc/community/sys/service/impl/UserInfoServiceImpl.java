@@ -2,7 +2,7 @@ package com.yc.community.sys.service.impl;
 
 import com.yc.community.common.util.CopyUtil;
 import com.yc.community.security.entity.UserDetail;
-import com.yc.community.sys.entity.UserInfo;
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.sys.mapper.RoleMenuMapper;
 import com.yc.community.sys.mapper.UserInfoMapper;
 import com.yc.community.sys.response.AuthorUserInfoResponse;

@@ -2,15 +2,10 @@ package com.yc.community.sys.controller;
 
 
 import com.yc.community.common.response.CommonResponse;
-import com.yc.community.security.entity.UserDetail;
-import com.yc.community.sys.entity.UserInfo;
 import com.yc.community.sys.response.AuthorUserInfoResponse;
 import com.yc.community.sys.response.InitUserInfoResponse;
 import com.yc.community.sys.service.IUserInfoService;
-import com.yc.community.sys.util.JwtProperties;
-import com.yc.community.sys.util.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 

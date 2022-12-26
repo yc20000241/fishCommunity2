@@ -1,6 +1,6 @@
 package com.yc.community.sys.mapper;
 
-import com.yc.community.sys.entity.UserInfo;
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

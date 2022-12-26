@@ -4,8 +4,7 @@ import com.yc.community.common.exception.BusinessException;
 import com.yc.community.common.exception.BusinessExceptionCode;
 import com.yc.community.common.util.DateUtil;
 import com.yc.community.security.component.UserDetailAcessUserInfo;
-import com.yc.community.security.entity.UserDetail;
-import com.yc.community.sys.entity.UserInfo;
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.RedisCallback;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;

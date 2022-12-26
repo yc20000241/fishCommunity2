@@ -1,7 +1,7 @@
 package com.yc.community.security.entity;
 
 import com.yc.community.sys.entity.RoleInfo;
-import com.yc.community.sys.entity.UserInfo;
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

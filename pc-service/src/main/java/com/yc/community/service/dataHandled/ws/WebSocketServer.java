@@ -119,6 +119,8 @@ public class WebSocketServer {
      **/
     public void sendMessage(String message,String userId) {
         WebSocketServer webSocketServer = webSocketMap.get(userId);
+        log.info("[websocket准备开始推送消息]");
+        log.info("webSocketServer"+webSocketServer);
         if (webSocketServer!=null){
             log.info("【websocket消息】推送消息,[toUser]userId={},message={}", userId,message);
             try {

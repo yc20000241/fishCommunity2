@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.benmanes.caffeine.cache.Cache;
 import com.yc.community.common.commonConst.ActiveEnum;
 import com.yc.community.common.commonConst.ArticlePublishEnum;
 import com.yc.community.common.commonConst.ConstList;
@@ -17,8 +18,8 @@ import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.service.dataHandled.initMessage.MessageAdapter;
 import com.yc.community.service.dataHandled.kafka.KafkaProducer;
 import com.yc.community.service.modules.articles.entity.FishArticles;
-import com.yc.community.service.modules.articles.entity.FishMessage;
 import com.yc.community.service.modules.articles.entity.FishUserArticleLike;
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.service.modules.articles.mapper.FishArticlesMapper;
 import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.ArticleLikeRequest;
@@ -26,11 +27,11 @@ import com.yc.community.service.modules.articles.request.PublishArticleRequest;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -56,6 +57,9 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     @Autowired
     private FishUserArticleLikeServiceImpl fishUserArticleLikeService;
 
+    @Resource(name = "userInfoCache")
+    private Cache<String, Object> userInfoCache;
+
     @Override
     public void publish(PublishArticleRequest publishArticleRequest) {
         FishArticles fishArticles = new FishArticles();
@@ -80,7 +84,7 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     }
 
     @Override
-    public IPage<FishArticles> search(String keyWord, String userId, Integer kind, Integer pageNo) {
+    public IPage<FishArticles> search(String keyWord, String userId, Integer kind, Integer pageNo){
         QueryWrapper<FishArticles> fishArticlesQueryWrapper = new QueryWrapper<>();
         fishArticlesQueryWrapper.eq("publish_status", ActiveEnum.ACTIVE.getCode());
         if(!StringUtils.isEmpty(keyWord))
@@ -99,6 +103,12 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
         Page<FishArticles> pageNotst = new Page<>(pageNo, 10);
         IPage<FishArticles> page1 = page(pageNotst, fishArticlesQueryWrapper);
+
+        List<FishArticles> records = page1.getRecords();
+        records.forEach(x -> {
+            UserInfo userInfo = (UserInfo)userInfoCache.getIfPresent(x.getCreatedId());
+            x.setCreatedName(userInfo.getNick());
+        });
 
         return page1;
     }
@@ -130,6 +140,12 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
         fishArticlesQueryWrapper.orderByDesc("created_time");
         List<FishArticles> list = list(fishArticlesQueryWrapper);
+
+        list.forEach(x -> {
+            UserInfo userInfo = (UserInfo)userInfoCache.getIfPresent(x.getCreatedId());
+            x.setCreatedName(userInfo.getNick());
+        });
+
         return list;
     }
 
@@ -148,6 +164,8 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     @Override
     public FishArticles getArticleInfoById(String id) {
         FishArticles byId = getById(id);
+        UserInfo userInfo = (UserInfo)userInfoCache.getIfPresent(byId.getCreatedId());
+        byId.setCreatedName(userInfo.getNick());
         kafkaProducer.commonSend("articleLook",JSON.toJSONString(byId));
         return byId;
     }
@@ -170,6 +188,8 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         fishUserArticleLikeService.save(fishUserArticleLike);
 
         HashMap<String, Object> map = new HashMap<>();
+        UserInfo userInfo = (UserInfo)userInfoCache.getIfPresent(byId.getCreatedId());
+        byId.setCreatedName(userInfo.getNick());
         map.put("article", byId);
         map.put("userId", articleLikeRequest.getUserId());
         map.put("userName", articleLikeRequest.getUserName());

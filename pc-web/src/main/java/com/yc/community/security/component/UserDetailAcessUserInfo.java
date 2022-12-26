@@ -2,12 +2,11 @@ package com.yc.community.security.component;
 
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.entity.RoleInfo;
-import com.yc.community.sys.entity.UserInfo;
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.sys.util.JwtProperties;
 import com.yc.community.sys.util.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;

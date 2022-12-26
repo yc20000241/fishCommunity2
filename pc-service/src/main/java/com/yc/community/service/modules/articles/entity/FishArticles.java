@@ -36,9 +36,6 @@ public class FishArticles implements Serializable {
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
-    @TableField("created_name")
-    private String createdName;
-
     @TableField("updated_time")
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedTime;
@@ -63,4 +60,7 @@ public class FishArticles implements Serializable {
 
     @TableField("describe")
     private String describe;
+
+    @TableField(exist = false)
+    private String createdName;
 }

@@ -18,7 +18,10 @@ public class CommonInitRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         log.info("开始加载数据到缓存中");
+        log.info("开始加载角色权限缓存");
         cacheService.initRolePermissionList();
+        log.info("角色权限缓存加载完成");
+        cacheService.initUserInfo();
         log.info("加载数据加载完成....");
         log.info("加载参数到缓存");
     }

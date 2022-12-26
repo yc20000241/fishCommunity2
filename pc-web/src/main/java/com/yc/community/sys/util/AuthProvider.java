@@ -1,7 +1,7 @@
 package com.yc.community.sys.util;
 
 import com.yc.community.security.entity.UserDetail;
-import com.yc.community.sys.entity.UserInfo;
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;

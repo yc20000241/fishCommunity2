@@ -46,17 +46,17 @@ public class FishComments implements Serializable {
     @TableField("created_time")
     private Date createdTime;
 
-    @TableField("from_user_name")
-    private String fromUserName;
-
-    @TableField("to_user_name")
-    private String toUserName;
-
-    @TableField("from_user_picture_path")
-    private String fromUserPicturePath;
-
     @TableField("like_count")
     private Integer likeCount;
+
+    @TableField(exist = false)
+    private String fromUserName;
+
+    @TableField(exist = false)
+    private String toUserName;
+
+    @TableField(exist = false)
+    private String fromUserPicturePath;
 
     @TableField(exist = false)
     private List<FishComments> childrenList;

@@ -3,7 +3,7 @@ package com.yc.community.security.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.entity.RoleInfo;
-import com.yc.community.sys.entity.UserInfo;
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.sys.service.impl.RoleInfoServiceImpl;
 import com.yc.community.sys.service.impl.UserInfoServiceImpl;
 import lombok.extern.slf4j.Slf4j;

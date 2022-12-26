@@ -1,6 +1,7 @@
 package com.yc.community.sys.service.impl;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.sys.mapper.RolePermissionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,14 @@ public class CacheServiceImpl {
     @Resource(name = "rolePermissionListCache")
     private Cache<String, List<String>> rolePermissionListCache;
 
+    @Resource(name = "userInfoCache")
+    private Cache<String, Object> userInfoCache;
+
     @Autowired
     private RolePermissionMapper rolePermissionMapper;
+
+    @Autowired
+    private UserInfoServiceImpl userInfoService;
 
     public void initRolePermissionList(){
         List<RolePathsVo> list = rolePermissionMapper.getRolePaths();
@@ -30,4 +37,11 @@ public class CacheServiceImpl {
         });
     }
 
+    public void initUserInfo() {
+        List<UserInfo> list = userInfoService.list();
+
+        list.forEach(x -> {
+            userInfoCache.put(x.getId(), x);
+        });
+    }
 }

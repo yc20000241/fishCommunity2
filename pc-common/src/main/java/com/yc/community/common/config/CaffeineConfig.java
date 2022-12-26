@@ -19,4 +19,9 @@ public class CaffeineConfig {
     public Cache<String, List<String>> rolePermissionListCache(){
         return Caffeine.newBuilder().maximumSize(DEFAULT_MAXSIZE).recordStats().build();
     }
+
+    @Bean("userInfoCache")
+    public Cache<String, Object> userInfoCache(){
+        return Caffeine.newBuilder().maximumSize(DEFAULT_MAXSIZE).recordStats().build();
+    }
 }
