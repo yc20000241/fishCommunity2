@@ -40,7 +40,7 @@ public class CommentLikeAdaptee implements IMessageAdaptee {
         fishMessage.setReceiveId(commentLikeRequest.getUserId());
         fishMessage.setCategoryContent("有人对你的评论进行了点赞");
         String userUrl = MenuConst.USER_CENTER_URL + "?userId=" + commentLikeRequest.getFromUserId();
-        String content = HTMLUtil.aFont(userUrl,commentLikeRequest.getFromUserName(), H5ColorConst.SKY_BLUE) + "对你的评论：" + HTMLUtil.font(fishComments.getArticleComment() , H5ColorConst.SKY_BLUE) + " 进行了点赞";
+        String content = HTMLUtil.aFont(userUrl,commentLikeRequest.getFromUserName(), H5ColorConst.IDEA_WORD_ORANGE) + "对你的评论：" + HTMLUtil.font(fishComments.getArticleComment() , H5ColorConst.SKY_BLUE) + " 进行了点赞";
         fishMessage.setContent(content);
 
         return fishMessage;

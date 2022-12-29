@@ -63,19 +63,26 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     @Override
     public void publish(PublishArticleRequest publishArticleRequest) {
         FishArticles fishArticles = new FishArticles();
-        fishArticles.setId(UUIDUtil.getUUID());
-        fishArticles.setCreatedId(publishArticleRequest.getUserId());
-        fishArticles.setCreatedName(publishArticleRequest.getUserName());
-        fishArticles.setCreatedTime(new Date());
+        if(StringUtils.isEmpty(publishArticleRequest.getArticleId())){
+            fishArticles.setId(UUIDUtil.getUUID());
+            fishArticles.setPublishStatus(ArticlePublishEnum.ARTICLE_PUBLISH.getCode());
+            fishArticles.setCreatedTime(new Date());
+            fishArticles.setCreatedId(publishArticleRequest.getUserId());
+            fishArticles.setCreatedName(publishArticleRequest.getUserName());
+            fishArticles.setStatus(ActiveEnum.ACTIVE.getCode());
+        }
+        else{
+            fishArticles = getById(publishArticleRequest.getArticleId());
+            fishArticles.setUpdatedTime(new Date());
+        }
+
         fishArticles.setPicturePath(publishArticleRequest.getFilePath());
-        fishArticles.setStatus(ActiveEnum.ACTIVE.getCode());
-        fishArticles.setPublishStatus(ArticlePublishEnum.ARTICLE_PUBLISH.getCode());
         fishArticles.setTitle(publishArticleRequest.getTitle());
         fishArticles.setDescribe(publishArticleRequest.getDescribe());
 
-        String fileName = minioUtil.stringUpload(publishArticleRequest.getContent(), ConstList.ARTICLE_BUCKET);
+        String fileName = minioUtil.stringUpload(publishArticleRequest.getContent(), ConstList.ARTICLE_BUCKET, publishArticleRequest.getFileName());
         fishArticles.setFilePath(fileName);
-        save(fishArticles);
+        saveOrUpdate(fishArticles);
     }
 
     @Override

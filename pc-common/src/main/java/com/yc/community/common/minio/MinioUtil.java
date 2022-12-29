@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -55,18 +56,21 @@ public class MinioUtil {
      *
      *
      */
-    public List<String> upload(MultipartFile file, String bucketName) {
+    public List<String> upload(MultipartFile file, String bucketName, String fileName) {
         existBucket(bucketName);
 
         List<String> names = new ArrayList<>();
 //        for (MultipartFile file : multipartFile) {
-            String fileName = file.getOriginalFilename();
-            System.out.println(file.getContentType());
-            String[] split = fileName.split("\\.");
-            if (split.length > 1) {
-                fileName = split[0] + "_" + System.currentTimeMillis() + "." + split[1];
-            } else {
-                fileName = fileName + System.currentTimeMillis();
+
+            if(StringUtils.isEmpty(fileName)){
+                fileName = file.getOriginalFilename();
+                String[] split = fileName.split("\\.");
+                fileName = file.getOriginalFilename();
+                if (split.length > 1) {
+                    fileName = split[0] + "_" + System.currentTimeMillis() + "." + split[1];
+                } else {
+                    fileName = fileName + System.currentTimeMillis();
+                }
             }
             InputStream in = null;
             try {
@@ -142,13 +146,13 @@ public class MinioUtil {
         return responseEntity;
     }
 
-    public String stringUpload(String str, String bucketName){
+    public String stringUpload(String str, String bucketName, String fileName){
         existBucket(bucketName);
 
-        String fileName = "";
         try{
             InputStream in = new ByteArrayInputStream(str.getBytes());
-            fileName = UUIDUtil.getUUID() + ".txt";
+            if(StringUtils.isEmpty(fileName))
+                fileName = UUIDUtil.getUUID() + ".txt";
             minioClient.putObject(PutObjectArgs.builder()
                             .bucket(bucketName)
                             .object(fileName)

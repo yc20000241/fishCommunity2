@@ -37,7 +37,7 @@ public class ArticleLikeAdaptee implements IMessageAdaptee {
         fishMessage.setReceiveId(fishArticles.getCreatedId());
         String url = MenuConst.ARTICLE_DETAIL_URL+"?id="+fishArticles.getId();
         String userUrl = MenuConst.USER_CENTER_URL + "?userId=" + map.get("userId").toString();
-        String content = HTMLUtil.aFont(userUrl,fishMessage.getCreatedName(), H5ColorConst.SKY_BLUE)+"对您对文章《"+HTMLUtil.aFont(url,fishArticles.getTitle(), H5ColorConst.SKY_BLUE)+"》进行了点赞";
+        String content = HTMLUtil.aFont(userUrl,fishMessage.getCreatedName(), H5ColorConst.IDEA_WORD_ORANGE)+"对您对文章《"+HTMLUtil.aFont(url,fishArticles.getTitle(), H5ColorConst.SKY_BLUE)+"》进行了点赞";
         fishMessage.setContent(content);
         fishMessage.setCategoryContent("有人对你对文章进行了点赞");
 

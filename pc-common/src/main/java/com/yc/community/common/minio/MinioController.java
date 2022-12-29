@@ -18,16 +18,19 @@ public class MinioController {
 
 
     @PostMapping("/upload")
-    public CommonResponse upload(@RequestParam(name = "file") MultipartFile multipartFile, @RequestParam(name = "bucketName") String bucketName) {
-        List<String> upload = minioUtil.upload(multipartFile, bucketName);
+    public CommonResponse upload(@RequestParam(name = "file") MultipartFile multipartFile,
+                                 @RequestParam(name = "bucketName") String bucketName,
+                                 @RequestParam(name = "fileName", required = false) String fileName) {
+        List<String> upload = minioUtil.upload(multipartFile, bucketName, fileName);
         return CommonResponse.OKBuilder.data(upload).msg("上传成功").build();
     }
 
     @PostMapping("/stringUpload")
     public CommonResponse stringUpload(@RequestParam(name = "str") String str,
-                                       @RequestParam(name = "bucketName") String bucketName) {
-        String fileName = minioUtil.stringUpload(str, bucketName);
-        return CommonResponse.OKBuilder.data(fileName).msg("上传成功").build();
+                                       @RequestParam(name = "bucketName") String bucketName,
+                                       @RequestParam(name = "fileName", required = false) String fileName) {
+        String fileName1 = minioUtil.stringUpload(str, bucketName, fileName);
+        return CommonResponse.OKBuilder.data(fileName1).msg("上传成功").build();
     }
 
     @GetMapping("/download")

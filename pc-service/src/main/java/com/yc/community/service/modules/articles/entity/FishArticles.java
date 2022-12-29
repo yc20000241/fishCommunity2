@@ -1,5 +1,6 @@
 package com.yc.community.service.modules.articles.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -23,7 +24,7 @@ public class FishArticles implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("id")
+    @TableId("id")
     private String id;
 
     @TableField("title")

@@ -9,7 +9,7 @@ public class HTMLUtil {
 
     public static String aFont(String url, String str, String color){
         str = font(str,color);
-        str = "<a href=\""+url+"\" style=\"cursor:pointer;\">"+str+"</a>";
+        str = "<a href=\""+url+"\" style=\"cursor:pointer;text-decoration:none;\">"+str+"</a>";
         return str;
     }
 

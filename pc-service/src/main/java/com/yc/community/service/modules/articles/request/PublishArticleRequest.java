@@ -23,4 +23,8 @@ public class PublishArticleRequest {
     private String userName;
 
     private String describe;
+
+    private String articleId;
+
+    private String fileName;
 }

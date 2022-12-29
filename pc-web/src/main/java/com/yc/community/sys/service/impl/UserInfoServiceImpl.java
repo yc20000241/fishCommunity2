@@ -94,7 +94,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             byId.setPassword(passwordEncoder.encode(editUserInfoRequest.getNewPassword()));
         }
         if(editUserInfoRequest.getUserPictureFile() != null){
-            List<String> upload = minioUtil.upload(editUserInfoRequest.getUserPictureFile(), ConstList.PICTURE_BUCKET);
+            List<String> upload = minioUtil.upload(editUserInfoRequest.getUserPictureFile(), ConstList.PICTURE_BUCKET, null);
             byId.setPicturePath(upload.get(0));
         }
 
