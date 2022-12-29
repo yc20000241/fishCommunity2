@@ -1,5 +1,8 @@
 package com.yc.community.service.dataHandled.initMessage;
 
+import com.yc.community.common.commonConst.H5ColorConst;
+import com.yc.community.common.commonConst.MenuConst;
+import com.yc.community.common.util.HTMLUtil;
 import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishComments;
@@ -36,7 +39,8 @@ public class CommentLikeAdaptee implements IMessageAdaptee {
         fishMessage.setCreatedName(commentLikeRequest.getFromUserName());
         fishMessage.setReceiveId(commentLikeRequest.getUserId());
         fishMessage.setCategoryContent("有人对你的评论进行了点赞");
-        String content = commentLikeRequest.getFromUserName() + "对你对评论：" + fishComments.getArticleComment() + " 进行了点赞";
+        String userUrl = MenuConst.USER_CENTER_URL + "?userId=" + commentLikeRequest.getFromUserId();
+        String content = HTMLUtil.aFont(userUrl,commentLikeRequest.getFromUserName(), H5ColorConst.SKY_BLUE) + "对你的评论：" + HTMLUtil.font(fishComments.getArticleComment() , H5ColorConst.SKY_BLUE) + " 进行了点赞";
         fishMessage.setContent(content);
 
         return fishMessage;

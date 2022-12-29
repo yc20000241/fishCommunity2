@@ -94,7 +94,7 @@ public class AuthServiceImpl{
     }
 
     public void logout() {
-        redisTemplate.opsForValue().set(AuthProvider.getLoginAccount(), "");
+        redisTemplate.opsForValue().set(AuthProvider.getLoginAccount(), null);
         SecurityContextHolder.clearContext();
     }
 

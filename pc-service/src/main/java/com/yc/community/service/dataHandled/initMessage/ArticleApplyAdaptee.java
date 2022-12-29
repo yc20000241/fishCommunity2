@@ -1,7 +1,10 @@
 package com.yc.community.service.dataHandled.initMessage;
 
 import com.yc.community.common.commonConst.ArticlePublishEnum;
+import com.yc.community.common.commonConst.H5ColorConst;
+import com.yc.community.common.commonConst.MenuConst;
 import com.yc.community.common.commonConst.MessageCategoryEnum;
+import com.yc.community.common.util.HTMLUtil;
 import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishMessage;
@@ -33,7 +36,8 @@ public class ArticleApplyAdaptee implements  IMessageAdaptee {
         fishMessage.setContent(publishContent);
         fishMessage.setCreatedTime(new Date());
         fishMessage.setReceiveId(fishArticles.getCreatedId());
-        String contentByCategory = "您的文章《" +fishArticles.getTitle() + "》"+ (fishArticles.getPublishStatus()==1 ? "审批已通过": "审批未通过");
+        String url = MenuConst.ARTICLE_DETAIL_URL+"?id="+fishArticles.getId();
+        String contentByCategory = "您的文章《" + HTMLUtil.aFont(url,fishArticles.getTitle(), H5ColorConst.SKY_BLUE) + "》"+ (fishArticles.getPublishStatus()==1 ? "审批已通过": "审批未通过");
         fishMessage.setCategoryContent(contentByCategory);
         return fishMessage;
     }
