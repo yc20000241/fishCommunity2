@@ -18,7 +18,7 @@ public class MinioController {
 
 
     @PostMapping("/upload")
-    public CommonResponse upload(@RequestParam(name = "file") MultipartFile multipartFile,
+    public CommonResponse upload(@RequestParam(name = "file", required = false) MultipartFile multipartFile,
                                  @RequestParam(name = "bucketName") String bucketName,
                                  @RequestParam(name = "fileName", required = false) String fileName) {
         List<String> upload = minioUtil.upload(multipartFile, bucketName, fileName);

@@ -57,6 +57,11 @@ public class MinioUtil {
      *
      */
     public List<String> upload(MultipartFile file, String bucketName, String fileName) {
+        if(file == null){
+            ArrayList<String> list = new ArrayList<>();
+            list.add("");
+            return list;
+        }
         existBucket(bucketName);
 
         List<String> names = new ArrayList<>();

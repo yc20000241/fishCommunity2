@@ -61,8 +61,10 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     private Cache<String, Object> userInfoCache;
 
     @Override
-    public void publish(PublishArticleRequest publishArticleRequest) {
+    public String publish(PublishArticleRequest publishArticleRequest) {
+        String msg = null;
         FishArticles fishArticles = new FishArticles();
+
         if(StringUtils.isEmpty(publishArticleRequest.getArticleId())){
             fishArticles.setId(UUIDUtil.getUUID());
             fishArticles.setPublishStatus(ArticlePublishEnum.ARTICLE_PUBLISH.getCode());
@@ -70,19 +72,27 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
             fishArticles.setCreatedId(publishArticleRequest.getUserId());
             fishArticles.setCreatedName(publishArticleRequest.getUserName());
             fishArticles.setStatus(ActiveEnum.ACTIVE.getCode());
+            fishArticles.setPicturePath(publishArticleRequest.getFilePath());
+            msg = "文章申请审批成功";
         }
         else{
             fishArticles = getById(publishArticleRequest.getArticleId());
             fishArticles.setUpdatedTime(new Date());
+            if(!StringUtils.isEmpty(publishArticleRequest.getPictureUrl()))
+                fishArticles.setPicturePath(publishArticleRequest.getPictureUrl());
+            else{
+                fishArticles.setPicturePath(publishArticleRequest.getFilePath());
+            }
+            msg = "文章编辑成功";
         }
 
-        fishArticles.setPicturePath(publishArticleRequest.getFilePath());
         fishArticles.setTitle(publishArticleRequest.getTitle());
         fishArticles.setDescribe(publishArticleRequest.getDescribe());
-
         String fileName = minioUtil.stringUpload(publishArticleRequest.getContent(), ConstList.ARTICLE_BUCKET, publishArticleRequest.getFileName());
         fishArticles.setFilePath(fileName);
         saveOrUpdate(fishArticles);
+
+        return msg;
     }
 
     @Override

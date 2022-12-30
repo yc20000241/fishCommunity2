@@ -104,8 +104,10 @@ public class WebSocketServer {
      **/
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
-        if(message.equals("ping"))
+        if(message.equals("ping")) {
             session.getBasicRemote().sendText("pong");
+            return;
+        }
         log.info("[连接ID:{}] 收到消息:{}", this.userId, message);
     }
 

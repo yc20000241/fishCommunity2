@@ -13,7 +13,6 @@ public class PublishArticleRequest {
     @NotBlank(message = "文章内容为空")
     private String content;
 
-    @NotBlank(message = "文件路径为空")
     private String filePath;
 
     @NotBlank(message = "用户id不可为空")
@@ -27,4 +26,6 @@ public class PublishArticleRequest {
     private String articleId;
 
     private String fileName;
+
+    private String pictureUrl;
 }

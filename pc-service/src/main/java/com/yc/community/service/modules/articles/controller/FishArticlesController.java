@@ -33,8 +33,8 @@ public class FishArticlesController {
 
     @PostMapping("/publish")
     public CommonResponse publish(@Validated @RequestBody PublishArticleRequest publishArticleRequest){
-        fishArticlesService.publish(publishArticleRequest);
-        return CommonResponse.OKBuilder.msg("文章申请审批成功").build();
+        String msg = fishArticlesService.publish(publishArticleRequest);
+        return CommonResponse.OKBuilder.msg(msg).build();
     }
 
     @GetMapping("/search")
