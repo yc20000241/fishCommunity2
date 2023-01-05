@@ -1,12 +1,9 @@
 package com.yc.community.service.dataHandled.kafka;
 
 import com.alibaba.fastjson.JSON;
-import com.yc.community.common.commonConst.MessageCategoryEnum;
-import com.yc.community.service.dataHandled.initMessage.MessageAdapter;
 import com.yc.community.service.dataHandled.ws.WebSocketServer;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishMessage;
-import com.yc.community.service.modules.articles.request.ArticleLikeRequest;
 import com.yc.community.service.modules.articles.service.impl.FishArticlesServiceImpl;
 import com.yc.community.service.modules.articles.service.impl.FishMessageServiceImpl;
 import lombok.extern.slf4j.Slf4j;

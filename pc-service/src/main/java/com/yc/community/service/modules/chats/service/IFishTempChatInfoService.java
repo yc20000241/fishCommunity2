@@ -1,7 +1,7 @@
 package com.yc.community.service.modules.chats.service;
 
-import com.yc.community.chats.entity.FishTempChatInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yc.community.service.modules.chats.entity.FishTempChatInfo;
 
 /**
  * <p>

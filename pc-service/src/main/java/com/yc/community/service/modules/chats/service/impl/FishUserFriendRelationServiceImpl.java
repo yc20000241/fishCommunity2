@@ -1,9 +1,9 @@
 package com.yc.community.service.modules.chats.service.impl;
 
-import com.yc.community.chats.entity.FishUserFriendRelation;
-import com.yc.community.chats.mapper.FishUserFriendRelationMapper;
-import com.yc.community.chats.service.IFishUserFriendRelationService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yc.community.service.modules.chats.entity.FishUserFriendRelation;
+import com.yc.community.service.modules.chats.mapper.FishUserFriendRelationMapper;
+import com.yc.community.service.modules.chats.service.IFishUserFriendRelationService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class FishUserFriendRelationServiceImpl extends ServiceImpl<FishUserFriendRelationMapper, FishUserFriendRelation> implements IFishUserFriendRelationService {
 
+    @Override
+    public void addFriend(FishUserFriendRelation fishUserFriendRelation) {
+        
+    }
 }

@@ -1,9 +1,9 @@
 package com.yc.community.service.modules.chats.service.impl;
 
-import com.yc.community.chats.entity.FishTempChatInfo;
-import com.yc.community.chats.mapper.FishTempChatInfoMapper;
-import com.yc.community.chats.service.IFishTempChatInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yc.community.service.modules.chats.entity.FishTempChatInfo;
+import com.yc.community.service.modules.chats.mapper.FishTempChatInfoMapper;
+import com.yc.community.service.modules.chats.service.IFishTempChatInfoService;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,7 +1,7 @@
 package com.yc.community.service.modules.chats.service;
 
-import com.yc.community.chats.entity.FishUserFriendRelation;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yc.community.service.modules.chats.entity.FishUserFriendRelation;
 
 /**
  * <p>
@@ -12,5 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-12-30
  */
 public interface IFishUserFriendRelationService extends IService<FishUserFriendRelation> {
+
+    void addFriend(FishUserFriendRelation fishUserFriendRelation);
 
 }

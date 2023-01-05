@@ -1,9 +1,13 @@
 package com.yc.community.service.modules.chats.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.yc.community.common.response.CommonResponse;
+import com.yc.community.service.modules.articles.entity.FishArticles;
+import com.yc.community.service.modules.chats.entity.FishUserFriendRelation;
+import com.yc.community.service.modules.chats.service.IFishUserFriendRelationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -14,8 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-12-30
  */
 @RestController
-@RequestMapping("/chats/fish-user-friend-relation")
+@RequestMapping("/api/service/chats/fishUserFriendRelation")
 public class FishUserFriendRelationController {
 
+    @Autowired
+    private IFishUserFriendRelationService fishUserFriendRelationService;
+
+    @PostMapping("/addFriend")
+    public CommonResponse addFriend(@RequestBody FishUserFriendRelation fishUserFriendRelation){
+        fishUserFriendRelationService.addFriend(fishUserFriendRelation);
+        return CommonResponse.OKBuilder.msg("发送请求成功").build();
+    }
 }
 

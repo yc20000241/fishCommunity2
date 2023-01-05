@@ -34,7 +34,7 @@ public class PublishCommentAdaptee implements IMessageAdaptee {
         fishMessage.setCategoryContent("您收到了一条评论");
         String userUrl = MenuConst.USER_CENTER_URL + "?userId=" + fishComments.getFromUserId();
         String commentUrl = MenuConst.ARTICLE_DETAIL_URL+"?id="+fishComments.getArticleId() + "&commentId=" + fishComments.getId();
-        String content = HTMLUtil.aFont(userUrl,fishComments.getFromUserName() , H5ColorConst.IDEA_WORD_ORANGE)+"对您进行了评论:"+ HTMLUtil.aFont(commentUrl,fishComments.getArticleComment() , H5ColorConst.SKY_BLUE);
+        String content = HTMLUtil.aFont(userUrl,fishComments.getFromUserName() , H5ColorConst.IDEA_WORD_ORANGE)+"对您进行了评论："+ HTMLUtil.aFont(commentUrl,fishComments.getArticleComment() , H5ColorConst.SKY_BLUE);
         fishMessage.setContent(content);
 
         return fishMessage;

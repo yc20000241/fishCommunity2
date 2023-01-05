@@ -35,7 +35,8 @@ public class WebSocketServer {
     /**
      * 为了保存在线用户信息，在方法中新建一个list存储一下【实际项目依据复杂度，可以存储到数据库或者缓存】
      */
-    private final static List<Session> SESSIONS = Collections.synchronizedList(new ArrayList<>());
+//    private final static List<Session> SESSIONS = Collections.synchronizedList(new ArrayList<>());
+    private final static ConcurrentHashMap<String,Session> SESSIONSMap = new ConcurrentHashMap();
 
     /**
      * @methodName: onOpen
@@ -51,7 +52,8 @@ public class WebSocketServer {
         this.session = session;
         this.userId = userId;
         webSocketSet.add(this);
-        SESSIONS.add(session);
+//        SESSIONS.add(session);
+        SESSIONSMap.put(userId, session);
         if (webSocketMap.containsKey(userId)) {
             webSocketMap.remove(userId);
             webSocketMap.put(userId,this);
@@ -75,6 +77,7 @@ public class WebSocketServer {
         webSocketSet.remove(this);
         if (webSocketMap.containsKey(userId)) {
             webSocketMap.remove(userId);
+            SESSIONSMap.put(userId,null);
             subOnlineCount();
         }
         log.info("[连接ID:{}] 断开连接, 当前连接数:{}", userId, getOnlineCount());
@@ -119,19 +122,27 @@ public class WebSocketServer {
      * @return void
      * @throws
      **/
-    public void sendMessage(String message,String userId) {
-        WebSocketServer webSocketServer = webSocketMap.get(userId);
-        log.info("[websocket准备开始推送消息]");
-        log.info("webSocketServer"+webSocketServer);
-        if (webSocketServer!=null){
+    public void sendMessage(String message,String userId){
+//        WebSocketServer webSocketServer = webSocketMap.get(userId);
+//        log.info("[websocket准备开始推送消息]");
+//        log.info("webSocketServer"+webSocketServer);
+//        if (webSocketServer!=null){
+//            log.info("【websocket消息】推送消息,[toUser]userId={},message={}", userId,message);
+//            try {
+//                webSocketServer.session.getBasicRemote().sendText(message);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                log.error("[连接ID:{}] 发送消息失败, 消息:{}", this.userId, message, e);
+//            }
+//        }
+        Session session = SESSIONSMap.get(userId);
+        try {
+            session.getBasicRemote().sendText(message);
             log.info("【websocket消息】推送消息,[toUser]userId={},message={}", userId,message);
-            try {
-                webSocketServer.session.getBasicRemote().sendText(message);
-            } catch (Exception e) {
-                e.printStackTrace();
-                log.error("[连接ID:{}] 发送消息失败, 消息:{}", this.userId, message, e);
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 
     /**
@@ -142,18 +153,18 @@ public class WebSocketServer {
      * @return void
      * @throws
      **/
-    public void sendMassMessage(String message) {
-        try {
-            for (Session session : SESSIONS) {
-                if (session.isOpen()) {
-                    session.getBasicRemote().sendText(message);
-                    log.info("[连接ID:{}] 发送消息:{}",session.getRequestParameterMap().get("userId"),message);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public void sendMassMessage(String message) {
+//        try {
+//            for (Session session : SESSIONS) {
+//                if (session.isOpen()) {
+//                    session.getBasicRemote().sendText(message);
+//                    log.info("[连接ID:{}] 发送消息:{}",session.getRequestParameterMap().get("userId"),message);
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * 获取当前连接数

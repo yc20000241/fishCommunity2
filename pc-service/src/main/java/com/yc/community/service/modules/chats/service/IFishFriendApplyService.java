@@ -1,7 +1,7 @@
 package com.yc.community.service.modules.chats.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yc.community.service.modules.chats.entity.FishChatInfo;
+import com.yc.community.service.modules.chats.entity.FishFriendApply;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.yc.community.service.modules.chats.entity.FishChatInfo;
  * </p>
  *
  * @author yc001
- * @since 2022-12-30
+ * @since 2023-01-05
  */
-public interface IFishChatInfoService extends IService<FishChatInfo> {
+public interface IFishFriendApplyService extends IService<FishFriendApply> {
 
 }

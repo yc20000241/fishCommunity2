@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication(exclude = {ErrorMvcAutoConfiguration.class})
 @ComponentScan(basePackages = "com.yc.community.*")
-@MapperScan(value = {"com.yc.community.sys.mapper","com.yc.community.service.modules.articles.mapper"})
+@MapperScan(value = {"com.yc.community.sys.mapper","com.yc.community.service.modules.*.mapper"})
 @EnableAsync
 public class FishCommunityApplication {
     public static void main(String[] args) {
