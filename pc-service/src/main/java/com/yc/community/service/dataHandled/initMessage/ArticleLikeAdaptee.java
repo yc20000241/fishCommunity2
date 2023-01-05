@@ -28,6 +28,7 @@ public class ArticleLikeAdaptee implements IMessageAdaptee {
         fishMessage.setId(UUIDUtil.getUUID());
         fishMessage.setCategory(CATEGORY);
         fishMessage.setCreatedTime(new Date());
+        fishMessage.setStatus(0);
 
         HashMap<String, Object> map = (HashMap<String, Object>)object;
         Object obj = map.get("article");

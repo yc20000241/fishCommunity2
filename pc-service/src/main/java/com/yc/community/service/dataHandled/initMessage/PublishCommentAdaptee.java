@@ -26,6 +26,7 @@ public class PublishCommentAdaptee implements IMessageAdaptee {
         fishMessage.setId(UUIDUtil.getUUID());
         fishMessage.setCategory(CATEGORY);
         fishMessage.setCreatedTime(new Date());
+        fishMessage.setStatus(0);
 
         FishComments fishComments = (FishComments) object;
         fishMessage.setCreatedId(fishComments.getFromUserId());

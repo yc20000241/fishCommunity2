@@ -2,6 +2,9 @@ package com.yc.community.service.modules.chats.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yc.community.service.modules.chats.entity.FishFriendApply;
+import com.yc.community.service.modules.chats.response.FriendApplyListResponse;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,11 @@ import com.yc.community.service.modules.chats.entity.FishFriendApply;
  */
 public interface IFishFriendApplyService extends IService<FishFriendApply> {
 
+    void friendApply(FishFriendApply fishFriendApply);
+
+    List<FriendApplyListResponse> getList(String userId);
+
+    Integer getRemindCount(String userId);
+
+    void hasReadApply(String userId);
 }

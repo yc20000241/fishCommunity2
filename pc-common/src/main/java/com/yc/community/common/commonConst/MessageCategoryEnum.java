@@ -9,7 +9,8 @@ public enum MessageCategoryEnum {
     ARTICLE_APPLY(1,"审批消息"),
     ARTICLE_LIKE(2, "文章点赞"),
     COMMENT_LIKE(3,"评论点赞"),
-    PUBLISH_COMMENT(4, "发表评论");
+    PUBLISH_COMMENT(4, "发表评论"),
+    ADD_FRIEND_APPLY(5,"发送好友申请");
 
     private Integer category;
 

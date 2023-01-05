@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-12-30
  */
 @RestController
-@RequestMapping("/chats/fish-temp-chat-info")
+@RequestMapping("/api/service/chats/fishTempChatInfo")
 public class FishTempChatInfoController {
 
 }
