@@ -37,7 +37,7 @@ public class SendFriendApplyAdaptee implements IMessageAdaptee {
         String msg = (String) stringObjectHashMap.get("content");
 
         fishMessage.setCreatedId(userInfo.getId());
-        fishMessage.setCreatedName(userInfo.getUserName());
+        fishMessage.setCreatedName(userInfo.getNick());
         fishMessage.setReceiveId(toUserId);
         fishMessage.setCategoryContent("有人对你发送了好友申请");
         String userUrl = MenuConst.USER_CENTER_URL + "?userId=" +fishMessage.getCreatedId();

@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yc.community.common.response.CommonResponse;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.chats.entity.FishUserFriendRelation;
+import com.yc.community.service.modules.chats.response.FriendListResponse;
 import com.yc.community.service.modules.chats.service.IFishUserFriendRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -24,10 +27,10 @@ public class FishUserFriendRelationController {
     @Autowired
     private IFishUserFriendRelationService fishUserFriendRelationService;
 
-    @PostMapping("/addFriend")
-    public CommonResponse addFriend(@RequestBody FishUserFriendRelation fishUserFriendRelation){
-        fishUserFriendRelationService.addFriend(fishUserFriendRelation);
-        return CommonResponse.OKBuilder.msg("发送请求成功").build();
+    @GetMapping("/friendList")
+    public CommonResponse friendList(@RequestParam("userId") String userId){
+        List<FriendListResponse> list = fishUserFriendRelationService.friendList(userId);
+        return CommonResponse.OKBuilder.data(list).build();
     }
 }
 

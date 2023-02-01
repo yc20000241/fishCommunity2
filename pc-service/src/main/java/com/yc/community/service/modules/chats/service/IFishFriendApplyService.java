@@ -23,4 +23,6 @@ public interface IFishFriendApplyService extends IService<FishFriendApply> {
     Integer getRemindCount(String userId);
 
     void hasReadApply(String userId);
+
+    void changeFriendApply(String id, Integer changeStatus);
 }

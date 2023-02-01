@@ -123,19 +123,9 @@ public class WebSocketServer {
      * @throws
      **/
     public void sendMessage(String message,String userId){
-//        WebSocketServer webSocketServer = webSocketMap.get(userId);
-//        log.info("[websocket准备开始推送消息]");
-//        log.info("webSocketServer"+webSocketServer);
-//        if (webSocketServer!=null){
-//            log.info("【websocket消息】推送消息,[toUser]userId={},message={}", userId,message);
-//            try {
-//                webSocketServer.session.getBasicRemote().sendText(message);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                log.error("[连接ID:{}] 发送消息失败, 消息:{}", this.userId, message, e);
-//            }
-//        }
         Session session = SESSIONSMap.get(userId);
+        if(session == null)
+            return;
         try {
             session.getBasicRemote().sendText(message);
             log.info("【websocket消息】推送消息,[toUser]userId={},message={}", userId,message);

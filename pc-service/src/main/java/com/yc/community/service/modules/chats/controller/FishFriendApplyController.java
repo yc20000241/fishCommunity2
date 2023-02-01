@@ -31,7 +31,7 @@ public class FishFriendApplyController {
         return CommonResponse.OKBuilder.msg("已发送好友申请").build();
     }
 
-    @PostMapping("/getList")
+    @GetMapping("/getList")
     public CommonResponse getList(@RequestParam("userId") String userId){
         List<FriendApplyListResponse> list = fishFriendApplyService.getList(userId);
         return CommonResponse.OKBuilder.data(list).build();
@@ -47,6 +47,14 @@ public class FishFriendApplyController {
     public CommonResponse hasReadApply(@RequestParam("userId") String userId){
         fishFriendApplyService.hasReadApply(userId);
         return CommonResponse.OKBuilder.build();
+    }
+
+    @GetMapping("/changeFriendApply")
+    public CommonResponse changeFriendApply(@RequestParam("id") String id,@RequestParam("changeStatus") Integer changeStatus){
+        fishFriendApplyService.changeFriendApply(id, changeStatus);
+        if(changeStatus == 0)
+            return CommonResponse.OKBuilder.msg("已拒绝好友申请").build();
+        return CommonResponse.OKBuilder.msg("已接受好友申请").build();
     }
 }
 
