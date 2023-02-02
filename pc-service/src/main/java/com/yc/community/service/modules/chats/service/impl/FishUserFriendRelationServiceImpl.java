@@ -35,11 +35,12 @@ public class FishUserFriendRelationServiceImpl extends ServiceImpl<FishUserFrien
         List<FishUserFriendRelation> fishUserFriendRelations = list(new QueryWrapper<FishUserFriendRelation>().eq("user_id", userId));
         fishUserFriendRelations.forEach(x -> {
             FriendListResponse friendListResponse = new FriendListResponse();
-            friendListResponse.setId(x.getId());
-            UserInfo userInfo = (UserInfo)userInfoCache.getIfPresent(x.getId());
+            friendListResponse.setId(x.getFriendId());
+            UserInfo userInfo = (UserInfo)userInfoCache.getIfPresent(x.getFriendId());
             friendListResponse.setNick(userInfo.getNick());
             friendListResponse.setPicturePath(userInfo.getPicturePath());
             friendListResponse.setSign(userInfo.getSign());
+            friendListResponses.add(friendListResponse);
         });
         return friendListResponses;
     }

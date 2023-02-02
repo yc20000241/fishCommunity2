@@ -43,5 +43,7 @@ public class FishChatInfo implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    @TableField("has_read")
+    private Integer hasRead;
 
 }
