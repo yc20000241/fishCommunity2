@@ -13,13 +13,13 @@ import javax.annotation.PreDestroy;
 
 @Component
 @Slf4j
-public class WebSocketServer {
+public class NettyServer {
 
     private static class SingletionWSServer {
-        static final WebSocketServer instance = new WebSocketServer();
+        static final NettyServer instance = new NettyServer();
     }
 
-    public static WebSocketServer getInstance() {
+    public static NettyServer getInstance() {
         return SingletionWSServer.instance;
     }
 
@@ -29,7 +29,7 @@ public class WebSocketServer {
     private ChannelFuture future;
     private Channel serverChannel;
 
-    public WebSocketServer() {
+    public NettyServer() {
         mainGroup = new NioEventLoopGroup();
         subGroup = new NioEventLoopGroup();
         server = new ServerBootstrap();

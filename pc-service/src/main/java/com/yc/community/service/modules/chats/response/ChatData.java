@@ -1,4 +1,4 @@
-package com.yc.community.service.modules.chats.request;
+package com.yc.community.service.modules.chats.response;
 
 import com.yc.community.service.modules.chats.entity.FishChatInfo;
 import lombok.AllArgsConstructor;

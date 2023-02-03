@@ -24,4 +24,9 @@ public class CaffeineConfig {
     public Cache<String, Object> userInfoCache(){
         return Caffeine.newBuilder().maximumSize(DEFAULT_MAXSIZE).recordStats().build();
     }
+
+    @Bean("chatUserChannelCache")
+    public Cache<String, Object> chatUserChannelCache(){
+        return Caffeine.newBuilder().maximumSize(DEFAULT_MAXSIZE).recordStats().build();
+    }
 }

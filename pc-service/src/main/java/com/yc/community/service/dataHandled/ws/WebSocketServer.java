@@ -77,7 +77,6 @@ public class WebSocketServer {
         webSocketSet.remove(this);
         if (webSocketMap.containsKey(userId)) {
             webSocketMap.remove(userId);
-            SESSIONSMap.put(userId,null);
             subOnlineCount();
         }
         log.info("[连接ID:{}] 断开连接, 当前连接数:{}", userId, getOnlineCount());

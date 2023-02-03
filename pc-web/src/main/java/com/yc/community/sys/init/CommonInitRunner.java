@@ -1,10 +1,12 @@
 package com.yc.community.sys.init;
 
+import com.yc.community.service.modules.chats.netty.NettyServer;
 import com.yc.community.sys.service.impl.CacheServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 
@@ -24,5 +26,6 @@ public class CommonInitRunner implements ApplicationRunner {
         cacheService.initUserInfo();
         log.info("加载数据加载完成....");
         log.info("加载参数到缓存");
+        NettyServer.getInstance().start();
     }
 }

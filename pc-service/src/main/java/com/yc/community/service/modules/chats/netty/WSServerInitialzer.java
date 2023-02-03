@@ -36,7 +36,7 @@ public class WSServerInitialzer extends ChannelInitializer<SocketChannel> {
          * 会帮你处理握手动作：handshaking（close、ping、pong） ping+pong = 心跳
          * 对于websocket 来讲，都是以frams 进行传输的，不同的数据类型对应的frams 也不同
          */
-        pipeline.addLast(new WebSocketServerProtocolHandler("/websocket"));
+        pipeline.addLast(new WebSocketServerProtocolHandler("/chatWebsocket"));
 
         //自定义的handler
         pipeline.addLast(new ChatHandler());
