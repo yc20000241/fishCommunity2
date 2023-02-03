@@ -1,5 +1,6 @@
 package com.yc.community.sys.service.impl;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import com.yc.community.common.commonConst.ConstList;
 import com.yc.community.common.exception.BusinessException;
 import com.yc.community.common.exception.BusinessExceptionCode;
@@ -23,6 +24,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -54,6 +56,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Autowired
     private MinioUtil minioUtil;
+
+    @Resource(name = "chatUserChannelCache")
+    private Cache<String, Object> chatUserCache;
 
     @Override
     public InitUserInfoResponse getInitUserInfo(HttpServletRequest request) {
@@ -99,5 +104,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }
 
         updateById(byId);
+    }
+
+    @Override
+    public void downline(String userId) {
+        chatUserCache.put(userId, "downline");
     }
 }

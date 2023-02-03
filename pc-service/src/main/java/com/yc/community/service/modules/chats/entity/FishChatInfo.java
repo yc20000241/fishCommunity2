@@ -46,4 +46,9 @@ public class FishChatInfo implements Serializable {
     @TableField("has_read")
     private Integer hasRead;
 
+    @TableField(exist = false)
+    private String nick;
+
+    @TableField(exist = false)
+    private String picturePath;
 }

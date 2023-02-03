@@ -120,19 +120,26 @@ public class FishFriendApplyServiceImpl extends ServiceImpl<FishFriendApplyMappe
         byId.setIfAccept(changeStatus);
         updateById(byId);
 
-        ArrayList<FishUserFriendRelation> fishUserFriendRelations = new ArrayList<>();
-        FishUserFriendRelation fishUserFriendRelation1 = new FishUserFriendRelation();
-        fishUserFriendRelation1.setId(UUIDUtil.getUUID());
-        fishUserFriendRelation1.setFriendId(byId.getFromUserId());
-        fishUserFriendRelation1.setUserId(byId.getToUserId());
-        fishUserFriendRelations.add(fishUserFriendRelation1);
+        List<FishUserFriendRelation> list = fishUserFriendRelationService.list(new QueryWrapper<FishUserFriendRelation>().eq("user_id", byId.getFromUserId()).eq("friend_id", byId.getToUserId()));
+        if(list.size() == 0){
+            ArrayList<FishUserFriendRelation> fishUserFriendRelations = new ArrayList<>();
+            FishUserFriendRelation fishUserFriendRelation1 = new FishUserFriendRelation();
+            fishUserFriendRelation1.setId(UUIDUtil.getUUID());
+            fishUserFriendRelation1.setFriendId(byId.getFromUserId());
+            fishUserFriendRelation1.setUserId(byId.getToUserId());
+            fishUserFriendRelations.add(fishUserFriendRelation1);
 
-        FishUserFriendRelation fishUserFriendRelation2 = new FishUserFriendRelation();
-        fishUserFriendRelation2.setId(UUIDUtil.getUUID());
-        fishUserFriendRelation2.setFriendId(byId.getFromUserId());
-        fishUserFriendRelation2.setUserId(byId.getToUserId());
-        fishUserFriendRelations.add(fishUserFriendRelation2);
+            FishUserFriendRelation fishUserFriendRelation2 = new FishUserFriendRelation();
+            fishUserFriendRelation2.setId(UUIDUtil.getUUID());
+            fishUserFriendRelation2.setFriendId(byId.getFromUserId());
+            fishUserFriendRelation2.setUserId(byId.getToUserId());
+            fishUserFriendRelations.add(fishUserFriendRelation2);
 
-        fishUserFriendRelationService.saveBatch(fishUserFriendRelations);
+            fishUserFriendRelationService.saveBatch(fishUserFriendRelations);
+        }else{
+            throw new BusinessException(BusinessExceptionCode.YOU_HAS_BEEN_FRIENDEN);
+        }
+
+
     }
 }

@@ -24,4 +24,5 @@ public interface IUserInfoService extends IService<UserInfo> {
 
     void editUserInfoById(EditUserInfoRequest editUserInfoRequest);
 
+    void downline(String userId);
 }

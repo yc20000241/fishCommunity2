@@ -50,5 +50,11 @@ public class UserInfoController {
         UserInfo byId = userInfoService.getById(id);
         return CommonResponse.OKBuilder.data(byId).build();
     }
+
+    @GetMapping("/downline")
+    public CommonResponse downline(@RequestParam("userId") String userId){
+        userInfoService.downline(userId);
+        return CommonResponse.OKBuilder.build();
+    }
 }
 

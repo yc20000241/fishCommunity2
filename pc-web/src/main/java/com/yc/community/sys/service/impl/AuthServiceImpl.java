@@ -1,6 +1,7 @@
 package com.yc.community.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.benmanes.caffeine.cache.Cache;
 import com.yc.community.common.commonConst.ActiveEnum;
 import com.yc.community.common.commonConst.RoleEnum;
 import com.yc.community.common.config.PropertiesConfig;
@@ -70,6 +71,8 @@ public class AuthServiceImpl{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Resource(name = "chatUserChannelCache")
+    private Cache<String, Object> chatUserCache;
 
     public AccessToken login(String loginAccount, String password) {
         // 1 创建UsernamePasswordAuthenticationToken
@@ -90,6 +93,7 @@ public class AuthServiceImpl{
         redisTemplate.opsForValue().set(username, userDetail, 3600 * 24 * 7, TimeUnit.SECONDS);
         // json解析不了双重对象
 //        stringRedisTemplate.opsForValue().set(userDetail.getUsername(), JSON.toJSONString(userDetail));
+        chatUserCache.put(userDetail.getUserId(),"online");
         return accessToken;
     }
 

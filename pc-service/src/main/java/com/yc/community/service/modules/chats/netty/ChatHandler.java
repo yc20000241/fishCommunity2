@@ -4,8 +4,10 @@ package com.yc.community.service.modules.chats.netty;
 import com.alibaba.fastjson.JSONObject;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.yc.community.common.util.JsonUtils;
+import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.service.modules.chats.entity.FishChatInfo;
 import com.yc.community.service.modules.chats.response.ChatData;
+import com.yc.community.service.modules.chats.service.impl.FishChatInfoServiceImpl;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -14,9 +16,12 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -26,14 +31,13 @@ import java.util.HashMap;
  */
 @DependsOn("springUtil")
 @Slf4j
+@Component
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
     //用于记录和管理所有客户端的channel
     public static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     private HashMap<String, HashMap<String, Channel>> ctxIdWithUserIdAndChannel = new HashMap<>();
 
-    @Resource(name = "chatUserChannelCache")
-    private Cache<String, Object> chatUserCache;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg){
@@ -51,18 +55,15 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         Channel channel =  ctx.channel();
         FishChatInfo fishChatInfo = chatData.getFishChatInfo();
 
-        if(chatData.getAction() == 0){ //刚登录
-            chatUserCache.put(fishChatInfo.getUserId(), channel);
-        }else if(chatData.getAction() == 1){  //创建对话
+        if(chatData.getAction() == 1){  //创建对话
             HashMap<String, Channel> userIdAndChannel = new HashMap<>();
             userIdAndChannel.put(fishChatInfo.getUserId(), channel);
             String key = ctx.channel().id().asShortText();
             ctxIdWithUserIdAndChannel.put(key, userIdAndChannel);
 
-            ChatData chatData1 = new ChatData();
-            chatData1.setCtxId(key);
+            chatData.setCtxId(key);
             channel.writeAndFlush(new TextWebSocketFrame(
-                    JsonUtils.objectToJson(chatData1)
+                    JsonUtils.objectToJson(chatData)
             ));
         }else if(chatData.getAction() == 2){  // 加入对话
             HashMap<String, Channel> stringChannelHashMap = ctxIdWithUserIdAndChannel.get(chatData.getCtxId());
@@ -71,9 +72,18 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             HashMap<String, Channel> stringChannelHashMap = ctxIdWithUserIdAndChannel.get(chatData.getCtxId());
             Channel channel1 = stringChannelHashMap.get(fishChatInfo.getFriendId());
 
-            channel1.writeAndFlush(new TextWebSocketFrame(
-                    JsonUtils.objectToJson(chatData)
-            ));
+            if(channel1 != null){   // 不为null，说明在线
+                channel1.writeAndFlush(new TextWebSocketFrame(
+                        JsonUtils.objectToJson(chatData)
+                ));
+            }
+
+            FishChatInfoServiceImpl fishChatInfoService = SpringUtil.getBean(FishChatInfoServiceImpl.class);
+            FishChatInfo fishChatInfo1 = chatData.getFishChatInfo();
+            fishChatInfo.setId(UUIDUtil.getUUID());
+            fishChatInfo.setCreatedTime(new Date());
+            fishChatInfo.setHasRead(0);
+            fishChatInfoService.save(fishChatInfo1);
         }
 
 
