@@ -63,9 +63,9 @@ public class FishChatInfoServiceImpl extends ServiceImpl<FishChatInfoMapper, Fis
     @Override
     public List<FishChatInfo> getFriendChatInfoList(String userId, String friendId) {
         QueryWrapper<FishChatInfo> fishChatInfoQueryWrapper = new QueryWrapper<>();
-        fishChatInfoQueryWrapper.eq("user_id", userId)
-                .eq("friend_id", friendId).last("limit 20")
-                .orderByDesc("created_time");
+        fishChatInfoQueryWrapper.and(wrapper -> wrapper.eq("user_id", userId).eq("friend_id", friendId))
+                .or(wrapper1 -> wrapper1.eq("user_id", friendId).eq("friend_id", userId));
+        fishChatInfoQueryWrapper.last("limit 20").orderByDesc("created_time");
         List<FishChatInfo> list = list(fishChatInfoQueryWrapper);
         return list;
     }

@@ -13,6 +13,4 @@ public class ChatData {
     private Integer action;
 
     private FishChatInfo fishChatInfo;
-
-    private String ctxId;
 }

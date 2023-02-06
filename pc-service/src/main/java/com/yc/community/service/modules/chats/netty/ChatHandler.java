@@ -36,7 +36,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     //用于记录和管理所有客户端的channel
     public static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
-    private HashMap<String, HashMap<String, Channel>> ctxIdWithUserIdAndChannel = new HashMap<>();
+    private  HashMap<String, Channel> userChannelMap = new HashMap<>();
 
 
     @Override
@@ -49,28 +49,16 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             return;
         }
         log.info("客户端所传输的消息"+content);
-        //1.获取客户端发来的消息
-//        ChatData chatData = JSONObject.parseObject(content, ChatData.class);
+
 		ChatData chatData = JsonUtils.jsonToPojo(content, ChatData.class);
         Channel channel =  ctx.channel();
         FishChatInfo fishChatInfo = chatData.getFishChatInfo();
 
-        if(chatData.getAction() == 1){  //创建对话
-            HashMap<String, Channel> userIdAndChannel = new HashMap<>();
-            userIdAndChannel.put(fishChatInfo.getUserId(), channel);
-            String key = ctx.channel().id().asShortText();
-            ctxIdWithUserIdAndChannel.put(key, userIdAndChannel);
+        if(chatData.getAction() == 1){  //创建或加入对话
+            userChannelMap.put(fishChatInfo.getUserId(), channel);
+        }else if(chatData.getAction() == 2){  // 发送信息
 
-            chatData.setCtxId(key);
-            channel.writeAndFlush(new TextWebSocketFrame(
-                    JsonUtils.objectToJson(chatData)
-            ));
-        }else if(chatData.getAction() == 2){  // 加入对话
-            HashMap<String, Channel> stringChannelHashMap = ctxIdWithUserIdAndChannel.get(chatData.getCtxId());
-            stringChannelHashMap.put(fishChatInfo.getUserId(), channel);
-        }else if(chatData.getAction() == 3){  // 发送信息
-            HashMap<String, Channel> stringChannelHashMap = ctxIdWithUserIdAndChannel.get(chatData.getCtxId());
-            Channel channel1 = stringChannelHashMap.get(fishChatInfo.getFriendId());
+            Channel channel1 = userChannelMap.get(fishChatInfo.getFriendId());
 
             if(channel1 != null){   // 不为null，说明在线
                 channel1.writeAndFlush(new TextWebSocketFrame(

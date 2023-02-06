@@ -2,6 +2,7 @@ package com.yc.community.sys.controller;
 
 
 import com.yc.community.common.response.CommonResponse;
+import com.yc.community.common.util.CopyUtil;
 import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.sys.request.EditUserInfoRequest;
 import com.yc.community.sys.response.AuthorUserInfoResponse;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
@@ -48,7 +50,8 @@ public class UserInfoController {
     @GetMapping("/getById")
     public CommonResponse getById(@RequestParam("id") String id){
         UserInfo byId = userInfoService.getById(id);
-        return CommonResponse.OKBuilder.data(byId).build();
+        InitUserInfoResponse ts = CopyUtil.copy(byId, InitUserInfoResponse.class);
+        return CommonResponse.OKBuilder.data(ts).build();
     }
 
     @GetMapping("/downline")
