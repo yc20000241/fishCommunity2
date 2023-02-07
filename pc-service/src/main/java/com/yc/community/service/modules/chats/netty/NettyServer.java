@@ -40,7 +40,7 @@ public class NettyServer {
 
     public void start() throws InterruptedException {
 //        this.future = server.bind("172.27.75.4",8888);
-        this.future = server.bind("127.0.0.1",8888);
+        this.future = server.bind("127.0.0.1",17777);
         serverChannel = future.sync().channel().closeFuture().sync().channel();
         if (future.isSuccess()) {
             log.info("启动 Netty 成功");

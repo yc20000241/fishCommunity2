@@ -33,7 +33,7 @@ public class FishChatInfoServiceImpl extends ServiceImpl<FishChatInfoMapper, Fis
     public Integer getNotReadChatCount(String userId) {
         QueryWrapper<FishChatInfo> fishChatInfoQueryWrapper = new QueryWrapper<>();
         fishChatInfoQueryWrapper.eq("friend_id", userId)
-                .eq("has_read", 0);
+                .eq("has_read", 0).select("distinct user_id");
         int count = count(fishChatInfoQueryWrapper);
         return count;
     }
@@ -65,7 +65,7 @@ public class FishChatInfoServiceImpl extends ServiceImpl<FishChatInfoMapper, Fis
         QueryWrapper<FishChatInfo> fishChatInfoQueryWrapper = new QueryWrapper<>();
         fishChatInfoQueryWrapper.and(wrapper -> wrapper.eq("user_id", userId).eq("friend_id", friendId))
                 .or(wrapper1 -> wrapper1.eq("user_id", friendId).eq("friend_id", userId));
-        fishChatInfoQueryWrapper.last("limit 20").orderByDesc("created_time");
+        fishChatInfoQueryWrapper.last("limit 20").orderByAsc("created_time");
         List<FishChatInfo> list = list(fishChatInfoQueryWrapper);
         return list;
     }

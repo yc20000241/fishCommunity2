@@ -34,9 +34,9 @@ import java.util.HashMap;
 @Component
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
     //用于记录和管理所有客户端的channel
-    public static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    //public static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
-    private  HashMap<String, Channel> userChannelMap = new HashMap<>();
+    private  static HashMap<String, Channel> userChannelMap = new HashMap<>();
 
 
     @Override
@@ -56,14 +56,20 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 
         if(chatData.getAction() == 1){  //创建或加入对话
             userChannelMap.put(fishChatInfo.getUserId(), channel);
+//            userChannelMap.keySet().forEach(x -> {
+//                System.out.println("key: "+ x+"; value: " + userChannelMap.get(x));
+//            });
         }else if(chatData.getAction() == 2){  // 发送信息
-
+//            userChannelMap.keySet().forEach(x -> {
+//                System.out.println("key: "+ x+"; value: " + userChannelMap.get(x));
+//            });
             Channel channel1 = userChannelMap.get(fishChatInfo.getFriendId());
 
             if(channel1 != null){   // 不为null，说明在线
                 channel1.writeAndFlush(new TextWebSocketFrame(
                         JsonUtils.objectToJson(chatData)
                 ));
+                log.info("发送信息："+chatData);
             }
 
             FishChatInfoServiceImpl fishChatInfoService = SpringUtil.getBean(FishChatInfoServiceImpl.class);
@@ -79,7 +85,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        users.add(ctx.channel());
+//        users.add(ctx.channel());
         log.info("加入channel_id为"+ctx.channel().id());
 	}
 
@@ -89,7 +95,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 		System.out.println("客户端被移除：channel id 为："+chanelId);
 		log.info("客户端被移除：channel id 为："+chanelId);
 
-		users.remove(ctx.channel());
+//		users.remove(ctx.channel());
 
     }
 
@@ -100,7 +106,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 		//发生了异常后关闭连接，同时从channelgroup移除
 		log.info("netty异常"+cause);
 		ctx.channel().close();
-		users.remove(ctx.channel());
+//		users.remove(ctx.channel());
 
     }
 

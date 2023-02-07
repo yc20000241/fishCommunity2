@@ -21,19 +21,19 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
         if(evt instanceof IdleStateEvent){
             IdleStateEvent event = (IdleStateEvent)evt;//强制类型转化
             if(event.state()== IdleState.READER_IDLE){
-                log.info("进入读空闲......");
-                System.out.println("进入读空闲......");
+//                log.info("进入读空闲......");
+//                System.out.println("进入读空闲......");
             }else if(event.state() == IdleState.WRITER_IDLE) {
-                log.info("进入写空闲......");
-                System.out.println("进入写空闲......");
+//                log.info("进入写空闲......");
+//                System.out.println("进入写空闲......");
             }else if(event.state()== IdleState.ALL_IDLE){
-                log.info("channel 关闭之前：users 的数量为："+ChatHandler.users.size());
-                System.out.println("channel 关闭之前：users 的数量为："+ChatHandler.users.size());
+//                log.info("channel 关闭之前：users 的数量为："+ChatHandler.users.size());
+//                System.out.println("channel 关闭之前：users 的数量为："+ChatHandler.users.size());
                 Channel channel = ctx.channel();
                 //资源释放
                 channel.close();
-                System.out.println("channel 关闭之后：users 的数量为："+ChatHandler.users.size());
-                log.info("channel 关闭之前：users 的数量为："+ChatHandler.users.size());
+//                System.out.println("channel 关闭之后：users 的数量为："+ChatHandler.users.size());
+//                log.info("channel 关闭之前：users 的数量为："+ChatHandler.users.size());
             }
         }
     }
