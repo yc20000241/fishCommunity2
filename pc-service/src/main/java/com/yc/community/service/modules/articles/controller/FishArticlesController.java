@@ -1,14 +1,18 @@
 package com.yc.community.service.modules.articles.controller;
 
 
+import cn.easyes.core.conditions.LambdaEsQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yc.community.common.response.CommonResponse;
+import com.yc.community.service.modules.articles.entity.EsArticle;
 import com.yc.community.service.modules.articles.entity.FishArticles;
+import com.yc.community.service.modules.articles.esMapper.ArticleMapper;
 import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.ArticleLikeRequest;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
+import org.elasticsearch.action.search.SearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +34,9 @@ public class FishArticlesController {
 
     @Autowired
     private IFishArticlesService fishArticlesService;
+
+    @Autowired
+    private ArticleMapper articleMapper;
 
     @PostMapping("/publish")
     public CommonResponse publish(@Validated @RequestBody PublishArticleRequest publishArticleRequest){
@@ -76,5 +83,16 @@ public class FishArticlesController {
         fishArticlesService.articleLike(articleLikeRequest);
         return CommonResponse.OKBuilder.msg("文章点赞成功").build();
     }
+
+    @PostMapping("/estest")
+    public CommonResponse estest(@RequestBody EsArticle esArticle){
+        articleMapper.insert(esArticle);
+        LambdaEsQueryWrapper<EsArticle> wrapper = new LambdaEsQueryWrapper<>();
+        wrapper.match(EsArticle::getArticleContent, "测试");
+        SearchResponse search = articleMapper.search(wrapper);
+//        EsPageInfo<EsArticle> esArticleEsPageInfo = articleMapper.pageQuery(wrapper, 1, 10);
+        return CommonResponse.OKBuilder.data(search).build();
+    }
+
 }
 

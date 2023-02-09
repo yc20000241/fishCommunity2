@@ -1,6 +1,7 @@
 package com.yc.community;
 
 
+import cn.easyes.starter.register.EsMapperScan;
 import com.yc.community.service.modules.chats.netty.NettyBooter;
 import com.yc.community.sys.init.CommonInitRunner;
 import org.mybatis.spring.annotation.MapperScan;
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @ComponentScan(basePackages = "com.yc.community.*")
 @MapperScan(value = {"com.yc.community.sys.mapper","com.yc.community.service.modules.*.mapper"})
 @EnableAsync
+@EsMapperScan("com.yc.community.service.modules.articles.esMapper")
 public class FishCommunityApplication {
     public static void main(String[] args) {
         SpringApplication.run(FishCommunityApplication.class, args);

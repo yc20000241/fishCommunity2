@@ -72,7 +72,7 @@
     <orderEntry type="library" name="Maven: com.github.ben-manes.caffeine:caffeine:2.8.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.checkerframework:checker-qual:3.5.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.3.3" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.10.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.10.0" level="project" />
     <orderEntry type="library" name="Maven: io.minio:minio:8.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.carrotsearch.thirdparty:simple-xml-safe:2.7.1" level="project" />
