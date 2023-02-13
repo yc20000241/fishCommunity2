@@ -1,6 +1,7 @@
 package com.yc.community.service.modules.articles.controller;
 
 
+import cn.easyes.core.biz.EsPageInfo;
 import cn.easyes.core.conditions.LambdaEsQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yc.community.common.response.CommonResponse;
@@ -89,9 +90,9 @@ public class FishArticlesController {
         articleMapper.insert(esArticle);
         LambdaEsQueryWrapper<EsArticle> wrapper = new LambdaEsQueryWrapper<>();
         wrapper.match(EsArticle::getArticleContent, "测试");
-        SearchResponse search = articleMapper.search(wrapper);
-//        EsPageInfo<EsArticle> esArticleEsPageInfo = articleMapper.pageQuery(wrapper, 1, 10);
-        return CommonResponse.OKBuilder.data(search).build();
+//        SearchResponse search = articleMapper.search(wrapper);
+        EsPageInfo<EsArticle> esArticleEsPageInfo = articleMapper.pageQuery(wrapper, 1, 10);
+        return CommonResponse.OKBuilder.data(esArticleEsPageInfo).build();
     }
 
 }
