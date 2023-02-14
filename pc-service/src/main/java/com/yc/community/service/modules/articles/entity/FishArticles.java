@@ -1,5 +1,6 @@
 package com.yc.community.service.modules.articles.entity;
 
+import cn.easyes.annotation.IndexField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
@@ -64,4 +65,13 @@ public class FishArticles implements Serializable {
 
     @TableField(exist = false)
     private String createdName;
+
+    @TableField(exist = false)
+    private String articleContent;
+
+    @TableField(exist = false)
+    private String highlightContent;
+
+    @TableField(exist = false)
+    private String highlightTitle;
 }

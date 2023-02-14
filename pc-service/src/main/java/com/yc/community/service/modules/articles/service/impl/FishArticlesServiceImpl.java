@@ -1,5 +1,7 @@
 package com.yc.community.service.modules.articles.service.impl;
 
+import cn.easyes.core.biz.EsPageInfo;
+import cn.easyes.core.conditions.LambdaEsQueryWrapper;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -13,19 +15,23 @@ import com.yc.community.common.commonConst.MessageCategoryEnum;
 import com.yc.community.common.exception.BusinessException;
 import com.yc.community.common.exception.BusinessExceptionCode;
 import com.yc.community.common.minio.MinioUtil;
+import com.yc.community.common.util.CopyUtil;
 import com.yc.community.common.util.DateUtil;
 import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.service.dataHandled.initMessage.MessageAdapter;
 import com.yc.community.service.dataHandled.kafka.KafkaProducer;
+import com.yc.community.service.modules.articles.entity.EsArticle;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishUserArticleLike;
 import com.yc.community.service.modules.articles.entity.UserInfo;
+import com.yc.community.service.modules.articles.esMapper.ArticleMapper;
 import com.yc.community.service.modules.articles.mapper.FishArticlesMapper;
 import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.ArticleLikeRequest;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
+import io.netty.util.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +39,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -53,6 +60,9 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
     @Autowired
     private KafkaProducer kafkaProducer;
+
+    @Autowired
+    private ArticleMapper articleMapper;
 
     @Autowired
     private FishUserArticleLikeServiceImpl fishUserArticleLikeService;
@@ -171,6 +181,10 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         stringObjectHashMap.put("articleObj", byId);
         stringObjectHashMap.put("publishContent",applyArticleRequest.getPublishContent());
         messageAdapter.adapter(MessageCategoryEnum.ARTICLE_APPLY.getCategory(), stringObjectHashMap);
+
+        String s = minioUtil.stringDownload(byId.getFilePath(), ConstList.ARTICLE_BUCKET);
+        byId.setArticleContent(s);
+        kafkaProducer.commonSend("esArticle", JSON.toJSONString(byId));
     }
 
     @Override
@@ -207,6 +221,70 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         map.put("userName", articleLikeRequest.getUserName());
 
         messageAdapter.adapter(MessageCategoryEnum.ARTICLE_LIKE.getCategory(), map);
+    }
+
+    @Override
+    public IPage<FishArticles> esSearch(String keyWord, String userId, Integer kind, Integer pageNo) {
+        LambdaEsQueryWrapper<EsArticle> wrapper = new LambdaEsQueryWrapper<>();
+        if(!StringUtils.isEmpty(keyWord)){
+            if(keyWord.length() > 1)
+                wrapper.and(wrap -> {
+                    wrap.match(EsArticle::getTitle, keyWord).or().match(EsArticle::getArticleContent, keyWord);
+                });
+            else
+                wrapper.multiMatchQuery(keyWord, EsArticle::getTitle, EsArticle::getArticleContent);
+        }
+
+        wrapper.eq(!StringUtils.isEmpty(userId), "created_id", userId);
+
+        if(kind == 1)
+            wrapper.orderByDesc("created_time");
+        else if(kind == 2)
+            wrapper.orderByAsc("created_time");
+        else if(kind == 3)
+            wrapper.orderByDesc("look_count");
+        else
+            wrapper.orderByDesc("like_count");
+
+        EsPageInfo<EsArticle> esArticleEsPageInfo = articleMapper.pageQuery(wrapper, pageNo, 10);
+        Page<FishArticles> fishArticlesIPage = new Page<>();
+
+        List<EsArticle> list = esArticleEsPageInfo.getList();
+        if(list.size() != 0){
+            List<String> ids = list.stream().map(EsArticle::getId).collect(Collectors.toList());
+            Map<String, EsArticle> idMap = list.stream().collect(Collectors.toMap(EsArticle::getId, item -> item));
+            List<FishArticles> fishArticles = listByIds(ids);
+
+            fishArticles.forEach(x -> {
+                UserInfo userInfo = (UserInfo)userInfoCache.getIfPresent(x.getCreatedId());
+                x.setCreatedName(userInfo.getNick());
+                EsArticle esArticle = idMap.get(x.getId());
+                x.setHighlightContent(esArticle.getHighlightContent());
+                x.setHighlightTitle(esArticle.getHighlightTitle());
+            });
+            fishArticlesIPage.setRecords(fishArticles);
+            fishArticlesIPage.setTotal(esArticleEsPageInfo.getTotal());
+        }
+
+        return fishArticlesIPage;
+    }
+
+    @Override
+    public List<EsArticle> estest() {
+        articleMapper.delete(new LambdaEsQueryWrapper<>());
+
+        List<FishArticles> list = list();
+        ArrayList<EsArticle> esArticles = new ArrayList<>();
+        list.forEach(x -> {
+            String s = minioUtil.stringDownload(x.getFilePath(), ConstList.ARTICLE_BUCKET);
+            EsArticle esArticle = CopyUtil.copy(x, EsArticle.class);
+            esArticle.setArticleContent(s);
+            esArticles.add(esArticle);
+        });
+
+        articleMapper.insertBatch(esArticles);
+        List<EsArticle> esArticles1 = articleMapper.selectList(new LambdaEsQueryWrapper<>());
+        return esArticles1;
     }
 
 }

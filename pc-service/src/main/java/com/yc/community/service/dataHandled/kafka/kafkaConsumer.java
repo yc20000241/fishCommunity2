@@ -1,9 +1,12 @@
 package com.yc.community.service.dataHandled.kafka;
 
 import com.alibaba.fastjson.JSON;
+import com.yc.community.common.util.CopyUtil;
 import com.yc.community.service.dataHandled.ws.WebSocketServer;
+import com.yc.community.service.modules.articles.entity.EsArticle;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishMessage;
+import com.yc.community.service.modules.articles.esMapper.ArticleMapper;
 import com.yc.community.service.modules.articles.service.impl.FishArticlesServiceImpl;
 import com.yc.community.service.modules.articles.service.impl.FishMessageServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,9 @@ public class kafkaConsumer {
     @Autowired
     private WebSocketServer webSocketServer;
 
+    @Autowired
+    private ArticleMapper articleMapper;
+
 
     @KafkaListener(topics = "message")
     public void messageListener(ConsumerRecord<String, String> record) {
@@ -46,4 +52,13 @@ public class kafkaConsumer {
         log.info("消费者进行消费："+ value);
     }
 
+    @KafkaListener(topics = "esArticle")
+    public void esArticleListener(ConsumerRecord<String, String> record) {
+        String value = record.value();
+        FishArticles fishArticles = JSON.parseObject(value, FishArticles.class);
+        EsArticle esArticle = CopyUtil.copy(fishArticles, EsArticle.class);
+        esArticle.setArticleContent(fishArticles.getArticleContent());
+        articleMapper.insert(esArticle);
+        log.info("消费者进行消费,存入es："+ value);
+    }
 }

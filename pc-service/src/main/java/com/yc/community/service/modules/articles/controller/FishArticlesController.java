@@ -50,7 +50,7 @@ public class FishArticlesController {
                                  @RequestParam(value = "userId", required = false) String userId,
                                  @RequestParam(value = "kind", defaultValue = "1") Integer kind,
                                  @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo){
-        IPage<FishArticles> list = fishArticlesService.search(keyWord, userId, kind, pageNo);
+        IPage<FishArticles> list = fishArticlesService.esSearch(keyWord, userId, kind, pageNo);
         return CommonResponse.OKBuilder.data(list).build();
     }
 
@@ -85,14 +85,10 @@ public class FishArticlesController {
         return CommonResponse.OKBuilder.msg("文章点赞成功").build();
     }
 
-    @PostMapping("/estest")
-    public CommonResponse estest(@RequestBody EsArticle esArticle){
-        articleMapper.insert(esArticle);
-        LambdaEsQueryWrapper<EsArticle> wrapper = new LambdaEsQueryWrapper<>();
-        wrapper.match(EsArticle::getArticleContent, "测试");
-//        SearchResponse search = articleMapper.search(wrapper);
-        EsPageInfo<EsArticle> esArticleEsPageInfo = articleMapper.pageQuery(wrapper, 1, 10);
-        return CommonResponse.OKBuilder.data(esArticleEsPageInfo).build();
+    @GetMapping("/estest")
+    public CommonResponse estest(){ // 同步数据库文章数据
+        List<EsArticle> estest = fishArticlesService.estest();
+        return CommonResponse.OKBuilder.data(estest).build();
     }
 
 }
