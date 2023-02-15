@@ -226,14 +226,9 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     @Override
     public IPage<FishArticles> esSearch(String keyWord, String userId, Integer kind, Integer pageNo) {
         LambdaEsQueryWrapper<EsArticle> wrapper = new LambdaEsQueryWrapper<>();
-        if(!StringUtils.isEmpty(keyWord)){
-            if(keyWord.length() > 1)
-                wrapper.and(wrap -> {
-                    wrap.match(EsArticle::getTitle, keyWord).or().match(EsArticle::getArticleContent, keyWord);
-                });
-            else
-                wrapper.multiMatchQuery(keyWord, EsArticle::getTitle, EsArticle::getArticleContent);
-        }
+        wrapper.and(!StringUtils.isEmpty(keyWord), wrap -> {
+            wrap.match(EsArticle::getTitle, keyWord).or().match(EsArticle::getArticleContent, keyWord);
+        });
 
         wrapper.eq(!StringUtils.isEmpty(userId), "created_id", userId);
 

@@ -23,11 +23,13 @@ public class EsArticle {
     @IndexId(type = IdType.CUSTOMIZE)
     private String id;
 
-    @IndexField(value = "title",fieldType = FieldType.TEXT, analyzer = Analyzer.IK_MAX_WORD, searchAnalyzer = Analyzer.IK_MAX_WORD)
+//    @IndexField(value = "title",fieldType = FieldType.TEXT, analyzer = Analyzer.IK_MAX_WORD, searchAnalyzer = Analyzer.IK_MAX_WORD)
+    @IndexField(value = "title",fieldType = FieldType.TEXT)
     @HighLight(mappingField = "highlightTitle", fragmentSize=50)
     private String title;
 
-    @IndexField(value = "article_content", fieldType = FieldType.TEXT, analyzer = Analyzer.IK_MAX_WORD, searchAnalyzer = Analyzer.IK_MAX_WORD)
+//    @IndexField(value = "article_content", fieldType = FieldType.TEXT, analyzer = Analyzer.IK_MAX_WORD, searchAnalyzer = Analyzer.IK_MAX_WORD)
+    @IndexField(value = "article_content", fieldType = FieldType.TEXT)
     @HighLight(mappingField = "highlightContent", fragmentSize=50)
     private String articleContent;
 
