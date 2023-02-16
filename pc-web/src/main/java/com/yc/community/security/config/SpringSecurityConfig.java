@@ -56,6 +56,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 放行登录方法
                 .antMatchers("/api/web/sys/**").permitAll()
                 .antMatchers("/websocket/**").permitAll()
+                .antMatchers("/chatWebsocket").permitAll()
                 // 其他请求都需要认证后才能访问
                 .anyRequest().authenticated()
                 // 使用自定义的 accessDecisionManager

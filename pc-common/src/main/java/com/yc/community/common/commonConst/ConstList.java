@@ -18,6 +18,6 @@ public class ConstList {
     public static List<String> PUBLIC_PERMISSION_URL;
 
     static {
-        NO_PERMISSION_LOGIN_MATCH_URL = Arrays.asList("/api/web/sys/**", "/api/web/home/**", "/websocket/**");
+        NO_PERMISSION_LOGIN_MATCH_URL = Arrays.asList("/api/web/sys/**", "/api/web/home/**", "/websocket/**","/chatWebsocket");
     }
 }
