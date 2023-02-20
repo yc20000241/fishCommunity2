@@ -23,6 +23,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,6 +44,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@EnableAsync
 public class AuthServiceImpl{
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -94,6 +96,10 @@ public class AuthServiceImpl{
         // json解析不了双重对象
 //        stringRedisTemplate.opsForValue().set(userDetail.getUsername(), JSON.toJSONString(userDetail));
         chatUserCache.put(userDetail.getUserId(),"online");
+
+        UserInfo userInfo = userDetail.getUserInfo();
+        userInfo.setLastLogin(new Date());
+        userInfoService.updateUserInfoById(userInfo);
         return accessToken;
     }
 

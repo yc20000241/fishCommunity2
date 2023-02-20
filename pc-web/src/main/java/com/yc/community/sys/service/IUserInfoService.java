@@ -7,6 +7,7 @@ import com.yc.community.sys.response.AuthorUserInfoResponse;
 import com.yc.community.sys.response.InitUserInfoResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
@@ -25,4 +26,8 @@ public interface IUserInfoService extends IService<UserInfo> {
     void editUserInfoById(EditUserInfoRequest editUserInfoRequest);
 
     void downline(String userId);
+
+    List<UserInfo> listAll(String keyWord);
+
+    void deleteUser(String userId);
 }

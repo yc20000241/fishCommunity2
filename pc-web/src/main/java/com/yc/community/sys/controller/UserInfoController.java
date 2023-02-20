@@ -59,5 +59,17 @@ public class UserInfoController {
         userInfoService.downline(userId);
         return CommonResponse.OKBuilder.build();
     }
+
+    @GetMapping("/listAll")
+    public CommonResponse listAll(@RequestParam("keyWord") String keyWord){
+        List<UserInfo> list = userInfoService.listAll(keyWord);
+        return CommonResponse.OKBuilder.data(list).build();
+    }
+
+    @GetMapping("/deleteUser")
+    public CommonResponse deleteUser(@RequestParam("userId") String userId){
+        userInfoService.deleteUser(userId);
+        return CommonResponse.OKBuilder.build();
+    }
 }
 
