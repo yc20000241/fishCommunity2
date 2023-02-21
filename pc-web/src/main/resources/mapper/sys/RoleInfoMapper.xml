@@ -7,4 +7,5 @@
             select role_id from sys_role_user where id = #{id}
         )
     </select>
+
 </mapper>

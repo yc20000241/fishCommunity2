@@ -1,8 +1,12 @@
 package com.yc.community.sys.service;
 
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.sys.entity.RoleInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -14,4 +18,5 @@ import org.springframework.stereotype.Service;
  */
 public interface IRoleInfoService extends IService<RoleInfo> {
 
+    HashMap<String, List<UserInfo>> getRoleAndNotRoleList(String roleId );
 }

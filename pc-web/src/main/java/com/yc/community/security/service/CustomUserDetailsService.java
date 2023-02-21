@@ -1,6 +1,8 @@
 package com.yc.community.security.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yc.community.common.exception.BusinessException;
+import com.yc.community.common.exception.BusinessExceptionCode;
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.sys.entity.RoleInfo;
 import com.yc.community.service.modules.articles.entity.UserInfo;
@@ -41,6 +43,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserDetail userDetail = new UserDetail();
         userDetail.setUserInfo(userInfo);
         List<RoleInfo> roleInfoList = roleInfoService.listRoleByUserId(userInfo.getId());
+        if(roleInfoList.size() == 0)
+            throw new BusinessException(BusinessExceptionCode.PLease_ADMIN_GIVE_A_ROLE);
         userDetail.setRoleInfoList(roleInfoList);
         return userDetail;
     }

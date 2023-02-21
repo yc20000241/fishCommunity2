@@ -1,5 +1,6 @@
 package com.yc.community.sys.mapper;
 
+import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.sys.entity.RoleInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -21,4 +22,6 @@ import java.util.List;
 public interface RoleInfoMapper extends BaseMapper<RoleInfo> {
 
     List<RoleInfo> listRoleByUserId(@Param("id") String id);
+
+
 }

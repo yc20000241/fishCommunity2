@@ -2,11 +2,14 @@ package com.yc.community.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.yc.community.common.commonConst.ActiveEnum;
 import com.yc.community.common.commonConst.ConstList;
+import com.yc.community.common.commonConst.RoleEnum;
 import com.yc.community.common.exception.BusinessException;
 import com.yc.community.common.exception.BusinessExceptionCode;
 import com.yc.community.common.minio.MinioUtil;
 import com.yc.community.common.util.CopyUtil;
+import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.security.entity.UserDetail;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishComments;
@@ -40,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -163,6 +167,18 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         fishFriendApplyService.remove(new QueryWrapper<FishFriendApply>().eq("from_user_id",userId));
         fishUserFriendRelationService.remove(new QueryWrapper<FishUserFriendRelation>().eq("friend_id", userId));
         fishMessageService.remove(new QueryWrapper<FishMessage>().eq("created_id", userId));
+    }
+
+    @Override
+    public void add(UserInfo userInfo) {
+        userInfo.setActive(ActiveEnum.ACTIVE.getCode());
+        userInfo.setCreatedTime(new Date());
+        userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
+        userInfo.setPicturePath("/article-image/default-avatar.b7d77977.png");
+        userInfo.setNick("未命名");
+        String uuid = UUIDUtil.getUUID();
+        userInfo.setId(uuid);
+        save(userInfo);
     }
 
     @Async

@@ -30,4 +30,6 @@ public interface IUserInfoService extends IService<UserInfo> {
     List<UserInfo> listAll(String keyWord);
 
     void deleteUser(String userId);
+
+    void add(UserInfo userInfo);
 }

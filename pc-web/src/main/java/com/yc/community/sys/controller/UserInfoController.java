@@ -71,5 +71,11 @@ public class UserInfoController {
         userInfoService.deleteUser(userId);
         return CommonResponse.OKBuilder.build();
     }
+
+    @PostMapping("/add")
+    public CommonResponse add(@RequestBody UserInfo userInfo){
+        userInfoService.add(userInfo);
+        return CommonResponse.OK;
+    }
 }
 

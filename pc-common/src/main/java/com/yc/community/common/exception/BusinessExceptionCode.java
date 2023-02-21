@@ -15,7 +15,8 @@ public enum BusinessExceptionCode {
     COMMENT_HAS_LIKEN("此评论已点赞", 611),
     EDIT_PASSWORD_NEED_OLD_AND_NEW("修改密码，需要新密码和旧密码", 612),
     YOU_HAS_BEEN_FRIENDEN("你们已经是好友了",613),
-    YOU_HAS_SEND_FRIEND_APPLY("你已向他发送过好友请求",614)
+    YOU_HAS_SEND_FRIEND_APPLY("你已向他发送过好友请求",614),
+    PLease_ADMIN_GIVE_A_ROLE("请管理员分配角色", 615)
     ;
 
     private String desc;
