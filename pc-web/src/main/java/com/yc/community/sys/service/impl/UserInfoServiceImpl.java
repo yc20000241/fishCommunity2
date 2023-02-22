@@ -25,6 +25,7 @@ import com.yc.community.service.modules.chats.service.impl.FishUserFriendRelatio
 import com.yc.community.sys.entity.RoleUser;
 import com.yc.community.sys.mapper.RoleMenuMapper;
 import com.yc.community.sys.mapper.UserInfoMapper;
+import com.yc.community.sys.request.AddUserToRoleRequest;
 import com.yc.community.sys.request.EditUserInfoRequest;
 import com.yc.community.sys.response.AuthorUserInfoResponse;
 import com.yc.community.sys.response.InitUserInfoResponse;
@@ -43,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -179,6 +181,21 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         String uuid = UUIDUtil.getUUID();
         userInfo.setId(uuid);
         save(userInfo);
+    }
+
+    @Override
+    @Transactional
+    public void addUserToRole(AddUserToRoleRequest addUserToRoleRequest) {
+        roleUserService.remove(new QueryWrapper<RoleUser>().eq("role_id", addUserToRoleRequest.getRoleId()));
+        ArrayList<RoleUser> roleUsers = new ArrayList<>();
+        addUserToRoleRequest.getIdList().forEach(x -> {
+            RoleUser roleUser = new RoleUser();
+            roleUser.setId(UUIDUtil.getUUID());
+            roleUser.setUserId(x);
+            roleUser.setRoleId(addUserToRoleRequest.getRoleId());
+            roleUsers.add(roleUser);
+        });
+        roleUserService.saveBatch(roleUsers);
     }
 
     @Async

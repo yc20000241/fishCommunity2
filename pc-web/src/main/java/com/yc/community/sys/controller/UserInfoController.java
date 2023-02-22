@@ -4,6 +4,7 @@ package com.yc.community.sys.controller;
 import com.yc.community.common.response.CommonResponse;
 import com.yc.community.common.util.CopyUtil;
 import com.yc.community.service.modules.articles.entity.UserInfo;
+import com.yc.community.sys.request.AddUserToRoleRequest;
 import com.yc.community.sys.request.EditUserInfoRequest;
 import com.yc.community.sys.response.AuthorUserInfoResponse;
 import com.yc.community.sys.response.InitUserInfoResponse;
@@ -76,6 +77,12 @@ public class UserInfoController {
     public CommonResponse add(@RequestBody UserInfo userInfo){
         userInfoService.add(userInfo);
         return CommonResponse.OK;
+    }
+
+    @PostMapping("/addUserToRole")
+    public CommonResponse addUserToRole(@RequestBody AddUserToRoleRequest addUserToRoleRequest){
+        userInfoService.addUserToRole(addUserToRoleRequest);
+        return CommonResponse.OKBuilder.msg("改变分组成功").build();
     }
 }
 
