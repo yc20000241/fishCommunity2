@@ -131,8 +131,8 @@ public class FishFriendApplyServiceImpl extends ServiceImpl<FishFriendApplyMappe
 
             FishUserFriendRelation fishUserFriendRelation2 = new FishUserFriendRelation();
             fishUserFriendRelation2.setId(UUIDUtil.getUUID());
-            fishUserFriendRelation2.setFriendId(byId.getFromUserId());
-            fishUserFriendRelation2.setUserId(byId.getToUserId());
+            fishUserFriendRelation2.setFriendId(byId.getToUserId());
+            fishUserFriendRelation2.setUserId(byId.getFromUserId());
             fishUserFriendRelations.add(fishUserFriendRelation2);
 
             fishUserFriendRelationService.saveBatch(fishUserFriendRelations);

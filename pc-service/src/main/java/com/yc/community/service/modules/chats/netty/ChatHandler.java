@@ -76,10 +76,9 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             FishChatInfo fishChatInfo1 = chatData.getFishChatInfo();
             fishChatInfo.setId(UUIDUtil.getUUID());
             fishChatInfo.setCreatedTime(new Date());
-            fishChatInfo.setHasRead(0);
+            fishChatInfo.setHasRead((channel1 != null ? 1 : 0));
             fishChatInfoService.save(fishChatInfo1);
         }
-
 
     }
 

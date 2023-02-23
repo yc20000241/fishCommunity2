@@ -18,8 +18,10 @@ import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.service.modules.articles.service.impl.FishArticlesServiceImpl;
 import com.yc.community.service.modules.articles.service.impl.FishCommentsServiceImpl;
 import com.yc.community.service.modules.articles.service.impl.FishMessageServiceImpl;
+import com.yc.community.service.modules.chats.entity.FishChatInfo;
 import com.yc.community.service.modules.chats.entity.FishFriendApply;
 import com.yc.community.service.modules.chats.entity.FishUserFriendRelation;
+import com.yc.community.service.modules.chats.service.impl.FishChatInfoServiceImpl;
 import com.yc.community.service.modules.chats.service.impl.FishFriendApplyServiceImpl;
 import com.yc.community.service.modules.chats.service.impl.FishUserFriendRelationServiceImpl;
 import com.yc.community.sys.entity.RoleUser;
@@ -98,6 +100,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Autowired
     private FishMessageServiceImpl fishMessageService;
 
+    @Autowired
+    private FishChatInfoServiceImpl fishChatInfoService;
+
     @Override
     public InitUserInfoResponse getInitUserInfo(HttpServletRequest request) {
         String authToken = jwtProvider.getToken(request);
@@ -166,9 +171,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         roleUserService.remove(new QueryWrapper<RoleUser>().eq("user_id", userId));
         fishArticlesService.remove(new QueryWrapper<FishArticles>().eq("created_id", userId));
         fishCommentsService.remove(new QueryWrapper<FishComments>().eq("from_user_id", userId).or().eq("to_user_id", userId));
-        fishFriendApplyService.remove(new QueryWrapper<FishFriendApply>().eq("from_user_id",userId));
-        fishUserFriendRelationService.remove(new QueryWrapper<FishUserFriendRelation>().eq("friend_id", userId));
-        fishMessageService.remove(new QueryWrapper<FishMessage>().eq("created_id", userId));
+        fishFriendApplyService.remove(new QueryWrapper<FishFriendApply>().eq("from_user_id",userId).or().eq("to_user_id", userId));
+        fishUserFriendRelationService.remove(new QueryWrapper<FishUserFriendRelation>().eq("friend_id", userId).or().eq("user_id", userId));
+        fishMessageService.remove(new QueryWrapper<FishMessage>().eq("created_id", userId).or().eq("receive_id", userId));
+        fishChatInfoService.remove(new QueryWrapper<FishChatInfo>().eq("user_id", userId).or().eq("friend_id",userId));
     }
 
     @Override

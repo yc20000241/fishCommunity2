@@ -36,9 +36,6 @@ public class FishArticlesController {
     @Autowired
     private IFishArticlesService fishArticlesService;
 
-    @Autowired
-    private ArticleMapper articleMapper;
-
     @PostMapping("/publish")
     public CommonResponse publish(@Validated @RequestBody PublishArticleRequest publishArticleRequest){
         String msg = fishArticlesService.publish(publishArticleRequest);

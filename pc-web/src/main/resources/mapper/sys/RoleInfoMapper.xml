@@ -4,7 +4,7 @@
 
     <select id="listRoleByUserId" resultType="com.yc.community.sys.entity.RoleInfo">
         select * from sys_role_info where id in (
-            select role_id from sys_role_user where id = #{id}
+            select role_id from sys_role_user where user_id = #{id}
         )
     </select>
 
