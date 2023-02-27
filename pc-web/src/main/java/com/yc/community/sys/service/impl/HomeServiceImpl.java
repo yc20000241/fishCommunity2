@@ -55,11 +55,11 @@ public class HomeServiceImpl {
 
     public List<Long> getYearSignList(HttpServletRequest request) {
         List<Long> result = new ArrayList<>();
-        List<String> months = Arrays.asList(new String[]{"01", "02", "03", "04", "04", "05", "06", "07", "08", "09", "10", "11", "12"});
+        List<String> months = Arrays.asList(new String[]{"01", "02", "03", "04",  "05", "06", "07", "08", "09", "10", "11", "12"});
         int currentYear = DateUtil.getCurrentYear();
         String id = userDetailAcessUserInfo.getUserInfo(request).getId();
 
-        for(int i = 1; i <= 12; i++){
+        for(int i = 0; i < 12; i++){
             String key = id + "_" + currentYear + "-" +months.get(i);
             Long bitCount = (Long) redisTemplate.execute( (RedisCallback<Long>) con -> con.bitCount(key.getBytes()));
             result.add(bitCount);

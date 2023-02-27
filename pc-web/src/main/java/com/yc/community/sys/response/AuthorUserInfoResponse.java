@@ -13,4 +13,6 @@ public class AuthorUserInfoResponse {
     private String nick;
 
     private String picturePath;
+
+    private String id;
 }

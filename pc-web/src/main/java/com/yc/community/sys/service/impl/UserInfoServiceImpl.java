@@ -103,6 +103,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Autowired
     private FishChatInfoServiceImpl fishChatInfoService;
 
+    @Resource(name = "userInfoCache")
+    private Cache<String, Object> userInfoCache;
+
     @Override
     public InitUserInfoResponse getInitUserInfo(HttpServletRequest request) {
         String authToken = jwtProvider.getToken(request);
@@ -187,6 +190,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         String uuid = UUIDUtil.getUUID();
         userInfo.setId(uuid);
         save(userInfo);
+
+        refreshUserInfo();
     }
 
     @Override
@@ -207,5 +212,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Async
     public void updateUserInfoById(UserInfo userInfo) {
         updateById(userInfo);
+    }
+
+    public void refreshUserInfo() {
+        List<UserInfo> list = list();
+
+        list.forEach(x -> {
+            userInfoCache.put(x.getId(), x);
+        });
     }
 }
