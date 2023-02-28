@@ -37,8 +37,8 @@ public class ArticleApplyAdaptee implements  IMessageAdaptee {
         fishMessage.setCreatedTime(new Date());
         fishMessage.setReceiveId(fishArticles.getCreatedId());
         fishMessage.setStatus(0);
-        String url = MenuConst.ARTICLE_DETAIL_URL+"?id="+fishArticles.getId();
-        String contentByCategory = "您的文章《" + HTMLUtil.aFont(url,fishArticles.getTitle(), H5ColorConst.SKY_BLUE) + "》"+ (fishArticles.getPublishStatus()==1 ? "审批已通过": "审批未通过");
+//        String url = MenuConst.ARTICLE_DETAIL_URL+"?id="+fishArticles.getId();
+        String contentByCategory = "您的文章《" + fishArticles.getTitle() + "》"+ (fishArticles.getPublishStatus()==1 ? "审批已通过": "审批未通过");
         fishMessage.setCategoryContent(contentByCategory);
         return fishMessage;
     }

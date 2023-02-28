@@ -56,13 +56,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 
         if(chatData.getAction() == 1){  //创建或加入对话
             userChannelMap.put(fishChatInfo.getUserId(), channel);
-//            userChannelMap.keySet().forEach(x -> {
-//                System.out.println("key: "+ x+"; value: " + userChannelMap.get(x));
-//            });
         }else if(chatData.getAction() == 2){  // 发送信息
-//            userChannelMap.keySet().forEach(x -> {
-//                System.out.println("key: "+ x+"; value: " + userChannelMap.get(x));
-//            });
             Channel channel1 = userChannelMap.get(fishChatInfo.getFriendId());
 
             if(channel1 != null){   // 不为null，说明在线
@@ -84,17 +78,15 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-//        users.add(ctx.channel());
         log.info("加入channel_id为"+ctx.channel().id());
 	}
 
 	@Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         String chanelId = ctx.channel().id().asShortText();
+        ctx.close();
 		System.out.println("客户端被移除：channel id 为："+chanelId);
 		log.info("客户端被移除：channel id 为："+chanelId);
-
-//		users.remove(ctx.channel());
 
     }
 

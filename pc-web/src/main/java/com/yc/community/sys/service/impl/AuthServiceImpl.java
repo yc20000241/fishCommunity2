@@ -196,6 +196,8 @@ public class AuthServiceImpl{
         roleUser.setRoleId(RoleEnum.USER.getCode());
         roleUser.setUserId(uuid);
         roleUserService.save(roleUser);
+
+        userInfoService.refreshUserInfo();
     }
 
     private String getIsVerification(String email, HttpServletRequest request) {

@@ -1,5 +1,6 @@
 package com.yc.community.sys.service.impl;
 
+import cn.easyes.core.conditions.LambdaEsQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.yc.community.common.commonConst.ActiveEnum;
@@ -11,10 +12,8 @@ import com.yc.community.common.minio.MinioUtil;
 import com.yc.community.common.util.CopyUtil;
 import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.security.entity.UserDetail;
-import com.yc.community.service.modules.articles.entity.FishArticles;
-import com.yc.community.service.modules.articles.entity.FishComments;
-import com.yc.community.service.modules.articles.entity.FishMessage;
-import com.yc.community.service.modules.articles.entity.UserInfo;
+import com.yc.community.service.modules.articles.entity.*;
+import com.yc.community.service.modules.articles.esMapper.ArticleMapper;
 import com.yc.community.service.modules.articles.service.impl.FishArticlesServiceImpl;
 import com.yc.community.service.modules.articles.service.impl.FishCommentsServiceImpl;
 import com.yc.community.service.modules.articles.service.impl.FishMessageServiceImpl;
@@ -106,6 +105,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Resource(name = "userInfoCache")
     private Cache<String, Object> userInfoCache;
 
+    @Autowired
+    private ArticleMapper articleMapper;
+
     @Override
     public InitUserInfoResponse getInitUserInfo(HttpServletRequest request) {
         String authToken = jwtProvider.getToken(request);
@@ -178,6 +180,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         fishUserFriendRelationService.remove(new QueryWrapper<FishUserFriendRelation>().eq("friend_id", userId).or().eq("user_id", userId));
         fishMessageService.remove(new QueryWrapper<FishMessage>().eq("created_id", userId).or().eq("receive_id", userId));
         fishChatInfoService.remove(new QueryWrapper<FishChatInfo>().eq("user_id", userId).or().eq("friend_id",userId));
+        articleMapper.delete(new LambdaEsQueryWrapper<EsArticle>().eq("created_id", userId));
     }
 
     @Override

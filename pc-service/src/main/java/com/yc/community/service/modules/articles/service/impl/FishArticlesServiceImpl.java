@@ -257,8 +257,14 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
                 x.setHighlightContent(esArticle.getHighlightContent());
                 x.setHighlightTitle(esArticle.getHighlightTitle());
             });
-            fishArticlesIPage.setRecords(fishArticles);
             fishArticlesIPage.setTotal(esArticleEsPageInfo.getTotal());
+
+            ArrayList<FishArticles> result = new ArrayList<>();
+            Map<String, FishArticles> fishIdMap = fishArticles.stream().collect(Collectors.toMap(FishArticles::getId, item -> item));
+            ids.forEach(x -> {
+                result.add(fishIdMap.get(x));
+            });
+            fishArticlesIPage.setRecords(result);
         }
 
         return fishArticlesIPage;
