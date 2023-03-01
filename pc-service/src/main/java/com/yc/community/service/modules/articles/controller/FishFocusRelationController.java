@@ -1,12 +1,16 @@
 package com.yc.community.service.modules.articles.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yc.community.common.response.CommonResponse;
+import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishComments;
 import com.yc.community.service.modules.articles.entity.FishFocusRelation;
 import com.yc.community.service.modules.articles.service.IFishFocusRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -25,8 +29,8 @@ public class FishFocusRelationController {
 
     @PostMapping("/addRelation")
     public CommonResponse addRelation(@RequestBody FishFocusRelation fishFocusRelation){
-        fishFocusRelationService.addRelation(fishFocusRelation);
-        return CommonResponse.OKBuilder.msg("关注成功").build();
+        String msg = fishFocusRelationService.addRelation(fishFocusRelation);
+        return CommonResponse.OKBuilder.msg(msg).build();
     }
 
     @GetMapping("/ifFocus")
@@ -35,5 +39,11 @@ public class FishFocusRelationController {
         return CommonResponse.OKBuilder.data(flag).build();
     }
 
+    @GetMapping("/focusWriteArticle")
+    public CommonResponse focusWriteArticle(@RequestParam("userId") String userId,
+                                            @RequestParam("pageNo") Integer pageNo){
+        IPage<FishArticles> list = fishFocusRelationService.focusWriteArticle(userId, pageNo);
+        return CommonResponse.OKBuilder.data(list).build();
+    }
 }
 

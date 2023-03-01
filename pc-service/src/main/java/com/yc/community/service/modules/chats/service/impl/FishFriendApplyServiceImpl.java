@@ -105,7 +105,7 @@ public class FishFriendApplyServiceImpl extends ServiceImpl<FishFriendApplyMappe
     @Override
     public void hasReadApply(String userId) {
         QueryWrapper<FishFriendApply> fishFriendApplyQueryWrapper = new QueryWrapper<>();
-        fishFriendApplyQueryWrapper.eq("to_user_id",userId).eq("status", 1);
+        fishFriendApplyQueryWrapper.eq("to_user_id",userId).eq("status", 0);
         List<FishFriendApply> list = list(fishFriendApplyQueryWrapper);
         list.forEach(x -> {
             x.setStatus(1);

@@ -21,10 +21,7 @@ import com.yc.community.common.util.DateUtil;
 import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.service.dataHandled.initMessage.MessageAdapter;
 import com.yc.community.service.dataHandled.kafka.KafkaProducer;
-import com.yc.community.service.modules.articles.entity.EsArticle;
-import com.yc.community.service.modules.articles.entity.FishArticles;
-import com.yc.community.service.modules.articles.entity.FishUserArticleLike;
-import com.yc.community.service.modules.articles.entity.UserInfo;
+import com.yc.community.service.modules.articles.entity.*;
 import com.yc.community.service.modules.articles.esMapper.ArticleMapper;
 import com.yc.community.service.modules.articles.mapper.FishArticlesMapper;
 import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
@@ -76,6 +73,7 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
     @Autowired
     private RedisTemplate redisTemplate;
+
 
     @Override
     public String publish(PublishArticleRequest publishArticleRequest) {
@@ -329,5 +327,7 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
         return articleHistoryResponse;
     }
+
+
 
 }

@@ -101,7 +101,9 @@ public class FishArticlesController {
     public CommonResponse lookThroughHistory(@RequestParam("userId") String userId,
                                              @RequestParam("pageNO") Integer pageNo){
         ArticleHistoryResponse articleHistoryResponse = fishArticlesService.lookThroughHistory(userId, pageNo);
-        return CommonResponse.OKBuilder.build();
+        return CommonResponse.OKBuilder.data(articleHistoryResponse).build();
     }
+
+
 }
 

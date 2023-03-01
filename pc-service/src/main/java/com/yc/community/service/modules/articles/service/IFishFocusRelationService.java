@@ -1,7 +1,11 @@
 package com.yc.community.service.modules.articles.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.entity.FishFocusRelation;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,7 +17,9 @@ import com.yc.community.service.modules.articles.entity.FishFocusRelation;
  */
 public interface IFishFocusRelationService extends IService<FishFocusRelation> {
 
-    void addRelation(FishFocusRelation fishFocusRelation);
+    String addRelation(FishFocusRelation fishFocusRelation);
 
     Boolean ifFocus(FishFocusRelation fishFocusRelation);
+
+    IPage<FishArticles> focusWriteArticle(String userId, Integer pageNo);
 }
