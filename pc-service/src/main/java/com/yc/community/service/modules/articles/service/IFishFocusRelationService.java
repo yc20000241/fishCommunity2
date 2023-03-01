@@ -13,4 +13,7 @@ import com.yc.community.service.modules.articles.entity.FishFocusRelation;
  */
 public interface IFishFocusRelationService extends IService<FishFocusRelation> {
 
+    void addRelation(FishFocusRelation fishFocusRelation);
+
+    Boolean ifFocus(FishFocusRelation fishFocusRelation);
 }
