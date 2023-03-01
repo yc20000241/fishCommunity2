@@ -7,6 +7,7 @@ import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.ArticleLikeRequest;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
+import com.yc.community.service.modules.articles.response.ArticleHistoryResponse;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 
 import java.util.List;
@@ -38,4 +39,8 @@ public interface IFishArticlesService extends IService<FishArticles> {
     IPage<FishArticles> esSearch(String keyWord, String userId, Integer kind, Integer pageNo);
 
     List<EsArticle> estest();
+
+    void lookThrough(String articleId);
+
+    ArticleHistoryResponse lookThroughHistory(String userId, Integer pageNo);
 }

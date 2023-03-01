@@ -3,6 +3,7 @@ package com.yc.community.service.modules.articles.service.impl;
 import cn.easyes.core.biz.EsPageInfo;
 import cn.easyes.core.conditions.LambdaEsQueryWrapper;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -29,10 +30,13 @@ import com.yc.community.service.modules.articles.mapper.FishArticlesMapper;
 import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.ArticleLikeRequest;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
+import com.yc.community.service.modules.articles.response.ArticleHistoryResponse;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
 import io.netty.util.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -69,6 +73,9 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
     @Resource(name = "userInfoCache")
     private Cache<String, Object> userInfoCache;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public String publish(PublishArticleRequest publishArticleRequest) {
@@ -286,6 +293,41 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         articleMapper.insertBatch(esArticles);
         List<EsArticle> esArticles1 = articleMapper.selectList(new LambdaEsQueryWrapper<>());
         return esArticles1;
+    }
+
+    @Override
+    @Async
+    public void lookThrough(String articleId) {
+        FishArticles fishArticles = getById(articleId);
+        fishArticles.setLookCount(fishArticles.getLookCount()+1);
+        updateById(fishArticles);
+
+        String userId = fishArticles.getCreatedId();
+        String key = userId + "_history";
+        Long size = redisTemplate.opsForList().size(key);
+
+        if(size > 200)
+            redisTemplate.opsForList().rightPop(key);
+        redisTemplate.opsForList().leftPush(key, JSON.toJSON(fishArticles));
+    }
+
+    @Override
+    public ArticleHistoryResponse lookThroughHistory(String userId, Integer pageNo) {
+        String key = userId + "_history";
+        Long size = redisTemplate.opsForList().size(key);
+
+        List<String> range = redisTemplate.opsForList().range(key, pageNo * 10 - 1, (pageNo + 1) * 10 - 1);
+        ArrayList<FishArticles> result = new ArrayList<>();
+        for (String s : range) {
+            FishArticles fishArticles = JSONObject.parseObject(s, FishArticles.class);
+            result.add(fishArticles);
+        }
+
+        ArticleHistoryResponse articleHistoryResponse = new ArticleHistoryResponse();
+        articleHistoryResponse.setList(result);
+        articleHistoryResponse.setTotal(size.intValue());
+
+        return articleHistoryResponse;
     }
 
 }

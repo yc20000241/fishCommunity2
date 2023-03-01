@@ -74,4 +74,8 @@ public class FishArticles implements Serializable {
 
     @TableField(exist = false)
     private String highlightTitle;
+
+    @TableField(exist = false)
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+    private Data historyLookThroughTime;
 }

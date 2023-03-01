@@ -11,10 +11,12 @@ import com.yc.community.service.modules.articles.esMapper.ArticleMapper;
 import com.yc.community.service.modules.articles.request.ApplyArticleRequest;
 import com.yc.community.service.modules.articles.request.ArticleLikeRequest;
 import com.yc.community.service.modules.articles.request.PublishArticleRequest;
+import com.yc.community.service.modules.articles.response.ArticleHistoryResponse;
 import com.yc.community.service.modules.articles.response.TodayTop10Reponse;
 import com.yc.community.service.modules.articles.service.IFishArticlesService;
 import org.elasticsearch.action.search.SearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +33,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/service/articles/fishArticles")
+@EnableAsync
 public class FishArticlesController {
 
     @Autowired
@@ -88,5 +91,17 @@ public class FishArticlesController {
         return CommonResponse.OKBuilder.data(estest).build();
     }
 
+    @GetMapping("/lookThrough")
+    public CommonResponse lookThrough(@RequestParam("articleId") String articleId){
+        fishArticlesService.lookThrough(articleId);
+        return CommonResponse.OKBuilder.build();
+    }
+
+    @GetMapping("/lookThroughHistory")
+    public CommonResponse lookThroughHistory(@RequestParam("userId") String userId,
+                                             @RequestParam("pageNO") Integer pageNo){
+        ArticleHistoryResponse articleHistoryResponse = fishArticlesService.lookThroughHistory(userId, pageNo);
+        return CommonResponse.OKBuilder.build();
+    }
 }
 
