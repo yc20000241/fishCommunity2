@@ -92,14 +92,15 @@ public class FishArticlesController {
     }
 
     @GetMapping("/lookThrough")
-    public CommonResponse lookThrough(@RequestParam("articleId") String articleId){
-        fishArticlesService.lookThrough(articleId);
+    public CommonResponse lookThrough(@RequestParam("articleId") String articleId,
+                                      @RequestParam("userId") String userId){
+        fishArticlesService.lookThrough(articleId, userId);
         return CommonResponse.OKBuilder.build();
     }
 
     @GetMapping("/lookThroughHistory")
     public CommonResponse lookThroughHistory(@RequestParam("userId") String userId,
-                                             @RequestParam("pageNO") Integer pageNo){
+                                             @RequestParam("pageNo") Integer pageNo){
         ArticleHistoryResponse articleHistoryResponse = fishArticlesService.lookThroughHistory(userId, pageNo);
         return CommonResponse.OKBuilder.data(articleHistoryResponse).build();
     }

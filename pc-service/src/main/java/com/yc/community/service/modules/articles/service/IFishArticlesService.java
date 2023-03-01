@@ -40,7 +40,7 @@ public interface IFishArticlesService extends IService<FishArticles> {
 
     List<EsArticle> estest();
 
-    void lookThrough(String articleId);
+    void lookThrough(String articleId, String userId);
 
     ArticleHistoryResponse lookThroughHistory(String userId, Integer pageNo);
 }

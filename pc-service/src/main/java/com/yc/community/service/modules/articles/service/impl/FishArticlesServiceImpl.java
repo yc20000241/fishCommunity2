@@ -295,18 +295,17 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
     @Override
     @Async
-    public void lookThrough(String articleId) {
+    public void lookThrough(String articleId, String userId) {
         FishArticles fishArticles = getById(articleId);
         fishArticles.setLookCount(fishArticles.getLookCount()+1);
         updateById(fishArticles);
 
-        String userId = fishArticles.getCreatedId();
         String key = userId + "_history";
         Long size = redisTemplate.opsForList().size(key);
 
         if(size > 200)
             redisTemplate.opsForList().rightPop(key);
-        redisTemplate.opsForList().leftPush(key, JSON.toJSON(fishArticles));
+        redisTemplate.opsForList().leftPush(key, JSON.toJSONString(fishArticles));
     }
 
     @Override
@@ -314,15 +313,16 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         String key = userId + "_history";
         Long size = redisTemplate.opsForList().size(key);
 
-        List<String> range = redisTemplate.opsForList().range(key, pageNo * 10 - 1, (pageNo + 1) * 10 - 1);
+        List<String> range = redisTemplate.opsForList().range(key, (pageNo-1)*10, pageNo*10-1);
         ArrayList<FishArticles> result = new ArrayList<>();
-        for (String s : range) {
-            FishArticles fishArticles = JSONObject.parseObject(s, FishArticles.class);
-            result.add(fishArticles);
-        }
+        if(range.size() > 0)
+            range.forEach(x -> {
+                FishArticles fishArticles = JSONObject.parseObject(x, FishArticles.class);
+                result.add(fishArticles);
+            });
 
         ArticleHistoryResponse articleHistoryResponse = new ArticleHistoryResponse();
-        articleHistoryResponse.setList(result);
+        articleHistoryResponse.setList(Optional.ofNullable(result).orElse(new ArrayList<>()));
         articleHistoryResponse.setTotal(size.intValue());
 
         return articleHistoryResponse;
