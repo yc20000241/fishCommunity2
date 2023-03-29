@@ -2,6 +2,7 @@ package com.yc.community.service.modules.chats.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yc.community.service.modules.chats.entity.FishUserFriendRelation;
+import com.yc.community.service.modules.chats.entity.FishUserMongo;
 import com.yc.community.service.modules.chats.response.FriendListResponse;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface IFishUserFriendRelationService extends IService<FishUserFriendR
 
 
     List<FriendListResponse> friendList(String userId);
+
+    List<FishUserMongo> searchFriendPoint(String userId, Integer distance, String longitude, String latitude);
 }

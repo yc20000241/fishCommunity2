@@ -39,7 +39,6 @@ public class NettyServer {
     }
 
     public void start() throws InterruptedException {
-//        this.future = server.bind("43.138.238.84",9000);
         this.future = server.bind("127.0.0.1",17777);
 //        this.future = server.bind("0.0.0.0",9000);
         serverChannel = future.sync().channel().closeFuture().sync().channel();

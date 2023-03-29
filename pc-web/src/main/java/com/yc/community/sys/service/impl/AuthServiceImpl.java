@@ -3,6 +3,7 @@ package com.yc.community.sys.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.yc.community.common.commonConst.ActiveEnum;
+import com.yc.community.common.commonConst.ConfigConst;
 import com.yc.community.common.commonConst.RoleEnum;
 import com.yc.community.common.config.PropertiesConfig;
 import com.yc.community.common.exception.BusinessException;
@@ -10,6 +11,11 @@ import com.yc.community.common.exception.BusinessExceptionCode;
 import com.yc.community.common.util.IpAddrUtil;
 import com.yc.community.common.util.UUIDUtil;
 import com.yc.community.security.entity.UserDetail;
+import com.yc.community.service.modules.chats.entity.FishUserMongo;
+import com.yc.community.service.thirdApi.baiDu.DiTuApi;
+import com.yc.community.service.thirdApi.baiDu.response.DTResultInfo;
+import com.yc.community.service.thirdApi.baiDu.response.IpResponse;
+import com.yc.community.service.thirdApi.baiDu.response.LonAndLatVo;
 import com.yc.community.sys.entity.RoleUser;
 import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.sys.request.EmailRequest;
@@ -19,6 +25,10 @@ import com.yc.community.sys.util.AuthProvider;
 import com.yc.community.sys.util.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
@@ -32,6 +42,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +64,7 @@ public class AuthServiceImpl{
     @Autowired
     private JwtProvider jwtProvider;
 
-    @Autowired
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
 
     @Resource(name = "CustomMailSender")
@@ -76,6 +88,15 @@ public class AuthServiceImpl{
     @Resource(name = "chatUserChannelCache")
     private Cache<String, Object> chatUserCache;
 
+    @Autowired
+    private DiTuApi diTuApi;
+
+    @Autowired
+    private ConfigConst configConst;
+
+    @Resource
+    private MongoTemplate mongoTemplate;
+
     public AccessToken login(String loginAccount, String password) {
         // 1 创建UsernamePasswordAuthenticationToken
         UsernamePasswordAuthenticationToken usernameAuthentication = new UsernamePasswordAuthenticationToken(loginAccount, password);
@@ -95,12 +116,36 @@ public class AuthServiceImpl{
         redisTemplate.opsForValue().set(username, userDetail, 3600 * 24 * 7, TimeUnit.SECONDS);
         // json解析不了双重对象
 //        stringRedisTemplate.opsForValue().set(userDetail.getUsername(), JSON.toJSONString(userDetail));
-        chatUserCache.put(userDetail.getUserId(),"online");
+        initMongoInfo(userDetail);
 
         UserInfo userInfo = userDetail.getUserInfo();
         userInfo.setLastLogin(new Date());
         userInfoService.updateUserInfoById(userInfo);
         return accessToken;
+    }
+
+    private void initMongoInfo(UserDetail userDetail) {
+        DTResultInfo<IpResponse> diTuApiLonAndLatByIp = diTuApi.getLonAndLatByIp(configConst.BAI_DU_DI_TU_AK, getIp(), "bd09ll");
+        if(diTuApiLonAndLatByIp.getContent() != null){
+            LonAndLatVo point = diTuApiLonAndLatByIp.getContent().getPoint();
+            chatUserCache.put(userDetail.getUserId(),"online");
+            String ip = getIp();
+            Update update = new Update();
+            update.set("id", userDetail.getUserId());
+            update.set("ip", ip);
+            update.set("latitude", point.getY());
+            update.set("longitude", point.getX());
+            update.set("address", diTuApiLonAndLatByIp.getContent().getAddress());
+            update.set("time", new Date());
+            update.set("nick", userDetail.getUserInfo().getNick());
+
+            Query query = new Query(Criteria.where("id").is(userDetail.getUserId()));
+            mongoTemplate.upsert(query, update, FishUserMongo.class);
+            log.info("ip地址为："+ip);
+            log.info("经纬度为："+point.getX()+" "+point.getY());
+        }else{
+            chatUserCache.put(userDetail.getUserId(),"online");
+        }
     }
 
     public void logout() {
@@ -121,9 +166,10 @@ public class AuthServiceImpl{
         String email = emailRequest.getLoginEmail();
 
         boolean isMatch = Pattern.matches("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$", email);
+        // 匹配是否是正确对邮箱
         if(!isMatch)
             throw new BusinessException(BusinessExceptionCode.EMAIL_FORMAT_ERROR);
-
+        // 校验是否是多次发送
         String key = getVerificationExpire(email, request);
 
         String emailVerification = UUIDUtil.getUUID().substring(0, 6);
@@ -135,7 +181,8 @@ public class AuthServiceImpl{
         simpleMailMessage.setFrom(propertiesConfig.getMailSendFrom());
 
         try {
-            javaMailSender.send(simpleMailMessage);
+            javaMailSender.send(simpleMailMessage); // 发送邮件
+            // 存入redis
             stringRedisTemplate.opsForValue().set(key, emailVerification, 60 * 5, TimeUnit.SECONDS);
         }catch (Exception e){
             e.printStackTrace();
@@ -211,5 +258,27 @@ public class AuthServiceImpl{
             return ipAddr + "_email";
 
         throw new BusinessException(BusinessExceptionCode.VERIFICATION_NOT_EXISTS);
+    }
+
+
+    //获取请求对象
+    public static HttpServletRequest getRequest() {
+        ServletRequestAttributes requestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes == null) {
+            return null;
+        } else {
+            return requestAttributes.getRequest();
+        }
+    }
+
+    //获取请求的ip地址
+    public static String getIp() {
+        HttpServletRequest request = getRequest();
+        if (request == null) {
+            return "127.0.0.1";
+        } else {
+            return request.getRemoteHost();
+        }
     }
 }

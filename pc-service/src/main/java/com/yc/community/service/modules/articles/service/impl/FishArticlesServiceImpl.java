@@ -181,14 +181,16 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         FishArticles byId = getById(applyArticleRequest.getId());
         byId.setPublishStatus(applyArticleRequest.getPublishState());
         updateById(byId);
-
+        //策略模式处理消息
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         stringObjectHashMap.put("articleObj", byId);
         stringObjectHashMap.put("publishContent",applyArticleRequest.getPublishContent());
         messageAdapter.adapter(MessageCategoryEnum.ARTICLE_APPLY.getCategory(), stringObjectHashMap);
 
+        // 从minio获取文章内容
         String s = minioUtil.stringDownload(byId.getFilePath(), ConstList.ARTICLE_BUCKET);
         byId.setArticleContent(s);
+        // kafka发送消息到es同步数据
         kafkaProducer.commonSend("esArticle", JSON.toJSONString(byId));
     }
 
@@ -231,6 +233,7 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
     @Override
     public IPage<FishArticles> esSearch(String keyWord, String userId, Integer kind, Integer pageNo) {
         LambdaEsQueryWrapper<EsArticle> wrapper = new LambdaEsQueryWrapper<>();
+        // 关键字匹配
         wrapper.and(!StringUtils.isEmpty(keyWord), wrap -> {
             wrap.match(EsArticle::getTitle, keyWord).or().match(EsArticle::getArticleContent, keyWord);
         });
@@ -238,23 +241,25 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
         wrapper.eq(!StringUtils.isEmpty(userId), "created_id", userId);
 
         if(kind == 1)
-            wrapper.orderByDesc("created_time");
+            wrapper.orderByDesc("created_time");  // 创建时间倒序
         else if(kind == 2)
-            wrapper.orderByAsc("created_time");
+            wrapper.orderByAsc("created_time");   // 创建时间升序
         else if(kind == 3)
-            wrapper.orderByDesc("look_count");
+            wrapper.orderByDesc("look_count");    // 浏览量排序
         else
-            wrapper.orderByDesc("like_count");
+            wrapper.orderByDesc("like_count");    // 点赞排序
 
         EsPageInfo<EsArticle> esArticleEsPageInfo = articleMapper.pageQuery(wrapper, pageNo, 10);
         Page<FishArticles> fishArticlesIPage = new Page<>();
 
         List<EsArticle> list = esArticleEsPageInfo.getList();
         if(list.size() != 0){
+            // stream流抽出主键
             List<String> ids = list.stream().map(EsArticle::getId).collect(Collectors.toList());
+            // stream流形成主键和对象map
             Map<String, EsArticle> idMap = list.stream().collect(Collectors.toMap(EsArticle::getId, item -> item));
             List<FishArticles> fishArticles = listByIds(ids);
-
+            // 补齐文章其他属性
             fishArticles.forEach(x -> {
                 UserInfo userInfo = (UserInfo)userInfoCache.getIfPresent(x.getCreatedId());
                 x.setCreatedName(userInfo.getNick());
@@ -266,6 +271,7 @@ public class FishArticlesServiceImpl extends ServiceImpl<FishArticlesMapper, Fis
 
             ArrayList<FishArticles> result = new ArrayList<>();
             Map<String, FishArticles> fishIdMap = fishArticles.stream().collect(Collectors.toMap(FishArticles::getId, item -> item));
+            // 按es查出的数据再排序
             ids.forEach(x -> {
                 result.add(fishIdMap.get(x));
             });

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yc.community.common.response.CommonResponse;
 import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.chats.entity.FishUserFriendRelation;
+import com.yc.community.service.modules.chats.entity.FishUserMongo;
 import com.yc.community.service.modules.chats.response.FriendListResponse;
 import com.yc.community.service.modules.chats.service.IFishUserFriendRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,15 @@ public class FishUserFriendRelationController {
     @GetMapping("/friendList")
     public CommonResponse friendList(@RequestParam("userId") String userId){
         List<FriendListResponse> list = fishUserFriendRelationService.friendList(userId);
+        return CommonResponse.OKBuilder.data(list).build();
+    }
+
+    @GetMapping("/searchFriendPoint")
+    public CommonResponse searchFriendPoint(@RequestParam("userId") String userId,
+                                            @RequestParam(value = "distance", required = false) Integer distance,
+                                            @RequestParam("longitude") String longitude,
+                                            @RequestParam("latitude") String latitude){
+        List<FishUserMongo> list = fishUserFriendRelationService.searchFriendPoint(userId, distance, longitude, latitude);
         return CommonResponse.OKBuilder.data(list).build();
     }
 }

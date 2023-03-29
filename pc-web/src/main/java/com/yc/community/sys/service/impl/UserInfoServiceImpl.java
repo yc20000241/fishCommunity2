@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.yc.community.common.commonConst.ActiveEnum;
 import com.yc.community.common.commonConst.ConstList;
-import com.yc.community.common.commonConst.RoleEnum;
 import com.yc.community.common.exception.BusinessException;
 import com.yc.community.common.exception.BusinessExceptionCode;
 import com.yc.community.common.minio.MinioUtil;

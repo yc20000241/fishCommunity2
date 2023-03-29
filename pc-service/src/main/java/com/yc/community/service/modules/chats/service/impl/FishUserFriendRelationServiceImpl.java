@@ -5,12 +5,18 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.yc.community.service.modules.articles.entity.UserInfo;
 import com.yc.community.service.modules.chats.entity.FishUserFriendRelation;
+import com.yc.community.service.modules.chats.entity.FishUserMongo;
 import com.yc.community.service.modules.chats.mapper.FishUserFriendRelationMapper;
 import com.yc.community.service.modules.chats.response.FriendListResponse;
 import com.yc.community.service.modules.chats.service.IFishUserFriendRelationService;
+import org.apache.lucene.util.CollectionUtil;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +34,9 @@ public class FishUserFriendRelationServiceImpl extends ServiceImpl<FishUserFrien
     @Resource(description = "userInfoCache")
     private Cache<String, Object> userInfoCache;
 
+    @Resource(name = "chatUserChannelCache")
+    private Cache<String, Object> chatUserCache;
+
     @Override
     public List<FriendListResponse> friendList(String userId) {
         List<FriendListResponse> friendListResponses = new ArrayList<>();
@@ -43,5 +52,27 @@ public class FishUserFriendRelationServiceImpl extends ServiceImpl<FishUserFrien
             friendListResponses.add(friendListResponse);
         });
         return friendListResponses;
+    }
+
+    @Override
+    public List<FishUserMongo> searchFriendPoint(String userId, Integer radius , String longitude, String latitude) {
+        List<FishUserFriendRelation> fishUserFriendRelations = list(new QueryWrapper<FishUserFriendRelation>().eq("user_id", userId));
+        ArrayList<String> onlineList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(fishUserFriendRelations))
+            fishUserFriendRelations.forEach(x -> {
+                if("online".equals(chatUserCache.getIfPresent(x.getFriendId())))
+                    onlineList.add(x.getFriendId());
+            });
+        if(!CollectionUtils.isEmpty(onlineList)){
+            Query query = new Query(Criteria.where("id").in(onlineList));
+
+//            Point point = new Point(Double.valueOf(longitude), Double.valueOf(latitude));
+//            Distance distance = new Distance(radius.doubleValue() * 0.00062137119 / 3963.2);
+//            Circle circle = new Circle(point, distance);
+//            Query query = new Query();
+//            query.addCriteria(Criteria.where("location").withinSphere(circle));
+        }
+
+        return null;
     }
 }

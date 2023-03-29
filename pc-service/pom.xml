@@ -71,6 +71,24 @@
             <artifactId>spring-boot</artifactId>
         </dependency>
 
+        <!--Retrofit依赖-->
+        <dependency>
+            <groupId>com.github.lianjiatech</groupId>
+            <artifactId>retrofit-spring-boot-starter</artifactId>
+            <version>2.2.18</version>
+        </dependency>
+
+        <!--SpringBoot整合MongoDB-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <!--MongoDB相关依赖-->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>3.9.1</version>
+        </dependency>
     </dependencies>
 
 </project>
