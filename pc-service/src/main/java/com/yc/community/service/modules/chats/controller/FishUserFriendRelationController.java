@@ -7,6 +7,7 @@ import com.yc.community.service.modules.articles.entity.FishArticles;
 import com.yc.community.service.modules.chats.entity.FishUserFriendRelation;
 import com.yc.community.service.modules.chats.entity.FishUserMongo;
 import com.yc.community.service.modules.chats.response.FriendListResponse;
+import com.yc.community.service.modules.chats.response.FriendMapPointResponse;
 import com.yc.community.service.modules.chats.service.IFishUserFriendRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +37,9 @@ public class FishUserFriendRelationController {
 
     @GetMapping("/searchFriendPoint")
     public CommonResponse searchFriendPoint(@RequestParam("userId") String userId,
-                                            @RequestParam(value = "distance", required = false) Integer distance,
-                                            @RequestParam("longitude") String longitude,
-                                            @RequestParam("latitude") String latitude){
-        List<FishUserMongo> list = fishUserFriendRelationService.searchFriendPoint(userId, distance, longitude, latitude);
-        return CommonResponse.OKBuilder.data(list).build();
+                                            @RequestParam(value = "distance", required = false) Integer distance){
+        FriendMapPointResponse friendMapPointResponse = fishUserFriendRelationService.searchFriendPoint(userId, distance);
+        return CommonResponse.OKBuilder.data(friendMapPointResponse).build();
     }
 }
 

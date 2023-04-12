@@ -2,6 +2,7 @@ package com.yc.community.service.modules.chats.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,6 +23,10 @@ public class FishUserMongo {
     private String ip;          // 上一次登录ip地址
 
     private String nick;
+
+    private String picturePath;
+
+    private GeoJsonPoint location;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

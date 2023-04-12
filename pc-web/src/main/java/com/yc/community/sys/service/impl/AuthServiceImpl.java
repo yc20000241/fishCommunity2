@@ -26,6 +26,7 @@ import com.yc.community.sys.util.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -125,11 +126,11 @@ public class AuthServiceImpl{
     }
 
     private void initMongoInfo(UserDetail userDetail) {
-        DTResultInfo<IpResponse> diTuApiLonAndLatByIp = diTuApi.getLonAndLatByIp(configConst.BAI_DU_DI_TU_AK, getIp(), "bd09ll");
+        String ip = getIp();
+        DTResultInfo<IpResponse> diTuApiLonAndLatByIp = diTuApi.getLonAndLatByIp(configConst.BAI_DU_DI_TU_AK, ip, "bd09ll");
         if(diTuApiLonAndLatByIp.getContent() != null){
             LonAndLatVo point = diTuApiLonAndLatByIp.getContent().getPoint();
             chatUserCache.put(userDetail.getUserId(),"online");
-            String ip = getIp();
             Update update = new Update();
             update.set("id", userDetail.getUserId());
             update.set("ip", ip);
@@ -138,6 +139,8 @@ public class AuthServiceImpl{
             update.set("address", diTuApiLonAndLatByIp.getContent().getAddress());
             update.set("time", new Date());
             update.set("nick", userDetail.getUserInfo().getNick());
+            update.set("location", new GeoJsonPoint(Double.valueOf(point.getX()), Double.valueOf(point.getY())));
+            update.set("picturePath", userDetail.getUserInfo().getPicturePath());
 
             Query query = new Query(Criteria.where("id").is(userDetail.getUserId()));
             mongoTemplate.upsert(query, update, FishUserMongo.class);
@@ -275,6 +278,8 @@ public class AuthServiceImpl{
     //获取请求的ip地址
     public static String getIp() {
         HttpServletRequest request = getRequest();
+//        log.info("X-Real-IP:"+ request.getHeader("X-Real-IP"));
+//        log.info("X-Forwarded-For:"+ request.getHeader("X-Forwarded-For"));
         if (request == null) {
             return "127.0.0.1";
         } else {

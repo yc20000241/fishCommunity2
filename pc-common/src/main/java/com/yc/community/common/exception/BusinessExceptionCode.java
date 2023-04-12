@@ -17,7 +17,8 @@ public enum BusinessExceptionCode {
     YOU_HAS_BEEN_FRIENDEN("你们已经是好友了",613),
     YOU_HAS_SEND_FRIEND_APPLY("你已向他发送过好友请求",614),
     PLease_ADMIN_GIVE_A_ROLE("请管理员分配角色", 615),
-    FOCUS_YOU_SELF("关注自己，这河狸嘛", 616)
+    FOCUS_YOU_SELF("关注自己，这河狸嘛", 616),
+    USR_POINT_NOT_EXIST("用户经纬度不存在",617)
     ;
 
     private String desc;
