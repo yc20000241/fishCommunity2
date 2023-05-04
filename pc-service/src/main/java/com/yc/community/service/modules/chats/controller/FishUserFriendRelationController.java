@@ -12,6 +12,7 @@ import com.yc.community.service.modules.chats.service.IFishUserFriendRelationSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import java.util.List;
 
 /**
@@ -40,6 +41,12 @@ public class FishUserFriendRelationController {
                                             @RequestParam(value = "distance", required = false) Integer distance){
         FriendMapPointResponse friendMapPointResponse = fishUserFriendRelationService.searchFriendPoint(userId, distance);
         return CommonResponse.OKBuilder.data(friendMapPointResponse).build();
+    }
+
+    @GetMapping("/saveTestMongoData")
+    public CommonResponse saveTestMongoData(){
+        fishUserFriendRelationService.saveTestMongoData();
+        return CommonResponse.OK;
     }
 }
 

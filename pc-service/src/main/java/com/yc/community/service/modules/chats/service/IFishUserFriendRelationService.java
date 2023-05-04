@@ -22,4 +22,6 @@ public interface IFishUserFriendRelationService extends IService<FishUserFriendR
     List<FriendListResponse> friendList(String userId);
 
     FriendMapPointResponse searchFriendPoint(String userId, Integer distance);
+
+    void saveTestMongoData();
 }

@@ -15,15 +15,19 @@ import com.yc.community.service.modules.chats.service.IFishUserFriendRelationSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Circle;
 import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -82,10 +86,12 @@ public class FishUserFriendRelationServiceImpl extends ServiceImpl<FishUserFrien
 
         Query query = new Query();
         if(!CollectionUtils.isEmpty(friendUserIdList)){
+            friendUserIdList.add(userId);
             query = new Query(Criteria.where("id").in(friendUserIdList));
         }
-        Point point = new Point(Double.valueOf(longitude), Double.valueOf(latitude));
-        Distance distance = new Distance(radius.doubleValue() * 0.00062137119 / 3963.2);
+        Point point = new Point(Double.valueOf(latitude), Double.valueOf(longitude));
+//        Distance distance = new Distance(radius.doubleValue()*1000 * 0.00062137119 / 3963.2);
+        Distance distance = new Distance(radius.doubleValue(), Metrics.KILOMETERS);
         Circle circle = new Circle(point, distance);
         query.addCriteria(Criteria.where("location").withinSphere(circle));
         fishUserMongos = mongoTemplate.find(query, FishUserMongo.class);
@@ -93,5 +99,37 @@ public class FishUserFriendRelationServiceImpl extends ServiceImpl<FishUserFrien
         fishUserMongos = Optional.ofNullable(fishUserMongos).orElse(new ArrayList<>());
         FriendMapPointResponse friendMapPointResponse = FriendMapPointResponse.builder().list(fishUserMongos).centerX(latitude).centerY(longitude).build();
         return friendMapPointResponse;
+    }
+
+    @Override
+    public void saveTestMongoData() {
+        Update update = new Update();
+        update.set("id", "8134d735804741c781f960d4e60a95c9");
+        update.set("ip", "59.55.141.148");
+        update.set("latitude", "115.86458944");
+        update.set("longitude", "28.68945530");
+        update.set("address", "中国 江西省 南昌市 红谷滩区");
+        update.set("time", new Date());
+        update.set("nick", "yc001");
+        update.set("location", new GeoJsonPoint(Double.valueOf("115.86458944"), Double.valueOf("28.68945530")));
+        update.set("picturePath", "/article-image/default-avatar.b7d77977.png");
+
+        Query query = new Query(Criteria.where("id").is("8134d735804741c781f960d4e60a95c9"));
+        mongoTemplate.upsert(query, update, FishUserMongo.class);
+
+
+        Update update1 = new Update();
+        update1.set("id", "531f25b2a868466caf57adf14837f03b");
+        update1.set("ip", "59.55.141.148");
+        update1.set("latitude", "115.9094");
+        update1.set("longitude", "28.6752");
+        update1.set("address", "中国 江西省 南昌市 红谷滩区 双子塔");
+        update1.set("time", new Date());
+        update1.set("nick", "yc002");
+        update1.set("location", new GeoJsonPoint(Double.valueOf("115.9094"), Double.valueOf("28.6752")));
+        update1.set("picturePath", "/article-image/default-avatar.b7d77977.png");
+
+        Query query1 = new Query(Criteria.where("id").is("531f25b2a868466caf57adf14837f03b"));
+        mongoTemplate.upsert(query1, update1, FishUserMongo.class);
     }
 }
